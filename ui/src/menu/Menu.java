@@ -1,7 +1,5 @@
 package menu;
 
-import engine.Stack;
-
 import java.util.Scanner;
 
 public class Menu {
@@ -10,7 +8,5 @@ public class Menu {
 
         Scanner s = new Scanner(System.in);
         int num = s.nextInt();
-
-        Stack.some(num);
     }
 }
