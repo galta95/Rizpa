@@ -1,7 +1,7 @@
 package dataManager.jaxb;
 
 import dataManager.jaxb.generated.RizpaStockExchangeDescriptor;
-import dataManager.jaxb.generated.RseStocks;
+import engine.RSE;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -13,20 +13,20 @@ import java.io.InputStream;
 
 public class SchemaBasedJAXB {
     private final static String JAXB_XML_GAME_PACKAGE_NAME = "dataManager.jaxb.generated";
-    private RizpaStockExchangeDescriptor exchangeDescriptor;
-    public void loadXml(String[] args) {
+
+    public static RSE loadXml(String path) {
         try {
-            InputStream inputStream = new FileInputStream(new File("engine/src/resources/ex1-small.xml"));
-            this.exchangeDescriptor = this.deserializeFrom(inputStream);
+            InputStream inputStream = new FileInputStream(new File(path));
+            return new RSE(deserializeFrom(inputStream));
         } catch (JAXBException | FileNotFoundException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
-    private RizpaStockExchangeDescriptor deserializeFrom(InputStream in) throws JAXBException {
+    private static RizpaStockExchangeDescriptor deserializeFrom(InputStream in) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance(JAXB_XML_GAME_PACKAGE_NAME);
         Unmarshaller u = jc.createUnmarshaller();
         return (RizpaStockExchangeDescriptor) u.unmarshal(in);
     }
-
 }

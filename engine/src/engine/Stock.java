@@ -1,4 +1,6 @@
-package engine.stocks;
+package engine;
+
+import dataManager.jaxb.generated.RseStock;
 
 public class Stock {
     private String symbol;
@@ -6,9 +8,15 @@ public class Stock {
     private int price;
 
     public Stock(String symbol, String companyName, int price) {
-        this.symbol  = symbol;
+        this.symbol = symbol;
         this.companyName = companyName;
         this.price = price;
+    }
+
+    public Stock(RseStock stock) {
+        this.symbol = stock.getRseSymbol();
+        this.companyName = stock.getRseCompanyName();
+        this.price = stock.getRsePrice();
     }
 
     public int getPrice() {
