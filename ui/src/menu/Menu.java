@@ -7,14 +7,16 @@ import java.util.Scanner;
 
 public class Menu {
     public static void main(String[] args) {
-        RSE rse;
-        int userChoise;
 
-        System.out.println("1. Load XML");
-        Scanner s = new Scanner(System.in);
-        userChoise = s.nextInt();
+    }
 
-        rse = Handler.startApp("engine/src/resources/ex1-small.xml");
-        System.out.println("Bye");
+    public static RSE optionOne() {
+        String xmlPath;
+
+        System.out.println("Enter xml full path: ");
+        Scanner scan = new Scanner(System.in);
+        xmlPath = scan.nextLine();
+
+        return Handler.startApp(xmlPath);
     }
 }
