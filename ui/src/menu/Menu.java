@@ -9,7 +9,7 @@ public class Menu {
         RSE rse;
         rse = Handler.startApp("engine/src/resources/ex1-small.xml");
         try {
-            optionThree(rse.getStocks(), "g");
+            optionTwo(rse.getStocks());
         } catch (Error e){
             if (e.getMessage().equals("No such stock")) {
                 System.out.println("No such stock");
@@ -31,10 +31,10 @@ public class Menu {
 
     public static void optionTwo(Stocks stocks) {
         Map<String, Stock> hashStocks = stocks.getStocks();
-        System.out.println("Stocks list: ");
+        System.out.println("Stocks list: \n");
 
         hashStocks.forEach((symbol, stock) -> {
-            printStockDetails(stock);
+            System.out.println(stock);
             System.out.println();
         });
     }
@@ -45,18 +45,8 @@ public class Menu {
         if (stock == null) {
             throw new Error("No such stock");
         }
-        printStockDetails(stock);
+        System.out.println(stock);
         printStockDeals(stock);
-    }
-
-    public static void printStockDetails(Stock stock) {
-        System.out.println(
-                "\t" + "Stock symbol: " + stock.getSymbol() + "\n" +
-                "\t" + "Stock company name: " + stock.getCompanyName() + "\n" +
-                "\t" + "Current price: " + stock.getPrice() + "\n" +
-                "\t" + "Deals until now: " + stock.getDealsCount() + "\n" +
-                "\t" + "Stock cycle: " + stock.getCycle()
-        );
     }
 
     public static void printStockDeals(Stock stock) {
@@ -65,12 +55,8 @@ public class Menu {
             throw new Error("No deals");
         }
         for (Deal deal : deals) {
-                System.out.println(
-                    "\t" + "Date: " + deal.getDate() +
-                    "\t" + "Number of shares: " + deal.getNumOfShares() +
-                    "\t" + "Sold price: " + deal.getSoldPrice() +
-                    "\t" + "Deal value: " + deal.getDealValue() + "\n"
-            );
+            System.out.println(deal);
+            System.out.println();
         }
     }
 }
