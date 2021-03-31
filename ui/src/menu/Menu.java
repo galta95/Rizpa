@@ -9,7 +9,7 @@ public class Menu {
         RSE rse;
         rse = Handler.startApp("engine/src/resources/ex1-small.xml");
         try {
-            choiceThree(rse.getStocks(), "g");
+            optionThree(rse.getStocks(), "g");
         } catch (Error e){
             if (e.getMessage().equals("No such stock")) {
                 System.out.println("No such stock");
@@ -19,7 +19,17 @@ public class Menu {
         }
     }
 
-    public static void choiceTwo(Stocks stocks) {
+    public static RSE optionOne() {
+        String xmlPath;
+
+        System.out.println("Enter xml full path: ");
+        Scanner scan = new Scanner(System.in);
+        xmlPath = scan.nextLine();
+
+        return Handler.startApp(xmlPath);
+    }
+
+    public static void optionTwo(Stocks stocks) {
         Map<String, Stock> hashStocks = stocks.getStocks();
         System.out.println("Stocks list: ");
 
@@ -29,7 +39,7 @@ public class Menu {
         });
     }
 
-    public static void choiceThree(Stocks stocks, String stockName) {
+    public static void optionThree(Stocks stocks, String stockName) {
         String stockSymbol = stockName.toUpperCase();
         Stock stock = stocks.getStocks().get(stockSymbol);
         if (stock == null) {
