@@ -4,59 +4,48 @@ import engine.*;
 
 import java.util.*;
 
+
 public class Menu {
+    private static RSE rse;
+    private static int choice;
+    private static Scanner s;
+
     public static void main(String[] args) {
-        RSE rse;
-        rse = Handler.startApp("engine/src/resources/ex1-small.xml");
-        try {
-            optionTwo(rse.getStocks());
-        } catch (Error e){
-            if (e.getMessage().equals("No such stock")) {
-                System.out.println("No such stock");
-            } else if (e.getMessage().equals("No deals")) {
-                System.out.println("No deals");
-            }
+        s = new Scanner(System.in);
+
+        while (true) {
+            MenuOption.showMenu();
+            // try
+            choice = s.nextInt();
+            // catch
+
+            menuActivate();
         }
     }
 
-    public static RSE optionOne() {
-        String xmlPath;
-
-        System.out.println("Enter xml full path: ");
-        Scanner scan = new Scanner(System.in);
-        xmlPath = scan.nextLine();
-
-        return Handler.startApp(xmlPath);
-    }
-
-    public static void optionTwo(Stocks stocks) {
-        Map<String, Stock> hashStocks = stocks.getStocks();
-        System.out.println("Stocks list: \n");
-
-        hashStocks.forEach((symbol, stock) -> {
-            System.out.println(stock);
-            System.out.println();
-        });
-    }
-
-    public static void optionThree(Stocks stocks, String stockName) {
-        String stockSymbol = stockName.toUpperCase();
-        Stock stock = stocks.getStocks().get(stockSymbol);
-        if (stock == null) {
-            throw new Error("No such stock");
-        }
-        System.out.println(stock);
-        printStockDeals(stock);
-    }
-
-    public static void printStockDeals(Stock stock) {
-        List<Deal> deals = stock.getDeals();
-        if (deals == null) {
-            throw new Error("No deals");
-        }
-        for (Deal deal : deals) {
-            System.out.println(deal);
-            System.out.println();
+    public static void menuActivate() {
+        switch (choice) {
+            case 1:
+                rse = MenuOption.readXML();
+                break;
+            case 2:
+                MenuOption.showAllStocks(rse.getStocks());
+                break;
+            case 3:
+                System.out.println("Please enter stock name: ");
+                String stockName = s.nextLine(); // TODO: do it better
+                stockName = s.nextLine();
+                MenuOption.showStockDetails(rse.getStocks(), stockName);
+                break;
+            case 4:
+                MenuOption.executeCommand();
+                break;
+            case 5:
+                MenuOption.showCommands();
+                break;
+            case 6:
+                MenuOption.exitSystem();
+                break;
         }
     }
 }
