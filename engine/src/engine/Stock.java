@@ -26,6 +26,9 @@ public class Stock {
         this.symbol = stock.getRseSymbol();
         this.companyName = stock.getRseCompanyName();
         this.price = stock.getRsePrice();
+        this.deals = null;
+        this.dealsCount = 0;
+        this.cycle = 0;
     }
 
     public int getPrice() {
