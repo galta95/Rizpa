@@ -60,4 +60,12 @@ public class Stock {
     public void setSymbol(String symbol) {
         this.symbol = symbol;
     }
+
+    public String toString() {
+        return "Stock symbol: " + this.symbol + "\n" +
+                "Stock company name: " + this.companyName + "\n" +
+                "Current price: " + this.price + "\n" +
+                "Deals until now: " + this.dealsCount + "\n" +
+                "Stock cycle: " + this.cycle;
+    }
 }

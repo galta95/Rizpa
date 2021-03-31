@@ -23,4 +23,11 @@ public class Deal {
     public int getNumOfShares() {
         return numOfShares;
     }
+
+    public String toString() {
+        return "Date: " + this.date +
+                "Number of shares: " + this.numOfShares +
+                "Sold price: " + this.soldPrice +
+                "Deal value: " + this.dealValue;
+    }
 }
