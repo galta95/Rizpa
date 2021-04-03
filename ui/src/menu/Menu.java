@@ -41,7 +41,7 @@ public class Menu {
                 MenuOption.executeOrder(rse);
                 break;
             case 5:
-                MenuOption.showOrders();
+                MenuOption.showStocksSummary(rse);
                 break;
             case 6:
                 MenuOption.exitSystem();

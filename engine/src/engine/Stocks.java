@@ -27,4 +27,14 @@ public class Stocks {
     public Stock gerStockBySymbol(String symbol) {
         return stocks.get(symbol);
     }
+
+    public String stocksSummary() {
+        String res = "";
+
+        for (Map.Entry<String, Stock> stock : stocks.entrySet()) {
+            res += stock.getValue().printSummary() + "\n";
+        }
+
+        return res;
+    }
 }

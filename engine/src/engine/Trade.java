@@ -34,8 +34,8 @@ public class Trade {
     }
 
     public String toString() {
-        return "Date: " + this.date +
-                "Number of shares: " + this.numOfShares +
-                "price: " + this.price;
+        return "Date: " + this.date + "\n" +
+                "Number of shares: " + this.numOfShares + "\n" +
+                "price: " + this.price + "\n";
     }
 }

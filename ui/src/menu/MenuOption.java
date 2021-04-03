@@ -11,12 +11,12 @@ public class MenuOption {
     public static void showMenu() {
         System.out.println(
                 "CHOOSE ONE OF THE FOLLOW: \n" +
-                        "\t 1 - read XML file \n" +
-                        "\t 2 - show all stocks \n" +
-                        "\t 3 - show stock details \n" +
-                        "\t 4 - execute command \n" +
-                        "\t 5 - show commands \n" +
-                        "\t 6 - exit system \n" +
+                        "\t 1 - Read XML file \n" +
+                        "\t 2 - Show all stocks \n" +
+                        "\t 3 - Show stock details \n" +
+                        "\t 4 - Execute order \n" +
+                        "\t 5 - Show stocks summary \n" +
+                        "\t 6 - Exit system \n" +
                         "PLEASE SELECT: "
         );
     }
@@ -84,12 +84,14 @@ public class MenuOption {
         System.out.println(res);
     }
 
-    public static void showOrders() {
-
+    public static void showStocksSummary(RSE rse) {
+        System.out.println(rse.getStocks().stocksSummary());
     }
 
     public static void exitSystem() {
-
+        System.out.println("Thank you for using our system! \n" +
+                "BYE BYE");
+        System.exit(0);
     }
 
     public static void printStockDeals(Stock stock) {
