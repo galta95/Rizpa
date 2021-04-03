@@ -2,6 +2,7 @@ package menu;
 
 import engine.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -10,13 +11,13 @@ public class MenuOption {
     public static void showMenu() {
         System.out.println(
                 "CHOOSE ONE OF THE FOLLOW: \n" +
-                "\t 1 - read XML file \n" +
-                "\t 2 - show all stocks \n" +
-                "\t 3 - show stock details \n" +
-                "\t 4 - execute command \n" +
-                "\t 5 - show commands \n" +
-                "\t 6 - exit system \n" +
-                "PLEASE SELECT: "
+                        "\t 1 - read XML file \n" +
+                        "\t 2 - show all stocks \n" +
+                        "\t 3 - show stock details \n" +
+                        "\t 4 - execute command \n" +
+                        "\t 5 - show commands \n" +
+                        "\t 6 - exit system \n" +
+                        "PLEASE SELECT: "
         );
     }
 
@@ -50,11 +51,40 @@ public class MenuOption {
         printStockDeals(stock);
     }
 
-    public static void executeCommand() {
+    public static void executeOrder(RSE rse) { // TODO: do it better + testing
+        Scanner scan = new Scanner(System.in);
+        Date date = new Date();
+        String orderName, symbolName, direction, res;
+        int price, numOfShares;
 
+        System.out.println("Please enter order name: ");
+        orderName = scan.nextLine();
+
+        System.out.println("Please enter symbol/company name: ");
+        symbolName = scan.nextLine();
+
+        System.out.println("Do you buy or sell? ");
+        direction = scan.nextLine();
+
+        if (direction.equals("buy"))
+            System.out.println("Please enter number of shares you want to buy: ");
+        else
+            System.out.println("Please enter number of shares you want to sell: ");
+        numOfShares = scan.nextInt();
+
+        if (orderName.equals("LMT")) {
+            System.out.println("Please enter the price you want: ");
+            price = scan.nextInt();
+        } else if (orderName.equals("MKT"))
+            price = 0;
+        else
+            price = -1;
+
+        res = Order.executeStockExchangeOrder(rse, symbolName, direction, orderName, date, numOfShares, price);
+        System.out.println(res);
     }
 
-    public static void showCommands() {
+    public static void showOrders() {
 
     }
 

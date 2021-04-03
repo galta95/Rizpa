@@ -24,7 +24,7 @@ public class Menu {
     }
 
     public static void menuActivate() {
-        switch (choice) {
+        switch (choice) { // TODO: do it better
             case 1:
                 rse = MenuOption.readXML();
                 break;
@@ -38,10 +38,10 @@ public class Menu {
                 MenuOption.showStockDetails(rse.getStocks(), stockName);
                 break;
             case 4:
-                MenuOption.executeCommand();
+                MenuOption.executeOrder(rse);
                 break;
             case 5:
-                MenuOption.showCommands();
+                MenuOption.showOrders();
                 break;
             case 6:
                 MenuOption.exitSystem();

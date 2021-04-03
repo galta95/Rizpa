@@ -8,19 +8,23 @@ import java.util.List;
 import java.util.Map;
 
 public class Stocks {
-    Map<String, Stock> stock;
+    Map<String, Stock> stocks;
 
     public Stocks(RseStocks rseStocks) {
         List<RseStock> rseStock = rseStocks.getRseStock();
-        this.stock = new HashMap<>();
+        this.stocks = new HashMap<>();
 
         for (RseStock item : rseStock) {
             Stock stock = new Stock(item);
-            this.stock.put(stock.getSymbol(), stock);
+            this.stocks.put(stock.getSymbol(), stock);
         }
     }
 
     public Map<String, Stock> getStocks() {
-        return this.stock;
+        return this.stocks;
+    }
+
+    public Stock gerStockBySymbol(String symbol) {
+        return stocks.get(symbol);
     }
 }

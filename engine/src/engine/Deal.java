@@ -2,11 +2,11 @@ package engine;
 
 import java.util.Date;
 
-public class Deal extends Barter {
+public class Deal extends Trade {
     private int dealValue;
 
-    public Deal(Date date, int numOfShares, int soldPrice, int dealValue) {
-        super(date, numOfShares, soldPrice);
+    public Deal(Date date, int numOfShares, int price, int dealValue) {
+        super(date, numOfShares, price);
         this.dealValue = dealValue;
     }
 
