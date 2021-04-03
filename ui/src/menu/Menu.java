@@ -32,10 +32,7 @@ public class Menu {
                 MenuOption.showAllStocks(rse.getStocks());
                 break;
             case 3:
-                System.out.println("Please enter stock name: ");
-                String stockName = s.nextLine(); // TODO: do it better
-                stockName = s.nextLine();
-                MenuOption.showStockDetails(rse.getStocks(), stockName);
+                MenuOption.showStockDetails(rse.getStocks());
                 break;
             case 4:
                 MenuOption.executeOrder(rse);

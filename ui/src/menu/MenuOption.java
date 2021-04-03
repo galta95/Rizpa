@@ -41,8 +41,14 @@ public class MenuOption {
         });
     }
 
-    public static void showStockDetails(Stocks stocks, String stockName) {
-        String stockSymbol = stockName.toUpperCase();
+    public static void showStockDetails(Stocks stocks) {
+        Scanner scan = new Scanner(System.in);
+        String stockSymbol;
+
+        System.out.println("Please enter stock symbol: ");
+        stockSymbol = scan.nextLine();
+
+        stockSymbol = stockSymbol.toUpperCase();
         Stock stock = stocks.getStocks().get(stockSymbol);
         if (stock == null) {
             throw new Error("No such stock");
@@ -51,7 +57,7 @@ public class MenuOption {
         printStockDeals(stock);
     }
 
-    public static void executeOrder(RSE rse) { // TODO: do it better + testing
+    public static void executeOrder(RSE rse) { // TODO: do it better + testing + check MKT
         Scanner scan = new Scanner(System.in);
         Date date = new Date();
         String orderName, symbolName, direction, res;
@@ -59,21 +65,27 @@ public class MenuOption {
 
         System.out.println("Please enter order name: ");
         orderName = scan.nextLine();
+        orderName = orderName.toUpperCase();
 
         System.out.println("Please enter symbol/company name: ");
         symbolName = scan.nextLine();
+        symbolName = symbolName.toUpperCase();
 
         System.out.println("Do you buy or sell? ");
         direction = scan.nextLine();
+        direction = direction.toUpperCase();
 
-        if (direction.equals("buy"))
+        if (direction.equals("BUY"))
             System.out.println("Please enter number of shares you want to buy: ");
         else
             System.out.println("Please enter number of shares you want to sell: ");
         numOfShares = scan.nextInt();
 
         if (orderName.equals("LMT")) {
-            System.out.println("Please enter the price you want: ");
+            if (direction.equals("BUY"))
+                System.out.println("Please enter the price you want to buy the stock: ");
+            else
+                System.out.println("Please enter the price you want to sell the stock: ");
             price = scan.nextInt();
         } else if (orderName.equals("MKT"))
             price = 0;

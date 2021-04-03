@@ -9,9 +9,9 @@ public class Order {
         Trade trade = new Trade(date, numOfShares, price);
 
         if (type.equals("LMT") || type.equals("MKT")) {
-            if (direction.equals("buy"))
+            if (direction.equals("BUY"))
                 res = LMTorMKTBuy(rse, symbol, trade);
-            else if (direction.equals("sell"))
+            else if (direction.equals("SELL"))
                 res = LMTorMKTSell(rse, symbol, trade);
         } else
             res = "ORDER FAILED";
