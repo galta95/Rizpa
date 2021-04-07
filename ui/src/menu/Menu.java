@@ -24,7 +24,7 @@ public class Menu {
     }
 
     public static void menuActivate() {
-        switch (choice) { // TODO: do it better
+        switch (choice) {
             case 1:
                 rse = MenuOption.readXML();
                 break;

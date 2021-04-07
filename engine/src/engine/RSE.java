@@ -14,6 +14,7 @@ public class RSE {
         return this.stocks;
     }
 
+    // TODO: duplicate code, need to be change
     public Trade buyTrade(Trade trade, String symbol) {
         Stock stock = this.stocks.gerStockBySymbol(symbol);
         if (stock == null)
@@ -28,7 +29,7 @@ public class RSE {
     public void addToBuyList(Trade trade, String symbol) {
         Stock stock = this.stocks.gerStockBySymbol(symbol);
         if (stock != null) {
-            stock.addBuy(trade);
+            stock.addBuyToBuysList(trade);
         }
     }
 
@@ -46,7 +47,7 @@ public class RSE {
     public void addToSellList(Trade trade, String symbol) {
         Stock stock = this.stocks.gerStockBySymbol(symbol);
         if (stock != null) {
-            stock.addSell(trade);
+            stock.addSellToSellsList(trade);
         }
     }
 }

@@ -81,7 +81,7 @@ public class Stock {
         this.symbol = symbol;
     }
 
-    public void addSell(Trade trade) {
+    public void addSellToSellsList(Trade trade) {
         Trade curr;
 
         for (int i = 0; i < this.sells.size(); i++) {
@@ -96,7 +96,7 @@ public class Stock {
         this.sells.add(trade);
     }
 
-    public void addBuy(Trade trade) {
+    public void addBuyToBuysList(Trade trade) {
         Trade curr;
 
         for (int i = 0; i < this.buys.size(); i++) {
@@ -112,54 +112,46 @@ public class Stock {
     }
 
     public Trade sell(Trade trade) {
-        for (Trade currBuy : this.buys) {
-            if (currBuy.getPrice() >= trade.getPrice())
-                makeDeal(trade, currBuy, buys);
+        for (Trade currSell : this.buys) {
+            if (currSell.getPrice() >= trade.getPrice()) {
+                makeDeal(trade, currSell, this.buys);
+                if (trade.getNumOfShares() == 0)
+                    break;
+            } else
+                break;
         }
-
         return trade;
     }
 
     public Trade buy(Trade trade) {
         for (Trade currSell : this.sells) {
-            if (currSell.getPrice() <= trade.getPrice())
-                makeDeal(trade, currSell, sells);
+            if (currSell.getPrice() <= trade.getPrice()) {
+                makeDeal(trade, currSell, this.sells);
+                if (trade.getNumOfShares() == 0)
+                    break;
+            } else
+                break;
         }
-
         return trade;
     }
 
-    private void makeDeal(Trade trade, Trade currSell, List<Trade> sells) {
-        int numOfShares;
-        int price;
-        int dealValue;
-        Deal newDeal;
+    private void makeDeal(Trade consumer, Trade producer, List<Trade> stockTradeList) {
+        int numOfShares = consumer.getNumOfShares();
+        int price = producer.getPrice();
+        int dealValue = price * numOfShares;
+        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue);
 
-        if (currSell.getNumOfShares() >= trade.getNumOfShares()) {
-            numOfShares = trade.getNumOfShares();
-            price = currSell.getPrice();
-            dealValue = price * numOfShares;
-
-            trade.setNumOfShares(0);
-            if (currSell.getNumOfShares() == numOfShares) {
-                sells.remove(currSell);
-            } else
-                currSell.setNumOfShares(currSell.getNumOfShares() - numOfShares);
+        if (producer.getNumOfShares() > consumer.getNumOfShares()) {
+            consumer.setNumOfShares(0);
+            producer.setNumOfShares(producer.getNumOfShares() - numOfShares);
         } else {
-            numOfShares = currSell.getNumOfShares();
-            price = currSell.getPrice();
-            dealValue = price * numOfShares;
-
-            trade.setNumOfShares(trade.getNumOfShares() - numOfShares);
-            sells.remove(currSell);
+            consumer.setNumOfShares(consumer.getNumOfShares() - numOfShares);
+            stockTradeList.remove(producer);
         }
-
-        newDeal = new Deal(trade.getDate(), numOfShares, price, dealValue);
         this.deals.add(newDeal); // TODO: make sure it added to the right place.
         this.dealsCount++;
         this.price = price;
         this.cycle += dealValue;
-
     }
 
     public String printSummary() {
@@ -173,7 +165,7 @@ public class Stock {
         else {
             for (Trade sell : this.sells) {
                 res += sell + "\n";
-                potentialValue += sell.numOfShares * sell.price;
+                potentialValue += sell.getNumOfShares() * sell.getPrice();
             }
         }
         res += "Total potential sells deals value: " + potentialValue + "\n\n";
@@ -185,12 +177,12 @@ public class Stock {
         else {
             for (Trade buy : this.buys) {
                 res += buy + "\n";
-                potentialValue += buy.numOfShares * buy.price;
+                potentialValue += buy.getNumOfShares() * buy.getPrice();
             }
         }
         res += "Total potential buys deals value: " + potentialValue + "\n\n";
 
-        res += "Deals waiting list: \n";
+        res += "Deals history: \n";
         if (deals.size() == 0)
             res += "There are no deals yet \n\n";
         else {
@@ -209,6 +201,6 @@ public class Stock {
                 "Stock company name: " + this.companyName + "\n" +
                 "Current price: " + this.price + "\n" +
                 "Deals until now: " + this.dealsCount + "\n" +
-                "Stock cycle: " + this.cycle + "\n";
+                "Stock cycle: " + this.cycle;
     }
 }
