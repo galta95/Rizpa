@@ -24,7 +24,7 @@ public class Menu {
     }
 
     public static void menuActivate() {
-        switch (choice) { // TODO: do it better
+        switch (choice) {
             case 1:
                 rse = MenuOption.readXML();
                 break;
@@ -32,13 +32,16 @@ public class Menu {
                 MenuOption.showAllStocks(rse.getStocks());
                 break;
             case 3:
-                MenuOption.showStockDetails(rse.getStocks());
+                System.out.println("Please enter stock name: ");
+                String stockName = s.nextLine(); // TODO: do it better
+                stockName = s.nextLine();
+                MenuOption.showStockDetails(rse.getStocks(), stockName);
                 break;
             case 4:
-                MenuOption.executeOrder(rse);
+                MenuOption.executeCommand();
                 break;
             case 5:
-                MenuOption.showStocksSummary(rse);
+                MenuOption.showCommands();
                 break;
             case 6:
                 MenuOption.exitSystem();

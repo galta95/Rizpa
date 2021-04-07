@@ -8,33 +8,19 @@ import java.util.List;
 import java.util.Map;
 
 public class Stocks {
-    Map<String, Stock> stocks;
+    Map<String, Stock> stock;
 
     public Stocks(RseStocks rseStocks) {
         List<RseStock> rseStock = rseStocks.getRseStock();
-        this.stocks = new HashMap<>();
+        this.stock = new HashMap<>();
 
         for (RseStock item : rseStock) {
             Stock stock = new Stock(item);
-            this.stocks.put(stock.getSymbol(), stock);
+            this.stock.put(stock.getSymbol(), stock);
         }
     }
 
     public Map<String, Stock> getStocks() {
-        return this.stocks;
-    }
-
-    public Stock gerStockBySymbol(String symbol) {
-        return stocks.get(symbol);
-    }
-
-    public String stocksSummary() {
-        String res = "";
-
-        for (Map.Entry<String, Stock> stock : stocks.entrySet()) {
-            res += stock.getValue().printSummary() + "\n";
-        }
-
-        return res;
+        return this.stock;
     }
 }
