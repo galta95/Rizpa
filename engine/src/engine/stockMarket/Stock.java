@@ -1,23 +1,26 @@
-package engine;
+package engine.stockMarket;
 
 import dataManager.jaxb.generated.RseStock;
+import engine.transaction.Deal;
+import engine.transaction.Trade;
 
+import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Stock {
+    private final List<Deal> deals;
+    private final List<Trade> sells;
+    private final List<Trade> buys;
     private String symbol;
     private String companyName;
     private int price;
-    private List<Deal> deals;
-    private List<Trade> sells;
-    private List<Trade> buys;
     private int dealsCount;
     private int cycle;
 
     public Stock(String symbol, String companyName, int price) {
-        this.symbol = symbol;
-        this.companyName = companyName;
+        this.symbol = symbol.toUpperCase();
+        this.companyName = companyName.toUpperCase();
         this.price = price;
         this.deals = new LinkedList<>();
         this.sells = new LinkedList<>();
@@ -27,14 +30,27 @@ public class Stock {
     }
 
     public Stock(RseStock stock) {
-        this.symbol = stock.getRseSymbol();
-        this.companyName = stock.getRseCompanyName();
+        this.symbol = stock.getRseSymbol().toUpperCase();
+        this.companyName = stock.getRseCompanyName().toUpperCase();
         this.price = stock.getRsePrice();
         this.deals = new LinkedList<>();
         this.sells = new LinkedList<>();
         this.buys = new LinkedList<>();
         this.dealsCount = 0;
         this.cycle = 0;
+        validations();
+    }
+
+    private void validations() {
+        if (this.symbol.contains(" ")) {
+            throw new InputMismatchException(this.symbol + " -  contains spaces");
+        }
+        if (this.companyName.startsWith(" ") || this.companyName.endsWith(" ")) {
+            throw new InputMismatchException(this.companyName + " -  contains spaces");
+        }
+        if (this.price <= 0) {
+            throw new InputMismatchException(this.symbol + " - price is not positive decimal");
+        }
     }
 
     public int getPrice() {
