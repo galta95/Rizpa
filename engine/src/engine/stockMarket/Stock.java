@@ -19,7 +19,7 @@ public class Stock {
     private int cycle;
 
     public Stock(String symbol, String companyName, int price) {
-        this.symbol = symbol.toUpperCase();
+        this.symbol = symbol;
         this.companyName = companyName.toUpperCase();
         this.price = price;
         this.deals = new LinkedList<>();
@@ -30,7 +30,7 @@ public class Stock {
     }
 
     public Stock(RseStock stock) {
-        this.symbol = stock.getRseSymbol().toUpperCase();
+        this.symbol = stock.getRseSymbol();
         this.companyName = stock.getRseCompanyName().toUpperCase();
         this.price = stock.getRsePrice();
         this.deals = new LinkedList<>();
@@ -43,10 +43,10 @@ public class Stock {
 
     private void validations() {
         if (this.symbol.contains(" ")) {
-            throw new InputMismatchException(this.symbol + " -  contains spaces");
+            throw new InputMismatchException(this.symbol + " - contains spaces");
         }
         if (this.companyName.startsWith(" ") || this.companyName.endsWith(" ")) {
-            throw new InputMismatchException(this.companyName + " -  contains spaces");
+            throw new InputMismatchException(this.companyName + " - contains spaces");
         }
         if (this.price <= 0) {
             throw new InputMismatchException(this.symbol + " - price is not positive decimal");
@@ -129,10 +129,9 @@ public class Stock {
 
     public Trade sell(Trade trade) {
         for (Trade currSell : this.buys) {
-            if (currSell.getPrice() >= trade.getPrice()) {
+            if (currSell.getPrice() >= trade.getPrice() && trade.getNumOfShares() > 0) {
                 makeDeal(trade, currSell, this.buys);
-                if (trade.getNumOfShares() == 0)
-                    break;
+                return trade;
             } else
                 break;
         }
@@ -141,10 +140,9 @@ public class Stock {
 
     public Trade buy(Trade trade) {
         for (Trade currSell : this.sells) {
-            if (currSell.getPrice() <= trade.getPrice()) {
+            if (currSell.getPrice() <= trade.getPrice() && trade.getNumOfShares() > 0) {
                 makeDeal(trade, currSell, this.sells);
-                if (trade.getNumOfShares() == 0)
-                    break;
+                return trade;
             } else
                 break;
         }
@@ -152,19 +150,25 @@ public class Stock {
     }
 
     private void makeDeal(Trade consumer, Trade producer, List<Trade> stockTradeList) {
-        int numOfShares = consumer.getNumOfShares();
+        int numOfShares;
         int price = producer.getPrice();
-        int dealValue = price * numOfShares;
-        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue);
 
         if (producer.getNumOfShares() > consumer.getNumOfShares()) {
+            numOfShares = consumer.getNumOfShares();
+
             consumer.setNumOfShares(0);
             producer.setNumOfShares(producer.getNumOfShares() - numOfShares);
         } else {
+            numOfShares = producer.getNumOfShares();
+
             consumer.setNumOfShares(consumer.getNumOfShares() - numOfShares);
             stockTradeList.remove(producer);
         }
-        this.deals.add(newDeal); // TODO: make sure it added to the right place.
+
+        int dealValue = price * numOfShares;
+        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue);
+
+        this.deals.add(0, newDeal);
         this.dealsCount++;
         this.price = price;
         this.cycle += dealValue;
@@ -213,10 +217,22 @@ public class Stock {
     }
 
     public String toString() {
-        return "Stock symbol: " + this.symbol + "\n" +
+        String res = "Stock symbol: " + this.symbol + "\n" +
                 "Stock company name: " + this.companyName + "\n" +
                 "Current price: " + this.price + "\n" +
                 "Deals until now: " + this.dealsCount + "\n" +
-                "Stock cycle: " + this.cycle;
+                "Stock cycle: " + this.cycle + "\n" +
+                "Deals history: \n";
+
+        if (deals.size() == 0) {
+            res += "There are no deals yet";
+        } else {
+            res += "\n";
+            for (Deal deal : this.deals) {
+                res += deal + "\n";
+            }
+        }
+
+        return res;
     }
 }
