@@ -2,6 +2,7 @@ package engine.stockMarket;
 
 import Errors.ConstraintError;
 import Errors.NotFoundError;
+import Errors.NotUpperCaseError;
 import dataManager.jaxb.generated.RseStock;
 import dataManager.jaxb.generated.RseStocks;
 
@@ -15,22 +16,33 @@ public class Stocks {
 
     public Stocks(RseStocks rseStocks) throws ConstraintError {
         List<RseStock> rseStock = rseStocks.getRseStock();
+        char ch;
 
         this.stocks = new HashMap<>();
         this.companyToSymbole = new HashMap<>();
 
         for (RseStock item : rseStock) {
             Stock stock = new Stock(item);
+            String stockSymbol = stock.getSymbol();
+            String stockCompanyName = stock.getCompanyName();
 
-            if (this.stocks.get(stock.getSymbol()) != null) {
-                throw new ConstraintError(stock.getSymbol());
+            for (int i = 0; i < stockSymbol.length(); i++) {
+                ch = stockSymbol.charAt(i);
+                if (!Character.isUpperCase(ch))
+                {
+                    throw new NotUpperCaseError(stockSymbol);
+                }
             }
-            if (this.companyToSymbole.get(stock.getCompanyName()) != null) {
-                throw new ConstraintError(stock.getCompanyName());
+            
+            if (this.stocks.get(stockSymbol) != null) {
+                throw new ConstraintError(stockSymbol);
+            }
+            if (this.companyToSymbole.get(stockCompanyName) != null) {
+                throw new ConstraintError(stockCompanyName);
             }
 
-            this.stocks.put(stock.getSymbol(), stock);
-            this.companyToSymbole.put(stock.getCompanyName(), stock.getSymbol());
+            this.stocks.put(stockSymbol, stock);
+            this.companyToSymbole.put(stockCompanyName, stockSymbol);
         }
     }
 
