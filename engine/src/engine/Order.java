@@ -9,18 +9,25 @@ public class Order {
         String res = null;
         Trade trade = new Trade(date, numOfShares, price);
 
-        if (type.equals("LMT") || type.equals("MKT")) {
+        if (type.equals("LMT")) {
             if (direction.equals("BUY"))
-                res = LMTorMKTBuy(rse, symbol, trade);
+                res = LMTBuy(rse, symbol, trade);
             else if (direction.equals("SELL"))
-                res = LMTorMKTSell(rse, symbol, trade);
-        } else
+                res = LMTSell(rse, symbol, trade);
+        } else if (type.equals("MKT")) {
+            if (direction.equals("BUY"))
+                res = MKTBuy(rse, symbol, trade);
+            else if (direction.equals("SELL"))
+                res = MKTSell(rse, symbol, trade);
+        } else {
             res = "ORDER FAILED";
+
+        }
 
         return res;
     }
 
-    private static String LMTorMKTBuy(RSE rse, String symbol, Trade trade) throws Exception {
+    private static String LMTBuy(RSE rse, String symbol, Trade trade) throws Exception {
         String res;
         int boughtNumOfShare = trade.getNumOfShares();
         int dealsCounter = 1;
@@ -53,7 +60,7 @@ public class Order {
         return res;
     }
 
-    private static String LMTorMKTSell(RSE rse, String symbol, Trade trade) throws Exception {
+    private static String LMTSell(RSE rse, String symbol, Trade trade) throws Exception {
         String res;
         int sellNumOfShare = trade.getNumOfShares();
         int dealsCounter = 1;
@@ -74,7 +81,7 @@ public class Order {
                 }
             }
         } else {
-            res += "Bought - 0\n";
+            res += "Sold - 0\n";
         }
 
         if (trade.getNumOfShares() > 0) {
@@ -83,6 +90,68 @@ public class Order {
             res += "Insert to sell list - " + sellNumOfShare + "\n";
         }
 
+        return res;
+    }
+
+    private static String MKTBuy(RSE rse, String symbol, Trade trade) throws Exception {
+        String res;
+        int sellNumOfShare;
+        int dealsCounter = 0;
+        res = "Order was executed successfully. \n";
+
+        while (trade.getNumOfShares() > 0) {
+            if (rse.isStockSellListEmpty(symbol)) {
+                trade.setPrice(rse.getStockPrice(symbol));
+
+                sellNumOfShare = trade.getNumOfShares();
+                rse.addToBuyList(trade, symbol);
+
+                if (dealsCounter == 0) {
+                    res += "Bought - 0\n";
+                }
+
+                res += "Insert to buy list - " + sellNumOfShare + "\n";
+                return res;
+            } else {
+                sellNumOfShare = trade.getNumOfShares();
+
+                trade.setPrice(rse.getStockSellPrice(symbol));
+                trade = rse.buyTrade(trade, symbol);
+                dealsCounter++;
+                res += "Bought #" + dealsCounter + ": " + (sellNumOfShare - trade.getNumOfShares()) + "\n";
+            }
+        }
+        return res;
+    }
+
+    private static String MKTSell(RSE rse, String symbol, Trade trade) throws Exception {
+        String res;
+        int sellNumOfShare;
+        int dealsCounter = 0;
+        res = "Order was executed successfully. \n";
+
+        while (trade.getNumOfShares() > 0) {
+            if (rse.isStockBuyListEmpty(symbol)) {
+                trade.setPrice(rse.getStockPrice(symbol));
+
+                sellNumOfShare = trade.getNumOfShares();
+                rse.addToSellList(trade, symbol);
+
+                if (dealsCounter == 0) {
+                    res += "Sold - 0\n";
+                }
+
+                res += "Insert to sell list - " + sellNumOfShare + "\n";
+                return res;
+            } else {
+                sellNumOfShare = trade.getNumOfShares();
+
+                trade.setPrice(rse.getStockBuyPrice(symbol));
+                trade = rse.sellTrade(trade, symbol);
+                dealsCounter++;
+                res += "Sold #" + dealsCounter + ": " + (sellNumOfShare - trade.getNumOfShares()) + "\n";
+            }
+        }
         return res;
     }
 }

@@ -46,4 +46,29 @@ public class RSE {
         Stock stock = this.stocks.getStockByName(symbol);
         stock.addSellToSellsList(trade);
     }
+
+    public boolean isStockBuyListEmpty(String symbol) {
+        Stock stock = this.stocks.getStockByName(symbol);
+        return stock.getBuys().isEmpty();
+    }
+
+    public boolean isStockSellListEmpty(String symbol) {
+        Stock stock = this.stocks.getStockByName(symbol);
+        return stock.getSells().isEmpty();
+    }
+
+    public int getStockPrice(String symbol) {
+        Stock stock = this.stocks.getStockByName(symbol);
+        return stock.getPrice();
+    }
+
+    public int getStockBuyPrice(String symbol) {
+        Stock stock = this.stocks.getStockByName(symbol);
+        return stock.getBuys().get(0).getPrice();
+    }
+
+    public int getStockSellPrice(String symbol) {
+        Stock stock = this.stocks.getStockByName(symbol);
+        return stock.getSells().get(0).getPrice();
+    }
 }
