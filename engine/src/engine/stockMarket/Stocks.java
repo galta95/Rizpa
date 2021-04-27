@@ -65,6 +65,7 @@ public class Stocks {
         return stock;
     }
 
+    //TODO: delete this shit
     public String stocksSummary() {
         String res = "";
 

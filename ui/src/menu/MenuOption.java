@@ -3,9 +3,8 @@ package menu;
 import Errors.DataNotLoadedError;
 import Errors.RangeError;
 import engine.*;
+import engine.dto.*;
 import engine.stockMarket.RSE;
-import engine.stockMarket.Stock;
-import engine.transaction.Deal;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -33,7 +32,7 @@ public class MenuOption {
         xmlPath = scan.nextLine();
 
         try {
-            RSE rse = Handler.startApp(xmlPath);
+            RSE rse = new RSE(xmlPath);
             System.out.println("XML loaded!");
             return rse;
         } catch (Exception e) {
@@ -45,13 +44,14 @@ public class MenuOption {
         if (rse == null) {
             throw new DataNotLoadedError();
         }
-        Map<String, Stock> hashStocks = rse.getStocks().getStocks(); //TODO: make better
-        System.out.println("Stocks list: \n");
+        DTOStocks stocks = rse.getAllStocks();
 
-        hashStocks.forEach((symbol, stock) -> {
-            System.out.println(stock);
+        System.out.println("Stocks list: \n");
+        for (DTOStock stock: stocks) {
+            DTODeals stockDeals = rse.getStockDeals(stock.getCompanyName());
+            printStock(stock, stockDeals);
             System.out.println();
-        });
+        }
     }
 
     public static void showStockDetails(RSE rse) throws DataNotLoadedError, Exception {
@@ -65,20 +65,49 @@ public class MenuOption {
         System.out.println("Please enter stock symbol/company name: ");
         stockName = scan.nextLine();
         stockName = stockName.toUpperCase();
-        Stock stock = rse.getStocks().getStockByName(stockName);
-        System.out.println(stock);
+        DTOStock stock = rse.getStockByName(stockName);
+        DTODeals stockDeals = rse.getStockDeals(stockName);
+
+        printStock(stock, stockDeals);
+    }
+
+    public static void printStock(DTOStock stock, DTODeals stockDeals) {
+        System.out.println(
+                "Stock symbol: " + stock.getSymbol() + "\n" +
+                        "Stock company name: " + stock.getCompanyName() + "\n" +
+                        "Current price: " + stock.getPrice() + "\n" +
+                        "Deals until now: " + stock.getDealsCount() + "\n" +
+                        "Stock cycle: " + stock.getCycle() + "\n" +
+                        "Deals history: \n"
+        );
+
+        if (stock.getDealsCount() == 0) {
+            System.out.println("There are no deals yet");
+        } else {
+            System.out.println("\n");
+            for (DTODeal deal : stockDeals) {
+                System.out.println(
+                        "*****\n" +
+                                "Date: " + deal.getDate() + "\n" +
+                                "Number of shares: " + deal.getNumOfShares() + "\n" +
+                                "price: " + deal.getPrice() +
+                                "Deal value: " + deal.getDealValue()
+                );
+            }
+        }
     }
 
     public static void executeOrder(RSE rse) throws DataNotLoadedError, Exception {
         Scanner scan = new Scanner(System.in);
         String date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
-        String orderName, operation, res;
+        String orderName, operation;
         int price;
+
+        DTOOrder dtoOrder;
 
         if (rse == null) {
             throw new DataNotLoadedError();
         }
-
         try {
             System.out.println(
                     "CHOOSE ONE OF THE FOLLOW: \n" +
@@ -99,7 +128,7 @@ public class MenuOption {
 
             System.out.println("Please enter stock symbol/company name: ");
             String symbolName = scan.nextLine().toUpperCase();
-            rse.assertStockExists(symbolName);
+            //rse.assertStockExists(symbolName);
 
             System.out.println(
                     "CHOOSE ONE OF THE FOLLOW: \n" +
@@ -139,8 +168,19 @@ public class MenuOption {
                 price = 0;
             }
 
-            res = Order.executeStockExchangeOrder(rse, symbolName, operation, orderName, date, numOfShares, price);
-            System.out.println(res);
+            if (orderName.equals("LMT")) {
+                if (operation.equals("BUY"))
+                    dtoOrder = rse.executeLmtOrderBuy(symbolName, date, numOfShares, price);
+                else if (operation.equals("SELL"))
+                    dtoOrder = rse.executeLmtOrderSell(symbolName, date, numOfShares, price);
+            } else if (orderName.equals("MKT")) {
+                if (operation.equals("BUY"))
+                    dtoOrder = rse.executeMktOrderBuy(symbolName, date, numOfShares, price);
+                else if (operation.equals("SELL"))
+                    dtoOrder = rse.executeMktOrderSell(symbolName, date, numOfShares, price);
+            } else {
+                System.out.println("ORDER FAILED");
+            }
         } catch (Exception e) {
             if (e.getMessage() != null) {
                 throw e;
@@ -153,7 +193,7 @@ public class MenuOption {
         if (rse == null) {
             throw new DataNotLoadedError();
         }
-        System.out.println(rse.getStocks().stocksSummary());
+        //System.out.println(rse.getStocks().stocksSummary());
     }
 
     public static void exitSystem() {
