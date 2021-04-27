@@ -14,10 +14,10 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RSE implements StockMarketApi {
+public class StockMarket implements StockMarketApi {
     private final Stocks stocks;
 
-    public RSE(String path) throws JAXBException, FileNotFoundException {
+    public StockMarket(String path) throws JAXBException, FileNotFoundException {
         RizpaStockExchangeDescriptor rsed = SchemaBasedJAXB.loadXml(path);
         this.stocks = new Stocks(rsed.getRseStocks());
     }

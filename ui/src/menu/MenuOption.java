@@ -2,9 +2,8 @@ package menu;
 
 import Errors.DataNotLoadedError;
 import Errors.RangeError;
-import engine.*;
 import engine.dto.*;
-import engine.stockMarket.RSE;
+import engine.stockMarket.StockMarket;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,7 +23,7 @@ public class MenuOption {
         );
     }
 
-    public static RSE readXML() throws Exception {
+    public static StockMarket readXML() throws Exception {
         String xmlPath;
 
         System.out.println("Enter xml full path: ");
@@ -32,30 +31,30 @@ public class MenuOption {
         xmlPath = scan.nextLine();
 
         try {
-            RSE rse = new RSE(xmlPath);
+            StockMarket stockMarket = new StockMarket(xmlPath);
             System.out.println("XML loaded!");
-            return rse;
+            return stockMarket;
         } catch (Exception e) {
             throw e;
         }
     }
 
-    public static void showAllStocks(RSE rse) throws DataNotLoadedError {
-        if (rse == null) {
+    public static void showAllStocks(StockMarket stockMarket) throws DataNotLoadedError {
+        if (stockMarket == null) {
             throw new DataNotLoadedError();
         }
-        DTOStocks stocks = rse.getAllStocks();
+        DTOStocks stocks = stockMarket.getAllStocks();
 
         System.out.println("Stocks list: \n");
         for (DTOStock stock: stocks) {
-            DTODeals stockDeals = rse.getStockDeals(stock.getCompanyName());
+            DTODeals stockDeals = stockMarket.getStockDeals(stock.getCompanyName());
             printStock(stock, stockDeals);
             System.out.println();
         }
     }
 
-    public static void showStockDetails(RSE rse) throws DataNotLoadedError, Exception {
-        if (rse == null) {
+    public static void showStockDetails(StockMarket stockMarket) throws DataNotLoadedError, Exception {
+        if (stockMarket == null) {
             throw new DataNotLoadedError();
         }
 
@@ -65,8 +64,8 @@ public class MenuOption {
         System.out.println("Please enter stock symbol/company name: ");
         stockName = scan.nextLine();
         stockName = stockName.toUpperCase();
-        DTOStock stock = rse.getStockByName(stockName);
-        DTODeals stockDeals = rse.getStockDeals(stockName);
+        DTOStock stock = stockMarket.getStockByName(stockName);
+        DTODeals stockDeals = stockMarket.getStockDeals(stockName);
 
         printStock(stock, stockDeals);
     }
@@ -97,7 +96,7 @@ public class MenuOption {
         }
     }
 
-    public static void executeOrder(RSE rse) throws DataNotLoadedError, Exception {
+    public static void executeOrder(StockMarket stockMarket) throws DataNotLoadedError, Exception {
         Scanner scan = new Scanner(System.in);
         String date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
         String orderName, operation;
@@ -105,7 +104,7 @@ public class MenuOption {
 
         DTOOrder dtoOrder;
 
-        if (rse == null) {
+        if (stockMarket == null) {
             throw new DataNotLoadedError();
         }
         try {
@@ -170,14 +169,14 @@ public class MenuOption {
 
             if (orderName.equals("LMT")) {
                 if (operation.equals("BUY"))
-                    dtoOrder = rse.executeLmtOrderBuy(symbolName, date, numOfShares, price);
+                    dtoOrder = stockMarket.executeLmtOrderBuy(symbolName, date, numOfShares, price);
                 else if (operation.equals("SELL"))
-                    dtoOrder = rse.executeLmtOrderSell(symbolName, date, numOfShares, price);
+                    dtoOrder = stockMarket.executeLmtOrderSell(symbolName, date, numOfShares, price);
             } else if (orderName.equals("MKT")) {
                 if (operation.equals("BUY"))
-                    dtoOrder = rse.executeMktOrderBuy(symbolName, date, numOfShares, price);
+                    dtoOrder = stockMarket.executeMktOrderBuy(symbolName, date, numOfShares, price);
                 else if (operation.equals("SELL"))
-                    dtoOrder = rse.executeMktOrderSell(symbolName, date, numOfShares, price);
+                    dtoOrder = stockMarket.executeMktOrderSell(symbolName, date, numOfShares, price);
             } else {
                 System.out.println("ORDER FAILED");
             }
@@ -189,8 +188,8 @@ public class MenuOption {
         }
     }
 
-    public static void showStocksSummary(RSE rse) throws DataNotLoadedError {
-        if (rse == null) {
+    public static void showStocksSummary(StockMarket stockMarket) throws DataNotLoadedError {
+        if (stockMarket == null) {
             throw new DataNotLoadedError();
         }
         //System.out.println(rse.getStocks().stocksSummary());
