@@ -3,11 +3,11 @@ package engine.dto;
 import engine.stockMarket.Stock;
 
 public class DTOStock {
-    private String companyName;
-    private String symbol;
-    private int price;
-    private int dealsCount;
-    private int cycle;
+    private final String companyName;
+    private final String symbol;
+    private final int price;
+    private final int dealsCount;
+    private final int cycle;
 
     public DTOStock(Stock stock) {
         this.companyName = stock.getCompanyName();
