@@ -1,7 +1,7 @@
 package menu;
 
-import Errors.DataNotLoadedError;
-import Errors.RangeError;
+import errors.DataNotLoadedError;
+import errors.RangeError;
 import engine.dto.*;
 import engine.stockMarket.StockMarket;
 

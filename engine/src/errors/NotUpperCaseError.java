@@ -1,4 +1,4 @@
-package Errors;
+package errors;
 
 public class NotUpperCaseError extends RuntimeException {
     public NotUpperCaseError(String element) {

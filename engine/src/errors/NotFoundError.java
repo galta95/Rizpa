@@ -1,4 +1,4 @@
-package Errors;
+package errors;
 
 public class NotFoundError extends RuntimeException {
     public NotFoundError(String element) {

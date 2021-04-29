@@ -1,6 +1,6 @@
 package engine.stockMarket;
 
-import Errors.NotFoundError;
+import errors.NotFoundError;
 import dataManager.jaxb.SchemaBasedJAXB;
 import dataManager.jaxb.generated.RizpaStockExchangeDescriptor;
 import engine.dto.DTODeals;
@@ -75,6 +75,7 @@ public class StockMarket implements StockMarketApi {
     }
 
     //----------------------------API-----------------------------//
+
     @Override
     public DTOStocks getAllStocks() {
         return new DTOStocks(this.stocks.getStocks());

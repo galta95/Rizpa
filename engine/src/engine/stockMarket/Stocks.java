@@ -1,8 +1,8 @@
 package engine.stockMarket;
 
-import Errors.ConstraintError;
-import Errors.NotFoundError;
-import Errors.NotUpperCaseError;
+import errors.ConstraintError;
+import errors.NotFoundError;
+import errors.NotUpperCaseError;
 import dataManager.jaxb.generated.RseStock;
 import dataManager.jaxb.generated.RseStocks;
 

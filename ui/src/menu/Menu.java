@@ -1,6 +1,6 @@
 package menu;
 
-import Errors.RangeError;
+import errors.RangeError;
 import engine.stockMarket.StockMarket;
 
 import java.util.*;
