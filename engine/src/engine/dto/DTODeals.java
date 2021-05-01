@@ -12,7 +12,7 @@ public class DTODeals implements Iterable<DTODeal> {
     public DTODeals(List<Deal> deals) {
         this.deals = new LinkedList<>();
         for (Deal deal: deals) {
-            this.deals.add(new DTODeal(deal.getDealValue(), deal.getDate(), deal.getNumOfShares(), deal.getPrice()));
+            this.deals.add(new DTODeal(deal.getDealValue(), deal.getDate(), deal.getNumOfShares(), deal.getPrice(), deal.getOrderType()));
         }
     }
 

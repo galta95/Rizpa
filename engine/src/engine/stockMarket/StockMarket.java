@@ -1,21 +1,19 @@
 package engine.stockMarket;
 
 import dataManager.generated.RizpaStockExchangeDescriptor;
+import engine.dto.*;
 import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.stocks.Stocks;
 import engine.stockMarket.users.Users;
 import errors.NotFoundError;
 import dataManager.SchemaBasedJAXB;
-import engine.dto.DTODeals;
-import engine.dto.DTOOrder;
-import engine.dto.DTOStock;
-import engine.dto.DTOStocks;
 import engine.transaction.Trade;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class StockMarket implements StockMarketApi {
     private final Stocks stocks;
@@ -115,9 +113,46 @@ public class StockMarket implements StockMarketApi {
     }
 
     @Override
+    public DTOStockSummary getStockSummary(String symbol) {
+        Stock stock = this.stocks.getStockBySymbol(symbol);
+        int potentialSellsValue = 0;
+        int potentialBuysValue = 0;
+        int sellsSize = stock.getSells().size();
+        int buysSize = stock.getBuys().size();
+
+        if (sellsSize > 0) {
+            for (Trade sell : stock.getSells()) {
+                potentialSellsValue += sell.getNumOfShares() * sell.getPrice();
+            }
+        }
+
+        if (buysSize > 0) {
+            for (Trade buy : stock.getBuys()) {
+                potentialBuysValue += buy.getNumOfShares() * buy.getPrice();
+            }
+        }
+
+        return new DTOStockSummary(stock.getSymbol(), stock.getCompanyName(), sellsSize, buysSize, stock.getSells(),
+                stock.getBuys(), stock.getDeals(), potentialSellsValue, potentialBuysValue, stock.getCycle());
+
+    }
+
+    @Override
+    public DTOStocksSummary getStocksSummary() {
+        Map<String, Stock> stocks = this.stocks.getStocks();
+        List<DTOStockSummary> stocksSummary = new LinkedList<>();
+
+        for (Map.Entry<String, Stock> stock : stocks.entrySet()) {
+            stocksSummary.add(this.getStockSummary(stock.getKey()));
+        }
+
+        return new DTOStocksSummary(stocksSummary);
+    }
+
+    @Override
     public DTOOrder executeLmtOrderBuy(String symbol, String date, int numOfShares, int price) {
         List<Integer> deals = new LinkedList<>();
-        Trade trade = new Trade(date, numOfShares, price);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.LMT);
 
         int numberOfSharesInsertedToList = 0;
         int boughtNumOfShare = trade.getNumOfShares();
@@ -148,7 +183,7 @@ public class StockMarket implements StockMarketApi {
     @Override
     public DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price) {
         List<Integer> deals = new LinkedList<>();
-        Trade trade = new Trade(date, numOfShares, price);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.LMT);
 
         int numberOfSharesInsertedToList = 0;
         int sellNumOfShare = trade.getNumOfShares();
@@ -179,7 +214,7 @@ public class StockMarket implements StockMarketApi {
     @Override
     public DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price) {
         List<Integer> deals = new LinkedList<>();
-        Trade trade = new Trade(date, numOfShares, price);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.MKT);
 
         int sellNumOfShare = 0;
         int dealsCounter = 0;
@@ -208,7 +243,7 @@ public class StockMarket implements StockMarketApi {
         int dealsCounter = 0;
         List<Integer> deals = new LinkedList<>();
         int numberOfSharesInsertedToList = 0;
-        Trade trade = new Trade(date, numOfShares, price);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.MKT);
 
         while (trade.getNumOfShares() > 0) {
             if (this.isStockBuyListEmpty(symbol)) {
