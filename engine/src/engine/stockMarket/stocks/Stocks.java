@@ -1,10 +1,10 @@
-package engine.stockMarket;
+package engine.stockMarket.stocks;
 
 import errors.ConstraintError;
 import errors.NotFoundError;
 import errors.NotUpperCaseError;
-import dataManager.jaxb.generated.RseStock;
-import dataManager.jaxb.generated.RseStocks;
+import dataManager.generated.RseStock;
+import dataManager.generated.RseStocks;
 
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +60,16 @@ public class Stocks {
 
         if (symbol != null ) {
             stock = stocks.get(symbol);
+        }
+
+        return stock;
+    }
+
+    public Stock getStockBySymbol(String symbol) throws NotFoundError {
+        Stock stock = stocks.get(symbol);
+
+        if (symbol == null) {
+            throw new NotFoundError(symbol);
         }
 
         return stock;

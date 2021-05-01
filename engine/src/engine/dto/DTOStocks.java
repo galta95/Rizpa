@@ -1,6 +1,6 @@
 package engine.dto;
 
-import engine.stockMarket.Stock;
+import engine.stockMarket.stocks.Stock;
 
 import java.util.Iterator;
 import java.util.LinkedList;
