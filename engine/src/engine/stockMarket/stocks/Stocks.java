@@ -74,15 +74,4 @@ public class Stocks {
 
         return stock;
     }
-
-    //TODO: delete this shit
-    public String stocksSummary() {
-        String res = "";
-
-        for (Map.Entry<String, Stock> stock : stocks.entrySet()) {
-            res += stock.getValue().printSummary() + "\n";
-        }
-
-        return res;
-    }
 }

@@ -154,54 +154,11 @@ public class Stock {
         }
 
         int dealValue = price * numOfShares;
-        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue);
+        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue, consumer.getOrderType());
 
         this.deals.add(0, newDeal);
         this.dealsCount++;
         this.price = price;
         this.cycle += dealValue;
-    }
-
-    //TODO: delete this shit
-    public String printSummary() {
-        int potentialValue = 0;
-        String res = "++++++++++++++++++++++++++\n" +
-                "Stock symbol: " + this.symbol + "\n" +
-                "Stock company name: " + this.companyName + "\n" +
-                "Sells waiting list: \n";
-        if (sells.size() == 0)
-            res += "There are no sell request \n\n";
-        else {
-            for (Trade sell : this.sells) {
-                res += sell + "\n";
-                potentialValue += sell.getNumOfShares() * sell.getPrice();
-            }
-        }
-        res += "Total potential sells deals value: " + potentialValue + "\n\n";
-
-        potentialValue = 0;
-        res += "Buys waiting list: \n";
-        if (buys.size() == 0)
-            res += "There are no buy request \n\n";
-        else {
-            for (Trade buy : this.buys) {
-                res += buy + "\n";
-                potentialValue += buy.getNumOfShares() * buy.getPrice();
-            }
-        }
-        res += "Total potential buys deals value: " + potentialValue + "\n\n";
-
-        res += "Deals history: \n";
-        if (deals.size() == 0)
-            res += "There are no deals yet \n\n";
-        else {
-            for (Deal deal : this.deals)
-                res += deal + "\n";
-        }
-        res += "Stock deals value (cycle): " + this.cycle + "\n";
-
-        res += "++++++++++++++++++++++++++\n";
-
-        return res;
     }
 }
