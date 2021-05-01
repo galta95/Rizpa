@@ -1,8 +1,11 @@
 package engine.stockMarket;
 
+import dataManager.generated.RizpaStockExchangeDescriptor;
+import engine.stockMarket.stocks.Stock;
+import engine.stockMarket.stocks.Stocks;
+import engine.stockMarket.users.Users;
 import errors.NotFoundError;
-import dataManager.jaxb.SchemaBasedJAXB;
-import dataManager.jaxb.generated.RizpaStockExchangeDescriptor;
+import dataManager.SchemaBasedJAXB;
 import engine.dto.DTODeals;
 import engine.dto.DTOOrder;
 import engine.dto.DTOStock;
@@ -16,10 +19,12 @@ import java.util.List;
 
 public class StockMarket implements StockMarketApi {
     private final Stocks stocks;
+    private final Users users;
 
     public StockMarket(String path) throws JAXBException, FileNotFoundException {
         RizpaStockExchangeDescriptor rsed = SchemaBasedJAXB.loadXml(path);
         this.stocks = new Stocks(rsed.getRseStocks());
+        this.users = new Users(rsed.getRseUsers(), this.stocks);
     }
 
     private void assertStockExists(String name) throws NotFoundError {
@@ -91,8 +96,12 @@ public class StockMarket implements StockMarketApi {
     }
 
     @Override
-    public DTOStock getStockBySymbol() {
-        return null;
+    public DTOStock getStockBySymbol(String symbol) {
+        try {
+            return new DTOStock(this.stocks.getStockBySymbol(symbol));
+        } catch (NotFoundError error) {
+            return null;
+        }
     }
 
     @Override

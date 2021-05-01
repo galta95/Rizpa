@@ -8,7 +8,7 @@ import engine.dto.DTOStocks;
 public interface StockMarketApi {
         DTOStocks getAllStocks();
         DTOStock getStockByName(String stockName);
-        DTOStock getStockBySymbol();
+        DTOStock getStockBySymbol(String symbol);
         DTODeals getStockDeals(String stockName);
         DTOOrder executeLmtOrderBuy(String symbol, String date, int numOfShares, int price);
         DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price);

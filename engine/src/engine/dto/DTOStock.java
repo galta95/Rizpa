@@ -1,6 +1,6 @@
 package engine.dto;
 
-import engine.stockMarket.Stock;
+import engine.stockMarket.stocks.Stock;
 
 public class DTOStock {
     private final String companyName;

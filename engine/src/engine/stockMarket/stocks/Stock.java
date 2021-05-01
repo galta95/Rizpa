@@ -1,6 +1,6 @@
-package engine.stockMarket;
+package engine.stockMarket.stocks;
 
-import dataManager.jaxb.generated.RseStock;
+import dataManager.generated.RseStock;
 import engine.transaction.Deal;
 import engine.transaction.Trade;
 

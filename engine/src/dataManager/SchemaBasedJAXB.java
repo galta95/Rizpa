@@ -1,7 +1,7 @@
-package dataManager.jaxb;
+package dataManager;
 
 import errors.FileFormatNotSupportedError;
-import dataManager.jaxb.generated.RizpaStockExchangeDescriptor;
+import dataManager.generated.RizpaStockExchangeDescriptor;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
