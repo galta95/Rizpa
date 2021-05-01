@@ -30,11 +30,4 @@ public class Trade {
     public void setPrice(int price) {
         this.price = price;
     }
-
-    public String toString() {
-        return "*****\n" +
-                "Date: " + this.date + "\n" +
-                "Number of shares: " + this.numOfShares + "\n" +
-                "price: " + this.price;
-    }
 }

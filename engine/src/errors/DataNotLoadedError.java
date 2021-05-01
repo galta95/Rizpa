@@ -1,4 +1,4 @@
-package Errors;
+package errors;
 
 public class DataNotLoadedError extends RuntimeException {
     public DataNotLoadedError() {

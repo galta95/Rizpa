@@ -1,14 +1,14 @@
 package menu;
 
-import Errors.RangeError;
-import engine.stockMarket.RSE;
+import errors.RangeError;
+import engine.stockMarket.StockMarket;
 
 import java.util.*;
 
 public class Menu {
     public static void main(String[] args) {
         int choice;
-        RSE rse = null;
+        StockMarket stockMarket = null;
         Scanner scan = new Scanner(System.in);
 
         while (true) {
@@ -21,19 +21,19 @@ public class Menu {
                 }
                 switch (choice) {
                     case 1:
-                        rse = MenuOption.readXML();
+                        stockMarket = MenuOption.readXML();
                         break;
                     case 2:
-                        MenuOption.showAllStocks(rse);
+                        MenuOption.showAllStocks(stockMarket);
                         break;
                     case 3:
-                        MenuOption.showStockDetails(rse);
+                        MenuOption.showStockDetails(stockMarket);
                         break;
                     case 4:
-                        MenuOption.executeOrder(rse);
+                        MenuOption.executeOrder(stockMarket);
                         break;
                     case 5:
-                        MenuOption.showStocksSummary(rse);
+                        MenuOption.showStocksSummary(stockMarket);
                         break;
                     case 6:
                         MenuOption.exitSystem();

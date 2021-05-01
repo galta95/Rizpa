@@ -1,4 +1,4 @@
-package Errors;
+package errors;
 
 public class FileFormatNotSupportedError extends RuntimeException {
     public FileFormatNotSupportedError(String format) {

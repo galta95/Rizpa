@@ -85,18 +85,6 @@ public class Stock {
         return cycle;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
     public void addSellToSellsList(Trade trade) {
         Trade curr;
 
@@ -174,6 +162,7 @@ public class Stock {
         this.cycle += dealValue;
     }
 
+    //TODO: delete this shit
     public String printSummary() {
         int potentialValue = 0;
         String res = "++++++++++++++++++++++++++\n" +
@@ -212,26 +201,6 @@ public class Stock {
         res += "Stock deals value (cycle): " + this.cycle + "\n";
 
         res += "++++++++++++++++++++++++++\n";
-
-        return res;
-    }
-
-    public String toString() {
-        String res = "Stock symbol: " + this.symbol + "\n" +
-                "Stock company name: " + this.companyName + "\n" +
-                "Current price: " + this.price + "\n" +
-                "Deals until now: " + this.dealsCount + "\n" +
-                "Stock cycle: " + this.cycle + "\n" +
-                "Deals history: \n";
-
-        if (deals.size() == 0) {
-            res += "There are no deals yet";
-        } else {
-            res += "\n";
-            for (Deal deal : this.deals) {
-                res += deal + "\n";
-            }
-        }
 
         return res;
     }

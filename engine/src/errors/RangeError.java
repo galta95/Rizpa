@@ -1,4 +1,4 @@
-package Errors;
+package errors;
 
 public class RangeError extends RuntimeException {
     public RangeError(String range) {

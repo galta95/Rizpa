@@ -11,9 +11,4 @@ public class Deal extends Trade {
     public int getDealValue() {
         return dealValue;
     }
-
-    public String toString() {
-        return super.toString() + "\n" +
-                "Deal value: " + this.dealValue;
-    }
 }
