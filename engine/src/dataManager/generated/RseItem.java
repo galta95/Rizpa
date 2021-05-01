@@ -6,7 +6,7 @@
 //
 
 
-package engine.src.dataManager.jaxb.generated2;
+package dataManager.generated;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;

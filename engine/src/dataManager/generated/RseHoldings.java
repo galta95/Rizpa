@@ -6,7 +6,7 @@
 //
 
 
-package engine.src.dataManager.jaxb.generated2;
+package dataManager.generated;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -6,10 +6,11 @@
 //
 
 
-package engine.src.dataManager.jaxb.generated2;
+package dataManager.generated;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -24,11 +25,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;element ref="{}rse-symbol"/>
- *         &lt;element ref="{}rse-company-name"/>
- *         &lt;element ref="{}rse-price"/>
- *       &lt;/all>
+ *       &lt;sequence>
+ *         &lt;element ref="{}rse-holdings"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,80 +38,62 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-
+    "rseHoldings"
 })
-@XmlRootElement(name = "rse-stock")
-public class RseStock {
+@XmlRootElement(name = "rse-user")
+public class RseUser {
 
-    @XmlElement(name = "rse-symbol", required = true)
-    protected String rseSymbol;
-    @XmlElement(name = "rse-company-name", required = true)
-    protected String rseCompanyName;
-    @XmlElement(name = "rse-price")
-    protected int rsePrice;
+    @XmlElement(name = "rse-holdings", required = true)
+    protected RseHoldings rseHoldings;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
 
     /**
-     * Gets the value of the rseSymbol property.
+     * Gets the value of the rseHoldings property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link RseHoldings }
+     *     
+     */
+    public RseHoldings getRseHoldings() {
+        return rseHoldings;
+    }
+
+    /**
+     * Sets the value of the rseHoldings property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RseHoldings }
+     *     
+     */
+    public void setRseHoldings(RseHoldings value) {
+        this.rseHoldings = value;
+    }
+
+    /**
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getRseSymbol() {
-        return rseSymbol;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the rseSymbol property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setRseSymbol(String value) {
-        this.rseSymbol = value;
-    }
-
-    /**
-     * Gets the value of the rseCompanyName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRseCompanyName() {
-        return rseCompanyName;
-    }
-
-    /**
-     * Sets the value of the rseCompanyName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRseCompanyName(String value) {
-        this.rseCompanyName = value;
-    }
-
-    /**
-     * Gets the value of the rsePrice property.
-     * 
-     */
-    public int getRsePrice() {
-        return rsePrice;
-    }
-
-    /**
-     * Sets the value of the rsePrice property.
-     * 
-     */
-    public void setRsePrice(int value) {
-        this.rsePrice = value;
+    public void setName(String value) {
+        this.name = value;
     }
 
 }
