@@ -11,7 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 public class SchemaBasedJAXB {
-    private final static String JAXB_XML_GAME_PACKAGE_NAME = "dataManager.jaxb.generated";
+    private final static String JAXB_XML_GAME_PACKAGE_NAME = "dataManager.generated";
 
     public static RizpaStockExchangeDescriptor loadXml(String path) throws FileNotFoundException, JAXBException {
         try {
