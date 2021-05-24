@@ -26,7 +26,6 @@ public class AppController {
         if (headerComponentController != null && bottomComponentController != null ) {
             headerComponentController.setAppController(this);
             bottomComponentController.setAppController(this);
-
         }
     }
 

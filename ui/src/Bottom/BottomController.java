@@ -19,7 +19,7 @@ public class BottomController {
         this.messageListener = new Message();
 
         messageLabel.textProperty().bind(new MessageBinding(messageListener));
-        messageListener.setMessage("Welcome to Rizpa Stock Exchange app!");
+        this.changeMessage("Welcome to Rizpa Stock Exchange app!");
     }
 
     public void setAppController(AppController appController) {
