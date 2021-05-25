@@ -28,4 +28,8 @@ public class Item {
     public String getSymbol() {
         return symbol;
     }
+
+    public int getQuantity() {
+        return quantity;
+    }
 }
