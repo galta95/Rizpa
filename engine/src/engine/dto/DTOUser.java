@@ -1,6 +1,5 @@
 package engine.dto;
 
-import engine.stockMarket.users.Item;
 import engine.stockMarket.users.User;
 
 import java.util.HashMap;

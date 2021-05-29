@@ -2,7 +2,7 @@ package Members;
 
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class Member {
+public class MemberTotalHoldings {
     final private SimpleIntegerProperty totalHoldings = new SimpleIntegerProperty();
 
     public SimpleIntegerProperty totalHoldingsProperty() {

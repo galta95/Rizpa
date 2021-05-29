@@ -32,7 +32,7 @@ public class AppController {
     private TabPane membersTabPane;
 
     private String xmlPath;
-    StockMarketApi stockMarket;
+    public StockMarketApi stockMarket;
 
     @FXML
     public void initialize() {
@@ -45,6 +45,7 @@ public class AppController {
     public void setXmlPath(String path) throws JAXBException, FileNotFoundException {
         this.xmlPath = path;
         stockMarket = new StockMarket(xmlPath);
+//        TODO: before adding - delete old members from the app (ui)
         addMembers();
         changeMessage("XML Loaded");
     }
@@ -73,7 +74,7 @@ public class AppController {
 
             Node singleMember = loader.load();
             SingleMemberController singleMemberController = loader.getController();
-            singleMemberController.creatMember(user.getTotalHoldings(), user.getHoldings());
+            singleMemberController.updateMember(user.getTotalHoldings(), user.getHoldings());
 
             tab.setContent(singleMember);
             membersTabPane.getTabs().add(tab);
