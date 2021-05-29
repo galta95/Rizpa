@@ -13,4 +13,5 @@ public interface StockMarketApi {
         DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price);
         DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price);
         DTOOrder executeMktOrderSell(String symbol, String date, int numOfShares, int price);
+        DTOUsers getAllUsers();
 }

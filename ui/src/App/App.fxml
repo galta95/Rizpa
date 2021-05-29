@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <ScrollPane fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="App.AppController">
@@ -12,9 +13,9 @@
          <bottom>
             <fx:include fx:id="bottomComponent" source="../Bottom/bottom.fxml" />
          </bottom>
-         <right>
-            <BorderPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-         </right>
+         <center>
+            <TabPane fx:id="membersTabPane" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+         </center>
       </BorderPane>
    </content>
 </ScrollPane>

@@ -9,7 +9,8 @@ import engine.stockMarket.stocks.Stocks;
 import errors.NotFoundError;
 
 public class Holdings {
-    private Map<String, Item> items;
+    private final Map<String, Item> items;
+    private final int totalHoldings;
 
     public Holdings(RseHoldings rseHoldings, Stocks stocks) {
         List<RseItem> rseHolding = rseHoldings.getRseItem();
@@ -18,12 +19,21 @@ public class Holdings {
         for (RseItem item : rseHolding) {
             Item currItem = new Item(item);
             String symbol = currItem.getSymbol();
-            this.isSymbolExsits(symbol, stocks);
+            this.isSymbolExists(symbol, stocks);
             this.items.put(symbol, currItem);
         }
+        this.totalHoldings = items.size();
     }
 
-    private void isSymbolExsits(String symbol, Stocks stocks) throws NotFoundError {
+    private void isSymbolExists(String symbol, Stocks stocks) throws NotFoundError {
         stocks.getStockBySymbol(symbol);
+    }
+
+    public int getTotalHoldings() {
+        return totalHoldings;
+    }
+
+    public Map<String, Item> getItems() {
+        return items;
     }
 }

@@ -4,6 +4,7 @@ import dataManager.generated.RizpaStockExchangeDescriptor;
 import engine.dto.*;
 import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.stocks.Stocks;
+import engine.stockMarket.users.User;
 import engine.stockMarket.users.Users;
 import errors.NotFoundError;
 import dataManager.SchemaBasedJAXB;
@@ -260,5 +261,10 @@ public class StockMarket implements StockMarketApi {
             }
         }
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
+    }
+
+    @Override
+    public DTOUsers getAllUsers() {
+        return new DTOUsers(this.users.getUsers());
     }
 }

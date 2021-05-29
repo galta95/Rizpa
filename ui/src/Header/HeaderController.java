@@ -44,5 +44,6 @@ public class HeaderController {
 
     @FXML
     void themeClicked(MouseEvent event) {
+
     }
 }

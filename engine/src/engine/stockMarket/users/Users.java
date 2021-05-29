@@ -24,10 +24,15 @@ public class Users {
         }
     }
 
+    public final Map<String, User> getUsers() {
+        return this.users;
+    }
+
     private void isUserNameExits(String name) throws ConstraintError {
         User user = this.users.get(name);
         if (user != null) {
             throw new ConstraintError(name);
         }
     }
+
 }
