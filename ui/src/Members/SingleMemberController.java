@@ -1,7 +1,6 @@
 package Members;
 
 import TradeForm.TradeFormController;
-import engine.dto.DTOStocks;
 import engine.stockMarket.StockMarketApi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
