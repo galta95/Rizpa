@@ -5,6 +5,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
@@ -18,6 +19,9 @@ public class HeaderController {
     private AppController appController;
     final FileChooser fc = new FileChooser();
     ObservableList<String> animationsChoiceBoxList = FXCollections.observableArrayList("on", "off");
+
+    @FXML
+    private Button adminBtn;
 
     @FXML
     private ChoiceBox animationsChoiceBox;
@@ -37,13 +41,21 @@ public class HeaderController {
     }
 
     @FXML
-    void loadXmlClicked(ActionEvent event) throws JAXBException, FileNotFoundException {
+    void loadXmlClicked(ActionEvent event) {
         File file = fc.showOpenDialog(null);
-        appController.setXmlPath(file.getPath());
+        if (file == null) {
+            appController.changeMessage("Load XML first");
+        } else {
+            appController.setXmlPath(file.getPath());
+        }
     }
 
     @FXML
     void themeClicked(MouseEvent event) {
 
+    }
+
+    public void changeAdminButtonTxt(String text) {
+        adminBtn.setText(text);
     }
 }

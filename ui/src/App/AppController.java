@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class AppController {
     @FXML
@@ -36,10 +37,8 @@ public class AppController {
     private TabPane membersTabPane;
 
     private String xmlPath;
-    private boolean adminLoaded;
     private Tab adminTab;
     public StockMarketApi stockMarket;
-
 
     @FXML
     public void initialize() {
@@ -47,15 +46,17 @@ public class AppController {
             headerComponentController.setAppController(this);
             bottomComponentController.setAppController(this);
         }
-        adminLoaded = false;
     }
 
-    public void setXmlPath(String path) throws JAXBException, FileNotFoundException {
-        this.xmlPath = path;
-        stockMarket = new StockMarket(xmlPath);
-//        TODO: before adding - delete old members from the app (ui)
-        addMembers();
-        changeMessage("XML Loaded");
+    public void setXmlPath(String path) {
+        try {
+            this.xmlPath = path;
+            stockMarket = new StockMarket(xmlPath);
+            addMembers();
+            changeMessage("XML Loaded");
+        } catch (JAXBException | FileNotFoundException e) {
+            changeMessage("Try to load again");
+        }
     }
 
     public void changeMessage(String newMessage) {
@@ -64,6 +65,9 @@ public class AppController {
 
     public void addMembers() {
         try {
+            if (membersTabPane.getTabs().size() > 0) {
+                membersTabPane = new TabPane();
+            }
             DTOUsers users = this.stockMarket.getAllUsers();
             for (DTOUser user : users) {
                 addMemberTab(user);
@@ -75,9 +79,17 @@ public class AppController {
 
     public void addAdminTab() {
         try {
-            if (adminLoaded) {
+            Optional<Tab> optionalAdminTab = membersTabPane.getTabs().stream()
+                    .filter((tab) -> tab.getText().equals("Admin"))
+                    .findFirst();
+
+            if (membersTabPane.getTabs().size() == 0) {
+                throw new Error("Must load xml first!");
+            }
+
+            if (optionalAdminTab.isPresent()) {
                 membersTabPane.getTabs().remove(adminTab);
-                adminLoaded = false;
+                headerComponentController.changeAdminButtonTxt("Admin");
             } else {
                 DTOStocksSummary stocksSummary = this.stockMarket.getStocksSummary();
                 adminTab = new Tab("Admin");
@@ -91,10 +103,9 @@ public class AppController {
 
                 adminTab.setContent(admin);
                 membersTabPane.getTabs().add(adminTab);
-                adminLoaded = true;
+                headerComponentController.changeAdminButtonTxt("close");
             }
         } catch (Error | IOException e) {
-            System.out.println(e.getMessage());
             changeMessage(e.getMessage());
         }
     }
