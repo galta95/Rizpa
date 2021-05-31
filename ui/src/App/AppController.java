@@ -20,6 +20,8 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AppController {
     @FXML
@@ -63,7 +65,7 @@ public class AppController {
     public void addMembers() {
         try {
             DTOUsers users = this.stockMarket.getAllUsers();
-            for (DTOUser user: users) {
+            for (DTOUser user : users) {
                 addMemberTab(user);
             }
         } catch (Error e) {
@@ -106,7 +108,8 @@ public class AppController {
 
             Node singleMember = loader.load();
             SingleMemberController singleMemberController = loader.getController();
-            singleMemberController.updateMember(user.getTotalHoldings(), user.getHoldings());
+            singleMemberController.updateMember(user.getTotalHoldings(), user.getHoldings(), user.getUserName(),
+                    this.stockMarket);
 
             tab.setContent(singleMember);
             membersTabPane.getTabs().add(tab);

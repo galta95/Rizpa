@@ -1,5 +1,8 @@
 package Members;
 
+import TradeForm.TradeFormController;
+import engine.dto.DTOStocks;
+import engine.stockMarket.StockMarketApi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,7 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,8 +19,10 @@ import java.net.URL;
 import java.util.Map;
 
 public class SingleMemberController {
-
     private MemberTotalHoldings memberTotalHoldingsListener;
+    private String userName;
+    private Map<String, Integer> holdings;
+    private StockMarketApi stockMarketApi;
 
     @FXML
     private TableView<StockHold> holdingTableView;
@@ -43,7 +47,12 @@ public class SingleMemberController {
         assert totalHoldingLabel != null;
     }
 
-    public void updateMember(int totalHoldings, Map<String, Integer> holdings) {
+    public void updateMember(int totalHoldings, Map<String, Integer> holdings, String userName,
+                             StockMarketApi stockMarketApi) {
+        this.userName = userName;
+        this.holdings = holdings;
+        this.stockMarketApi = stockMarketApi;
+
         this.memberTotalHoldingsListener = new MemberTotalHoldings();
         totalHoldingLabel.textProperty().bind(new MemberTotalHoldingsBinding(memberTotalHoldingsListener));
         this.updateHoldingLabel(totalHoldings);
@@ -70,15 +79,16 @@ public class SingleMemberController {
     }
 
     public void openTradeForm(ActionEvent event) throws IOException {
-        Stage stage = new Stage();
-
         URL url = getClass().getResource("/TradeForm/tradeForm.fxml");
-        Parent root = FXMLLoader.load(url);
-        stage.setTitle("Trade Form");
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = loader.load();
 
+        TradeFormController tradeFormController = loader.getController();
+        tradeFormController.showMemberInformation(this.holdings, this.stockMarketApi);
+
+        Stage stage = new Stage();
         stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.initOwner(orderButton.getScene().getWindow());
-        stage.showAndWait();
+        stage.setTitle("Trade Form");
+        stage.show();
     }
 }
