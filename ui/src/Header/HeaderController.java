@@ -6,7 +6,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 
@@ -30,6 +29,7 @@ public class HeaderController {
 
     @FXML
     void adminClicked(ActionEvent event) {
+        this.appController.addAdminTab();
     }
 
     public void setAppController(AppController appController) {

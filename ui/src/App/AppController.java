@@ -1,8 +1,10 @@
 package App;
 
+import Admin.AdminController;
 import Bottom.BottomController;
 import Header.HeaderController;
 import Members.SingleMemberController;
+import engine.dto.DTOStocksSummary;
 import engine.dto.DTOUser;
 import engine.dto.DTOUsers;
 import engine.stockMarket.StockMarket;
@@ -32,7 +34,10 @@ public class AppController {
     private TabPane membersTabPane;
 
     private String xmlPath;
+    private boolean adminLoaded;
+    private Tab adminTab;
     public StockMarketApi stockMarket;
+
 
     @FXML
     public void initialize() {
@@ -40,6 +45,7 @@ public class AppController {
             headerComponentController.setAppController(this);
             bottomComponentController.setAppController(this);
         }
+        adminLoaded = false;
     }
 
     public void setXmlPath(String path) throws JAXBException, FileNotFoundException {
@@ -61,6 +67,32 @@ public class AppController {
                 addMemberTab(user);
             }
         } catch (Error e) {
+            changeMessage(e.getMessage());
+        }
+    }
+
+    public void addAdminTab() {
+        try {
+            if (adminLoaded) {
+                membersTabPane.getTabs().remove(adminTab);
+                adminLoaded = false;
+            } else {
+                DTOStocksSummary stocksSummary = this.stockMarket.getStocksSummary();
+                adminTab = new Tab("Admin");
+                FXMLLoader loader = new FXMLLoader();
+                URL url = this.getClass().getResource("/Admin/Admin.fxml");
+                loader.setLocation(url);
+
+                Node admin = loader.load();
+                AdminController adminController = loader.getController();
+                adminController.updateAdmin(stocksSummary);
+
+                adminTab.setContent(admin);
+                membersTabPane.getTabs().add(adminTab);
+                adminLoaded = true;
+            }
+        } catch (Error | IOException e) {
+            System.out.println(e.getMessage());
             changeMessage(e.getMessage());
         }
     }
