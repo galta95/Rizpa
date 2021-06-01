@@ -19,4 +19,17 @@ public class User {
     public Holdings getHoldings() {
         return holdings;
     }
+
+    public void updateHoldings(String symbol, int numOfShares) {
+        Item stock = this.holdings.getItemBySymbol(symbol);
+        if (stock == null) {
+            this.holdings.addItem(symbol, numOfShares);
+        } else {
+            stock.updateQuantity(numOfShares);
+            if (stock.getQuantity() == 0) {
+                this.holdings.removeItem(symbol);
+            }
+        }
+        holdings.setTotalHoldings();
+    }
 }

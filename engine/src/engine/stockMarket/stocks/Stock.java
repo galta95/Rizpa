@@ -1,6 +1,8 @@
 package engine.stockMarket.stocks;
 
 import dataManager.generated.RseStock;
+import engine.stockMarket.users.Holdings;
+import engine.stockMarket.users.User;
 import engine.transaction.Deal;
 import engine.transaction.Trade;
 
@@ -154,7 +156,11 @@ public class Stock {
         }
 
         int dealValue = price * numOfShares;
-        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue, consumer.getOrderType());
+        Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue,
+                consumer.getOrderType(), consumer.getUser(), producer.getUser());
+
+        consumer.getUser().updateHoldings(symbol, numOfShares);
+        producer.getUser().updateHoldings(symbol, numOfShares);
 
         this.deals.add(0, newDeal);
         this.dealsCount++;
