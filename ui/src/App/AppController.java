@@ -20,8 +20,6 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 public class AppController {
@@ -66,11 +64,12 @@ public class AppController {
     public void addMembers() {
         try {
             if (membersTabPane.getTabs().size() > 0) {
-                membersTabPane = new TabPane();
+                this.membersTabPane.getTabs().removeAll(membersTabPane.getTabs());
             }
             DTOUsers users = this.stockMarket.getAllUsers();
             for (DTOUser user : users) {
-                addMemberTab(user);
+                SingleMemberController singleMember = addMemberTab(user);
+                singleMember.setAppController(this);
             }
         } catch (Error e) {
             changeMessage(e.getMessage());
@@ -110,7 +109,7 @@ public class AppController {
         }
     }
 
-    public void addMemberTab(DTOUser user) {
+    public SingleMemberController addMemberTab(DTOUser user) {
         try {
             FXMLLoader loader = new FXMLLoader();
             URL url = this.getClass().getResource("/Members/singleMember.fxml");
@@ -124,9 +123,11 @@ public class AppController {
 
             tab.setContent(singleMember);
             membersTabPane.getTabs().add(tab);
+
+            return singleMemberController;
         } catch (Error | IOException e) {
-            System.out.println(e.getMessage());
             changeMessage(e.getMessage());
+            return null;
         }
     }
 }

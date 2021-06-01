@@ -1,6 +1,9 @@
 package Members;
 
+import App.AppController;
 import TradeForm.TradeFormController;
+import engine.dto.DTOUser;
+import engine.dto.DTOUsers;
 import engine.stockMarket.StockMarketApi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +25,7 @@ public class SingleMemberController {
     private String userName;
     private Map<String, Integer> holdings;
     private StockMarketApi stockMarketApi;
+    private AppController appController;
 
     @FXML
     private TableView<StockHold> holdingTableView;
@@ -46,6 +50,10 @@ public class SingleMemberController {
         assert totalHoldingLabel != null;
     }
 
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
+
     public void updateMember(int totalHoldings, Map<String, Integer> holdings, String userName,
                              StockMarketApi stockMarketApi) {
         this.userName = userName;
@@ -67,6 +75,18 @@ public class SingleMemberController {
         this.memberTotalHoldingsListener.setTotalHoldings(updatedHoldings);
     }
 
+    public void updateHoldingLabel() {
+        DTOUsers users = stockMarketApi.getAllUsers();
+        int holdings = 0;
+
+        for (DTOUser user: users) {
+            if (user.getUserName().equals(this.userName)) {
+                holdings = user.getTotalHoldings();
+            }
+        }
+        this.updateHoldingLabel(4);
+    }
+
     ObservableList<StockHold> getStockHoldObservableList(Map<String, Integer> holdings) {
         ObservableList<StockHold> items = FXCollections.observableArrayList();
 
@@ -83,6 +103,8 @@ public class SingleMemberController {
         Parent root = loader.load();
 
         TradeFormController tradeFormController = loader.getController();
+        tradeFormController.setAppController(appController);
+        tradeFormController.setParent(this);
         tradeFormController.showMemberInformation(this.holdings, this.stockMarketApi);
 
         Stage stage = new Stage();

@@ -1,5 +1,6 @@
 package TradeForm;
 
+import App.AppController;
 import Members.SingleMemberController;
 import engine.dto.DTOStock;
 import engine.dto.DTOStocks;
@@ -20,6 +21,8 @@ public class TradeFormController implements Initializable {
     private List<String> allStocks;
     private List<String> userStocks;
     private StockMarketApi stockMarketApi;
+    private AppController appController;
+    private SingleMemberController parent;
 
     @FXML
     private Button doneButton;
@@ -133,6 +136,16 @@ public class TradeFormController implements Initializable {
         }
 
         Stage stage = (Stage) doneButton.getScene().getWindow();
+        parent.updateHoldingLabel();
+        //this.appController.addMembers();
         stage.close();
+    }
+
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
+
+    public void setParent(SingleMemberController singleMemberController) {
+        this.parent = singleMemberController;
     }
 }
