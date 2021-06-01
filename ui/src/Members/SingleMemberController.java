@@ -22,7 +22,7 @@ import java.util.Map;
 
 public class SingleMemberController {
     private MemberTotalHoldings memberTotalHoldingsListener;
-    private String userName;
+    public String userName;
     private Map<String, Integer> holdings;
     private StockMarketApi stockMarketApi;
     private AppController appController;
@@ -84,7 +84,7 @@ public class SingleMemberController {
                 holdings = user.getTotalHoldings();
             }
         }
-        this.updateHoldingLabel(4);
+        this.updateHoldingLabel(holdings);
     }
 
     ObservableList<StockHold> getStockHoldObservableList(Map<String, Integer> holdings) {

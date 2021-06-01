@@ -9,9 +9,9 @@ public interface StockMarketApi {
         DTODeals getStockDeals(String stockName);
         DTOStockSummary getStockSummary(String symbol);
         DTOStocksSummary getStocksSummary();
-        DTOOrder executeLmtOrderBuy(String symbol, String date, int numOfShares, int price);
-        DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price);
-        DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price);
-        DTOOrder executeMktOrderSell(String symbol, String date, int numOfShares, int price);
+        DTOOrder executeLmtOrderBuy(String symbol, String date, int numOfShares, int price, String userName);
+        DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price, String userName);
+        DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price, String userName);
+        DTOOrder executeMktOrderSell(String symbol, String date, int numOfShares, int price, String userName);
         DTOUsers getAllUsers();
 }

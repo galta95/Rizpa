@@ -56,6 +56,15 @@ public class TradeFormController implements Initializable {
         ObservableList<String> typeChoiceBoxList = typeChoiceBox.getItems();
         typeChoiceBoxList.addAll("MKT", "LMT");
         typeChoiceBox.setItems(typeChoiceBoxList);
+        gateTextArea.setDisable(true);
+        typeChoiceBox.setOnAction(actionEvent -> {
+            if (typeChoiceBox.getValue().equals("LMT")) {
+                gateTextArea.setDisable(false);
+            } else {
+                gateTextArea.setDisable(true);
+                gateTextArea.clear();
+            }
+        });
     }
 
     public void closeForm(ActionEvent event) throws IOException {
@@ -97,7 +106,6 @@ public class TradeFormController implements Initializable {
 
         try {
             numOfShares = Integer.parseInt(quantityTextField.getText());
-            price = Integer.parseInt(gateTextArea.getText());
         } catch (NumberFormatException e) {
             throw new Error("Gate Limit and Quantity must be a number");
         }
@@ -113,19 +121,24 @@ public class TradeFormController implements Initializable {
         switch (orderType) {
             case "MKT": {
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
-                    this.stockMarketApi.executeMktOrderBuy(symbol, date, numOfShares, price);
+                    this.stockMarketApi.executeMktOrderBuy(symbol, date, numOfShares, 0, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
-                    this.stockMarketApi.executeMktOrderBuy(symbol, date, numOfShares, price);
+                    this.stockMarketApi.executeLmtOrderSell(symbol, date, numOfShares, 0, parent.userName);
                 } else {
                     System.out.println("ERROR");
                 }
                 break;
             }
             case "LMT": {
+                try {
+                    price = Integer.parseInt(gateTextArea.getText());
+                } catch (NumberFormatException e) {
+                    throw new Error("Gate Limit and Quantity must be a number");
+                }
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
-                    this.stockMarketApi.executeLmtOrderBuy(symbol, date, numOfShares, price);
+                    this.stockMarketApi.executeLmtOrderBuy(symbol, date, numOfShares, price, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
-                    this.stockMarketApi.executeLmtOrderSell(symbol, date, numOfShares, price);
+                    this.stockMarketApi.executeLmtOrderSell(symbol, date, numOfShares, price, parent.userName);
                 } else {
                     System.out.println("ERROR");
                 }
@@ -137,7 +150,7 @@ public class TradeFormController implements Initializable {
 
         Stage stage = (Stage) doneButton.getScene().getWindow();
         parent.updateHoldingLabel();
-        //this.appController.addMembers();
+        this.appController.addMembers(); //Remove this
         stage.close();
     }
 

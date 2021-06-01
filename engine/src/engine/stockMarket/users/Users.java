@@ -35,4 +35,7 @@ public class Users {
         }
     }
 
+    public User getUserByName(String name) {
+        return users.get(name);
+    }
 }

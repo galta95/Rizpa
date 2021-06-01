@@ -10,7 +10,7 @@ import errors.NotFoundError;
 
 public class Holdings {
     private final Map<String, Item> items;
-    private final int totalHoldings;
+    private int totalHoldings;
 
     public Holdings(RseHoldings rseHoldings, Stocks stocks) {
         List<RseItem> rseHolding = rseHoldings.getRseItem();
@@ -35,5 +35,30 @@ public class Holdings {
 
     public Map<String, Item> getItems() {
         return items;
+    }
+
+    public void addTotalHoldings(int totalHoldings) {
+        this.totalHoldings += totalHoldings;
+    }
+
+    public void subTotalHoldings(int totalHoldings) {
+        this.totalHoldings -= totalHoldings;
+    }
+
+    public void setTotalHoldings() {
+        this.totalHoldings = items.size();
+    }
+
+    public Item getItemBySymbol(String symbol) {
+        return items.get(symbol);
+    }
+
+    public void addItem(String symbol, int numOfShares) {
+        Item newItem = new Item(symbol, numOfShares);
+        items.put(symbol, newItem);
+    }
+
+    public void removeItem(String symbol) {
+        items.remove(symbol);
     }
 }
