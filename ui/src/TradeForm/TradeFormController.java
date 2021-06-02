@@ -3,7 +3,6 @@ package TradeForm;
 import App.AppController;
 import Members.SingleMemberController;
 import engine.dto.DTOStock;
-import engine.dto.DTOStocks;
 import engine.stockMarket.StockMarketApi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +14,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class TradeFormController implements Initializable {
@@ -99,7 +100,7 @@ public class TradeFormController implements Initializable {
 
     public void doneOnClick() {
         String symbol = stocksChoiceBox.getValue();
-        String date = new Date().toString();
+        String date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
         String orderType = typeChoiceBox.getValue();
         int numOfShares;
         int price;
