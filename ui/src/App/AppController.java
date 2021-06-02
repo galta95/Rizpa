@@ -64,6 +64,7 @@ public class AppController {
     public void addMembers() {
         try {
             if (membersTabPane.getTabs().size() > 0) {
+                addAdminTab();
                 this.membersTabPane.getTabs().removeAll(membersTabPane.getTabs());
             }
             DTOUsers users = this.stockMarket.getAllUsers();
