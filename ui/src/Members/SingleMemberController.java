@@ -1,19 +1,31 @@
 package Members;
 
+import App.AppController;
+import TradeForm.TradeFormController;
+import engine.dto.DTOUser;
+import engine.dto.DTOUsers;
+import engine.stockMarket.StockMarketApi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 public class SingleMemberController {
-
     private MemberTotalHoldings memberTotalHoldingsListener;
+    public String userName;
+    private Map<String, Integer> holdings;
+    private StockMarketApi stockMarketApi;
+    private AppController appController;
 
     @FXML
     private TableView<StockHold> holdingTableView;
@@ -38,7 +50,16 @@ public class SingleMemberController {
         assert totalHoldingLabel != null;
     }
 
-    public void updateMember(int totalHoldings, Map<String, Integer> holdings) {
+    public void setAppController(AppController appController) {
+        this.appController = appController;
+    }
+
+    public void updateMember(int totalHoldings, Map<String, Integer> holdings, String userName,
+                             StockMarketApi stockMarketApi) {
+        this.userName = userName;
+        this.holdings = holdings;
+        this.stockMarketApi = stockMarketApi;
+
         this.memberTotalHoldingsListener = new MemberTotalHoldings();
         totalHoldingLabel.textProperty().bind(new MemberTotalHoldingsBinding(memberTotalHoldingsListener));
         this.updateHoldingLabel(totalHoldings);
@@ -54,6 +75,18 @@ public class SingleMemberController {
         this.memberTotalHoldingsListener.setTotalHoldings(updatedHoldings);
     }
 
+    public void updateHoldingLabel() {
+        DTOUsers users = stockMarketApi.getAllUsers();
+        int holdings = 0;
+
+        for (DTOUser user: users) {
+            if (user.getUserName().equals(this.userName)) {
+                holdings = user.getTotalHoldings();
+            }
+        }
+        this.updateHoldingLabel(holdings);
+    }
+
     ObservableList<StockHold> getStockHoldObservableList(Map<String, Integer> holdings) {
         ObservableList<StockHold> items = FXCollections.observableArrayList();
 
@@ -62,5 +95,21 @@ public class SingleMemberController {
         }
 
         return items;
+    }
+
+    public void openTradeForm(ActionEvent event) throws IOException {
+        URL url = getClass().getResource("/TradeForm/tradeForm.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = loader.load();
+
+        TradeFormController tradeFormController = loader.getController();
+        tradeFormController.setAppController(appController);
+        tradeFormController.setParent(this);
+        tradeFormController.showMemberInformation(this.holdings, this.stockMarketApi);
+
+        Stage stage = new Stage();
+        stage.setScene(new Scene(root));
+        stage.setTitle("Trade Form");
+        stage.show();
     }
 }

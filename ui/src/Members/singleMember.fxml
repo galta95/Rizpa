@@ -40,6 +40,6 @@
       </ScrollPane>
       <Label fx:id="holdingLabel" text="Holding" GridPane.columnIndex="1" GridPane.rowIndex="1" />
       <Label fx:id="totalHoldingLabel" minWidth="130.0" prefWidth="130.0" text="Total Holding: " GridPane.columnIndex="3" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-      <Button fx:id="orderButton" maxWidth="100.0" minHeight="-Infinity" minWidth="100.0" mnemonicParsing="false" prefWidth="100.0" text="Make An Order" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
+      <Button fx:id="orderButton" maxWidth="100.0" minHeight="-Infinity" minWidth="100.0" mnemonicParsing="false" onAction="#openTradeForm" prefWidth="100.0" text="Make An Order" GridPane.columnIndex="4" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
    </children>
 </GridPane>

@@ -65,30 +65,42 @@ public class AdminController implements Initializable {
 
         for (DTOTrade trade: dtoTradeListBuys) {
             buysList.append(trade.getDate());
+            buysList.append("\n");
             buysList.append(trade.getOrderType());
+            buysList.append("\n");
             buysList.append(trade.getNumOfShares());
+            buysList.append("\n");
             buysList.append(trade.getPrice());
+            buysList.append("\n");
             // stockSummery.append(trade.); GET USER NAME
         }
 
         for (DTOTrade trade: dtoTradeListSells) {
             sellsList.append(trade.getDate());
+            sellsList.append("\n");
             sellsList.append(trade.getOrderType());
+            sellsList.append("\n");
             sellsList.append(trade.getNumOfShares());
+            sellsList.append("\n");
             sellsList.append(trade.getPrice());
+            sellsList.append("\n");
             // stockSummery.append(trade.); GET USER NAME
         }
 
         for (DTODeal deal: dtoDealList) {
-            sellsList.append(deal.getDate());
-            sellsList.append(deal.getOrderType());
-            sellsList.append(deal.getNumOfShares());
-            sellsList.append(deal.getPrice());
+            dealsHistory.append(deal.getDate());
+            dealsHistory.append("\n");
+            dealsHistory.append(deal.getOrderType());
+            dealsHistory.append("\n");
+            dealsHistory.append(deal.getNumOfShares());
+            dealsHistory.append("\n");
+            dealsHistory.append(deal.getPrice());
+            dealsHistory.append("\n");
             // stockSummery.append(trade.); GET buyer name and seller name
         }
 
         buyLabel.setText(buysList.toString());
         sellLabel.setText(sellsList.toString());
-        dealLabel.setText(sellsList.toString());
+        dealLabel.setText(dealsHistory.toString());
     }
 }

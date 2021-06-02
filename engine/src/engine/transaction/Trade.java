@@ -1,5 +1,7 @@
 package engine.transaction;
 
+import engine.stockMarket.users.User;
+
 public class Trade {
     public enum OrderType {
         LMT, MKT
@@ -8,12 +10,14 @@ public class Trade {
     private int numOfShares;
     private int price;
     private OrderType orderType;
+    private User user;
 
-    public Trade(String date, int numOfShares, int price, OrderType orderType) {
+    public Trade(String date, int numOfShares, int price, OrderType orderType, User user) {
         this.date = date;
         this.numOfShares = numOfShares;
         this.price = price;
         this.orderType = orderType;
+        this.user = user;
     }
 
     public String getDate() {
@@ -38,5 +42,9 @@ public class Trade {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public User getUser() {
+        return user;
     }
 }
