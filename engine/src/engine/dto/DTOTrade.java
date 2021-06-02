@@ -7,12 +7,14 @@ public class DTOTrade {
     private final int numOfShares;
     private final int price;
     private Trade.OrderType orderType;
+    private String userName;
 
-    public DTOTrade(String date, int numOfShares, int price, Trade.OrderType orderType) {
+    public DTOTrade(String date, int numOfShares, int price, Trade.OrderType orderType, String userName) {
         this.date = date;
         this.numOfShares = numOfShares;
         this.price = price;
         this.orderType = orderType;
+        this.userName = userName;
     }
 
     public String getDate() {
@@ -29,5 +31,9 @@ public class DTOTrade {
 
     public Trade.OrderType getOrderType() {
         return orderType;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 }

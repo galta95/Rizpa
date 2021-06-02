@@ -11,9 +11,19 @@ public class Deal extends Trade {
                 User consumer, User producer) {
         super(date, numOfShares, price, orderType, null);
         this.dealValue = dealValue;
+        this.consumer = consumer;
+        this.producer = producer;
     }
 
     public int getDealValue() {
         return dealValue;
+    }
+
+    public User getConsumer() {
+        return consumer;
+    }
+
+    public User getProducer() {
+        return producer;
     }
 }
