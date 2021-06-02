@@ -13,18 +13,19 @@
       <GridPane>
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
-            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
-            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="20.0" />
-            <ColumnConstraints hgrow="SOMETIMES" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="30.0" minHeight="30.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
           <RowConstraints valignment="TOP" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="50.0" minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
             <Label text="Select Stock" GridPane.columnIndex="1" />
@@ -35,17 +36,17 @@
             <ScrollBar fx:id="buyScrollPane" orientation="VERTICAL" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
             <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
                <content>
-                  <Label fx:id="buyLabel" text="Label" />
+                  <Label fx:id="buyLabel" />
                </content>
             </ScrollPane>
             <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="5" GridPane.rowIndex="1">
                <content>
-                  <Label fx:id="sellLabel" text="Label" />
+                  <Label fx:id="sellLabel" />
                </content>
             </ScrollPane>
             <ScrollPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="7" GridPane.rowIndex="1">
                <content>
-                  <Label fx:id="dealLabel" text="Label" />
+                  <Label fx:id="dealLabel" />
                </content>
             </ScrollPane>
          </children>
