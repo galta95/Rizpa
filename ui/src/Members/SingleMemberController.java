@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -110,6 +111,7 @@ public class SingleMemberController {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.setTitle("Trade Form");
+        stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
     }
 }
