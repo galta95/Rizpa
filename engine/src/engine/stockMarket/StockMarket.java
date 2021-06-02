@@ -232,6 +232,7 @@ public class StockMarket implements StockMarketApi {
                 trade.setPrice(this.getStockPrice(symbol));
                 numberOfSharesInsertedToList = trade.getNumOfShares();
                 this.addToBuyList(trade, symbol);
+                break;
             } else {
                 sellNumOfShare = trade.getNumOfShares();
 
@@ -259,6 +260,7 @@ public class StockMarket implements StockMarketApi {
                 trade.setPrice(this.getStockPrice(symbol));
                 numberOfSharesInsertedToList = trade.getNumOfShares();
                 this.addToSellList(trade, symbol);
+                break;
             } else {
                 sellNumOfShare = trade.getNumOfShares();
 
