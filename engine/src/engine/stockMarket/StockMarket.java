@@ -279,4 +279,19 @@ public class StockMarket implements StockMarketApi {
     public DTOUsers getAllUsers() {
         return new DTOUsers(this.users.getUsers());
     }
+
+    @Override
+    public DTOUser getUserByName(String name) {
+        User user = this.users.getUserByName(name);
+        if (user == null) {
+            return null;
+        }
+        return new DTOUser(user);
+    }
+
+    @Override
+    public DTOUserPotentialStockQuantity getUserStockPotentialQuantity(String userName, String symbol) {
+        User user = this.users.getUserByName(userName);
+        return new DTOUserPotentialStockQuantity(user.getHoldings().getItems().get(symbol).getPotentialQuantity());
+    }
 }

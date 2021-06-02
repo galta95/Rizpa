@@ -14,4 +14,6 @@ public interface StockMarketApi {
         DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price, String userName);
         DTOOrder executeMktOrderSell(String symbol, String date, int numOfShares, int price, String userName);
         DTOUsers getAllUsers();
+        DTOUser getUserByName(String name);
+        DTOUserPotentialStockQuantity getUserStockPotentialQuantity(String userName, String symbol);
 }
