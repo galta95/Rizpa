@@ -58,6 +58,7 @@ public class TradeFormController implements Initializable {
         typeChoiceBoxList.addAll("MKT", "LMT");
         typeChoiceBox.setItems(typeChoiceBoxList);
         gateTextArea.setDisable(true);
+        doneButton.setDisable(true);
         typeChoiceBox.setOnAction(actionEvent -> {
             if (typeChoiceBox.getValue().equals("LMT")) {
                 gateTextArea.setDisable(false);
@@ -83,6 +84,7 @@ public class TradeFormController implements Initializable {
             stocksChoiceBoxList.addAll(userStocks);
             stocksChoiceBox.setItems(stocksChoiceBoxList);
         }
+        checkForm();
     }
 
     public void showMemberInformation(Map<String, Integer> holdings, StockMarketApi stockMarketApi) {
@@ -96,6 +98,7 @@ public class TradeFormController implements Initializable {
         for (DTOStock stock : stockMarketApi.getAllStocks()) {
             this.allStocks.add(stock.getSymbol());
         }
+        checkForm();
     }
 
     public void doneOnClick() {
@@ -161,5 +164,10 @@ public class TradeFormController implements Initializable {
 
     public void setParent(SingleMemberController singleMemberController) {
         this.parent = singleMemberController;
+    }
+
+    public void checkForm() {
+        doneButton.setDisable(stocksChoiceBox.getValue().isEmpty() || (gateTextArea.getText().isEmpty() && !gateTextArea.isDisable()) ||
+                quantityTextField.getText().isEmpty() || typeChoiceBox.getValue().isEmpty());
     }
 }
