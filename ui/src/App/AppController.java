@@ -37,6 +37,7 @@ public class AppController {
     private String xmlPath;
     private Tab adminTab;
     public StockMarketApi stockMarket;
+    private boolean adminIsOpen;
 
     @FXML
     public void initialize() {
@@ -44,6 +45,7 @@ public class AppController {
             headerComponentController.setAppController(this);
             bottomComponentController.setAppController(this);
         }
+        adminIsOpen = false;
     }
 
     public void setXmlPath(String path) {
@@ -64,7 +66,10 @@ public class AppController {
     public void addMembers() {
         try {
             if (membersTabPane.getTabs().size() > 0) {
-                addAdminTab();
+                if (adminIsOpen) {
+                    addAdminTab();
+                    adminIsOpen = false;
+                }
                 this.membersTabPane.getTabs().removeAll(membersTabPane.getTabs());
             }
             DTOUsers users = this.stockMarket.getAllUsers();
@@ -90,6 +95,7 @@ public class AppController {
             if (optionalAdminTab.isPresent()) {
                 membersTabPane.getTabs().remove(adminTab);
                 headerComponentController.changeAdminButtonTxt("Admin");
+                adminIsOpen = false;
             } else {
                 DTOStocksSummary stocksSummary = this.stockMarket.getStocksSummary();
                 adminTab = new Tab("Admin");
@@ -104,6 +110,7 @@ public class AppController {
                 adminTab.setContent(admin);
                 membersTabPane.getTabs().add(adminTab);
                 headerComponentController.changeAdminButtonTxt("close");
+                adminIsOpen = true;
             }
         } catch (Error | IOException e) {
             changeMessage(e.getMessage());

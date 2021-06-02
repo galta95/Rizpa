@@ -52,4 +52,8 @@ public class Item {
             quantity -= numOfShares;
         }
     }
+
+    public int getPotentialQuantity() {
+        return potentialQuantity;
+    }
 }

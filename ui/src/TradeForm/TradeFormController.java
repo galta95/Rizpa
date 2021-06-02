@@ -2,8 +2,7 @@ package TradeForm;
 
 import App.AppController;
 import Members.SingleMemberController;
-import engine.dto.DTOOrder;
-import engine.dto.DTOStock;
+import engine.dto.*;
 import engine.stockMarket.StockMarketApi;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -106,6 +105,7 @@ public class TradeFormController implements Initializable {
         String symbol = stocksChoiceBox.getValue();
         String date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
         String orderType = typeChoiceBox.getValue();
+        DTOUserPotentialStockQuantity potentialQuantity = this.stockMarketApi.getUserStockPotentialQuantity(parent.userName, symbol);
         int numOfShares = 0;
         int price = 0;
 
@@ -153,6 +153,11 @@ public class TradeFormController implements Initializable {
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
                     dtoOrder = this.stockMarketApi.executeMktOrderBuy(symbol, date, numOfShares, 0, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
+                    if (potentialQuantity.getPotentialQuantity() < numOfShares) {
+                        appController.changeMessage("ORDER FAILED: Dont have enough shares to sell");
+                        stage.close();
+                        return;
+                    }
                     dtoOrder = this.stockMarketApi.executeMktOrderSell(symbol, date, numOfShares, 0, parent.userName);
                 }
                 break;
@@ -173,6 +178,11 @@ public class TradeFormController implements Initializable {
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
                     dtoOrder = this.stockMarketApi.executeLmtOrderBuy(symbol, date, numOfShares, price, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
+                    if (potentialQuantity.getPotentialQuantity() < numOfShares) {
+                        appController.changeMessage("ORDER FAILED: Dont have enough shares to sell");
+                        stage.close();
+                        return;
+                    }
                     dtoOrder = this.stockMarketApi.executeLmtOrderSell(symbol, date, numOfShares, price, parent.userName);
                 }
                 break;
