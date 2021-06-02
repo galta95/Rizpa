@@ -124,7 +124,7 @@ public class TradeFormController implements Initializable {
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
                     this.stockMarketApi.executeMktOrderBuy(symbol, date, numOfShares, 0, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
-                    this.stockMarketApi.executeLmtOrderSell(symbol, date, numOfShares, 0, parent.userName);
+                    this.stockMarketApi.executeMktOrderSell(symbol, date, numOfShares, 0, parent.userName);
                 } else {
                     System.out.println("ERROR");
                 }
