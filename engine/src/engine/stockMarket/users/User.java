@@ -31,5 +31,6 @@ public class User {
             }
         }
         holdings.setTotalHoldings();
+        holdings.updateTotalStocksValue();
     }
 }

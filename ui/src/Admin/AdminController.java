@@ -72,7 +72,8 @@ public class AdminController implements Initializable {
             buysList.append("\n");
             buysList.append(trade.getPrice());
             buysList.append("\n");
-            // stockSummery.append(trade.); GET USER NAME
+            buysList.append(trade.getUserName());
+            buysList.append("\n");
         }
 
         for (DTOTrade trade: dtoTradeListSells) {
@@ -84,7 +85,8 @@ public class AdminController implements Initializable {
             sellsList.append("\n");
             sellsList.append(trade.getPrice());
             sellsList.append("\n");
-            // stockSummery.append(trade.); GET USER NAME
+            sellsList.append(trade.getUserName());
+            sellsList.append("\n");
         }
 
         for (DTODeal deal: dtoDealList) {
@@ -96,7 +98,11 @@ public class AdminController implements Initializable {
             dealsHistory.append("\n");
             dealsHistory.append(deal.getPrice());
             dealsHistory.append("\n");
-            // stockSummery.append(trade.); GET buyer name and seller name
+            dealsHistory.append("Deal executed between ");
+            dealsHistory.append(deal.getProducer());
+            dealsHistory.append(" and ");
+            dealsHistory.append(deal.getConsumer());
+            dealsHistory.append("\n");
         }
 
         buyLabel.setText(buysList.toString());

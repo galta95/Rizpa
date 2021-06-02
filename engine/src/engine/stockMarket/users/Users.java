@@ -1,9 +1,13 @@
 package engine.stockMarket.users;
 
+import dataManager.generated.RseHoldings;
+import dataManager.generated.RseStocks;
 import dataManager.generated.RseUser;
 import dataManager.generated.RseUsers;
+import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.stocks.Stocks;
 import errors.ConstraintError;
+import errors.NotFoundError;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +24,7 @@ public class Users {
             User currUser = new User(user, stocks);
             String name = currUser.getName();
             this.isUserNameExits(name);
+            this.isStockExists(currUser.getHoldings(), stocks);
             this.users.put(name, currUser);
         }
     }
@@ -37,5 +42,13 @@ public class Users {
 
     public User getUserByName(String name) {
         return users.get(name);
+    }
+
+    private void isStockExists(Holdings currUserHoldings, Stocks stocks) {
+        currUserHoldings.getItems().forEach((String symbol, Item item) -> {
+            if (stocks.getStocks().get(symbol) == null) {
+                throw new NotFoundError(symbol);
+            }
+        });
     }
 }

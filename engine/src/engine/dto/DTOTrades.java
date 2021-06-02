@@ -11,8 +11,9 @@ public class DTOTrades implements Iterable<DTOTrade> {
 
     public DTOTrades(List<Trade> trades) {
         this.trades = new LinkedList<>();
-        for (Trade trade: trades) {
-            this.trades.add(new DTOTrade(trade.getDate(), trade.getNumOfShares(), trade.getPrice(), trade.getOrderType()));
+        for (Trade trade : trades) {
+            this.trades.add(new DTOTrade(trade.getDate(), trade.getNumOfShares(),
+                    trade.getPrice(), trade.getOrderType(), trade.getUser().getName()));
         }
     }
 

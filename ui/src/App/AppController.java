@@ -64,6 +64,7 @@ public class AppController {
     public void addMembers() {
         try {
             if (membersTabPane.getTabs().size() > 0) {
+                addAdminTab();
                 this.membersTabPane.getTabs().removeAll(membersTabPane.getTabs());
             }
             DTOUsers users = this.stockMarket.getAllUsers();
@@ -118,7 +119,7 @@ public class AppController {
 
             Node singleMember = loader.load();
             SingleMemberController singleMemberController = loader.getController();
-            singleMemberController.updateMember(user.getTotalHoldings(), user.getHoldings(), user.getUserName(),
+            singleMemberController.updateMember(user.getTotalStocksValue(), user.getHoldings(), user.getUserName(),
                     this.stockMarket);
 
             tab.setContent(singleMember);

@@ -81,7 +81,7 @@ public class SingleMemberController {
 
         for (DTOUser user: users) {
             if (user.getUserName().equals(this.userName)) {
-                holdings = user.getTotalHoldings();
+                holdings = user.getTotalStocksValue();
             }
         }
         this.updateHoldingLabel(holdings);
