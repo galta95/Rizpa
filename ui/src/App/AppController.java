@@ -118,7 +118,7 @@ public class AppController {
 
             Node singleMember = loader.load();
             SingleMemberController singleMemberController = loader.getController();
-            singleMemberController.updateMember(user.getTotalHoldings(), user.getHoldings(), user.getUserName(),
+            singleMemberController.updateMember(user.getTotalStocksValue(), user.getHoldings(), user.getUserName(),
                     this.stockMarket);
 
             tab.setContent(singleMember);
