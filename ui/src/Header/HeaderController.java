@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class HeaderController {
-
+    public String themePath;
     private AppController appController;
     final FileChooser fc = new FileChooser();
     ObservableList<String> themeChoiceBoxList = FXCollections.observableArrayList("LightMode", "DarkMode", "Default");
@@ -29,6 +29,7 @@ public class HeaderController {
     @FXML
     public void initialize() {
         theme.getItems().setAll(themeChoiceBoxList);
+        themePath = "";
     }
 
     @FXML
@@ -46,7 +47,6 @@ public class HeaderController {
         if (file == null) {
             appController.changeMessage("Load XML first");
         } else {
-
             appController.setXmlPath(file.getPath());
         }
     }
@@ -55,21 +55,27 @@ public class HeaderController {
     void themeClicked(MouseEvent event) {
 
     }
-
     public void changeAdminButtonTxt(String text) {
         adminBtn.setText(text);
     }
 
     public void setTheme(ActionEvent actionEvent) {
-        Scene scene = (Scene) theme.getScene();
+        Scene scene = (Scene) appController.membersTabPane.getScene();
         if (theme.getValue().equals("DarkMode")) {
             scene.getStylesheets().clear();
+            themePath = "/App/darkmode.css";
             scene.getStylesheets().add(getClass().getResource("/App/darkmode.css").toExternalForm());
         } else if (theme.getValue().equals("LightMode")) {
             scene.getStylesheets().clear();
+            themePath = "/App/lightmode.css";
             scene.getStylesheets().add(getClass().getResource("/App/lightmode.css").toExternalForm());
         } else {
+            themePath = "";
             scene.getStylesheets().clear();
         }
+    }
+
+    public String getThemePath() {
+        return themePath;
     }
 }

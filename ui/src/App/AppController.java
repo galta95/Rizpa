@@ -5,50 +5,37 @@ import Bottom.BottomController;
 import Header.HeaderController;
 import Members.SingleMemberController;
 import ProgressTask.ProgressTaskController;
-import TradeForm.TradeFormController;
 import engine.dto.DTOStocksSummary;
 import engine.dto.DTOUser;
 import engine.dto.DTOUsers;
 import engine.stockMarket.StockMarket;
 import engine.stockMarket.StockMarketApi;
 import errors.ConstraintError;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import javax.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
-
-import static java.lang.Thread.sleep;
 
 public class AppController {
     @FXML
     private ScrollPane headerComponent;
     @FXML
-    private HeaderController headerComponentController;
+    public HeaderController headerComponentController;
     @FXML
     private ScrollPane bottomComponent;
     @FXML
     private BottomController bottomComponentController;
     @FXML
-    private TabPane membersTabPane;
+    public TabPane membersTabPane;
 
     private String xmlPath;
     private Tab adminTab;

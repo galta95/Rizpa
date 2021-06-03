@@ -107,9 +107,16 @@ public class SingleMemberController {
         tradeFormController.setAppController(appController);
         tradeFormController.setParent(this);
         tradeFormController.showMemberInformation(this.holdings, this.stockMarketApi);
-
         Stage stage = new Stage();
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+
+        String themePath = appController.headerComponentController.getThemePath();
+
+        if (!themePath.isEmpty()) {
+           scene.getStylesheets().add(getClass().getResource(themePath).toExternalForm());
+        }
+
+        stage.setScene(scene);
         stage.setTitle("Trade Form");
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.show();
