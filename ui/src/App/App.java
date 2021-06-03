@@ -13,7 +13,6 @@ import java.net.URL;
 public class App extends Application {
 
     public static void main(String[] args) throws JAXBException, FileNotFoundException {
-        //StockMarketApi stockMarket = new StockMarket("");
         Thread.currentThread().setName("main");
         launch(App.class);
     }

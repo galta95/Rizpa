@@ -4,23 +4,39 @@ import Admin.AdminController;
 import Bottom.BottomController;
 import Header.HeaderController;
 import Members.SingleMemberController;
+import ProgressTask.ProgressTaskController;
+import TradeForm.TradeFormController;
 import engine.dto.DTOStocksSummary;
 import engine.dto.DTOUser;
 import engine.dto.DTOUsers;
 import engine.stockMarket.StockMarket;
 import engine.stockMarket.StockMarketApi;
+import errors.ConstraintError;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
+
+import static java.lang.Thread.sleep;
 
 public class AppController {
     @FXML
@@ -50,12 +66,16 @@ public class AppController {
 
     public void setXmlPath(String path) {
         try {
+            openPbar();
             this.xmlPath = path;
             stockMarket = new StockMarket(xmlPath);
             addMembers();
             changeMessage("XML Loaded");
-        } catch (JAXBException | FileNotFoundException e) {
-            changeMessage("Try to load again");
+        } catch (ConstraintError e) {
+            changeMessage("Error: failed to load xml - " + e.getMessage());
+        }
+        catch (Error | NullPointerException | JAXBException | IOException | InterruptedException e) {
+            changeMessage("Error: failed to load xml");
         }
     }
 
@@ -137,5 +157,20 @@ public class AppController {
             changeMessage(e.getMessage());
             return null;
         }
+    }
+
+    public void openPbar() throws IOException, InterruptedException {
+        URL url = getClass().getResource("/ProgressTask/progressTask.fxml");
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root = loader.load();
+
+        ProgressTaskController progressTaskController = loader.getController();
+
+        Stage stage = new Stage();
+
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.show();
+        progressTaskController.startProgress();
     }
 }

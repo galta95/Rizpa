@@ -43,6 +43,7 @@ public class HeaderController {
         if (file == null) {
             appController.changeMessage("Load XML first");
         } else {
+
             appController.setXmlPath(file.getPath());
         }
     }
