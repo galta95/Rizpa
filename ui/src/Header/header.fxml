@@ -12,41 +12,36 @@
 
 <ScrollPane fx:id="headerComponent" fitToHeight="true" fitToWidth="true" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Header.HeaderController">
    <content>
-      <GridPane minHeight="30.0" minWidth="600.0">
+      <GridPane id="headerComponent" minHeight="30.0" minWidth="600.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="50.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="80.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="80.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints minHeight="60.0" prefHeight="60.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label prefWidth="300.0" text="Rizpa Stock Exchange" GridPane.columnSpan="3">
+            <Label id="rizpaheader" prefWidth="300.0" text="Rizpa Stock Exchange" GridPane.columnSpan="3">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="adminBtn" mnemonicParsing="false" onAction="#adminClicked" prefWidth="70.0" text="Admin" GridPane.columnIndex="3">
+            <Button fx:id="adminBtn" mnemonicParsing="false" onAction="#adminClicked" prefWidth="70.0" text="Admin" GridPane.columnIndex="4">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Button>
-            <Button mnemonicParsing="false" onAction="#loadXmlClicked" prefWidth="70.0" text="Load XML" GridPane.columnIndex="4">
+            <Button mnemonicParsing="false" onAction="#loadXmlClicked" prefWidth="70.0" text="Load XML" GridPane.columnIndex="5">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>
             </Button>
-            <ChoiceBox accessibleRoleDescription="choose" onMouseClicked="#themeClicked" prefWidth="150.0" GridPane.columnIndex="5">
-               <GridPane.margin>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </GridPane.margin>
-            </ChoiceBox>
-            <ChoiceBox fx:id="animationsChoiceBox" prefWidth="150.0" GridPane.columnIndex="6">
+            <ChoiceBox fx:id="theme" accessibleRoleDescription="choose" onAction="#setTheme" onMouseClicked="#themeClicked" prefWidth="150.0" GridPane.columnIndex="6">
                <GridPane.margin>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </GridPane.margin>

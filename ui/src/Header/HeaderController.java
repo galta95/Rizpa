@@ -5,27 +5,30 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import java.io.File;
 
 public class HeaderController {
 
     private AppController appController;
     final FileChooser fc = new FileChooser();
-    ObservableList<String> animationsChoiceBoxList = FXCollections.observableArrayList("on", "off");
+    ObservableList<String> themeChoiceBoxList = FXCollections.observableArrayList("LightMode", "DarkMode", "Default");
 
     @FXML
     private Button adminBtn;
 
     @FXML
-    private ChoiceBox animationsChoiceBox;
+    private ChoiceBox<String> theme;
 
     @FXML
     public void initialize() {
-        animationsChoiceBox.setItems(animationsChoiceBoxList);
+        theme.getItems().setAll(themeChoiceBoxList);
     }
 
     @FXML
@@ -55,5 +58,18 @@ public class HeaderController {
 
     public void changeAdminButtonTxt(String text) {
         adminBtn.setText(text);
+    }
+
+    public void setTheme(ActionEvent actionEvent) {
+        Scene scene = (Scene) theme.getScene();
+        if (theme.getValue().equals("DarkMode")) {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(getClass().getResource("/App/darkmode.css").toExternalForm());
+        } else if (theme.getValue().equals("LightMode")) {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(getClass().getResource("/App/lightmode.css").toExternalForm());
+        } else {
+            scene.getStylesheets().clear();
+        }
     }
 }
