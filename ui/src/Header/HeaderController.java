@@ -1,6 +1,7 @@
 package Header;
 
 import App.AppController;
+import javafx.beans.value.WritableFloatValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

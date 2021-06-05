@@ -105,18 +105,16 @@ public class TradeFormController implements Initializable {
         String symbol = stocksChoiceBox.getValue();
         String date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
         String orderType = typeChoiceBox.getValue();
-        DTOUserPotentialStockQuantity potentialQuantity = this.stockMarketApi.getUserStockPotentialQuantity(parent.userName, symbol);
+        DTOUserPotentialStockQuantity potentialQuantity = null;
         int numOfShares = 0;
         int price = 0;
 
-
         try {
-            if(stocksChoiceBox.getValue().isEmpty() || (gateTextArea.getText().isEmpty() && !gateTextArea.isDisable()) ||
+            if (stocksChoiceBox.getValue().isEmpty() || (gateTextArea.getText().isEmpty() && !gateTextArea.isDisable()) ||
                     quantityTextField.getText().isEmpty() || typeChoiceBox.getValue().isEmpty()) {
                 throw new Error();
             }
-        }
-        catch (NullPointerException | Error error) {
+        } catch (NullPointerException | Error error) {
             appController.changeMessage("ORDER FAILED: All fields have to be full");
             stage.close();
             return;
@@ -153,6 +151,7 @@ public class TradeFormController implements Initializable {
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
                     dtoOrder = this.stockMarketApi.executeMktOrderBuy(symbol, date, numOfShares, 0, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
+                    potentialQuantity = this.stockMarketApi.getUserStockPotentialQuantity(parent.userName, symbol);
                     if (potentialQuantity.getPotentialQuantity() < numOfShares) {
                         appController.changeMessage("ORDER FAILED: Dont have enough shares to sell");
                         stage.close();
@@ -178,6 +177,7 @@ public class TradeFormController implements Initializable {
                 if (Direction.getSelectedToggle().equals(buyRadioButton)) {
                     dtoOrder = this.stockMarketApi.executeLmtOrderBuy(symbol, date, numOfShares, price, parent.userName);
                 } else if (Direction.getSelectedToggle().equals(sellRadioButton)) {
+                    potentialQuantity = this.stockMarketApi.getUserStockPotentialQuantity(parent.userName, symbol);
                     if (potentialQuantity.getPotentialQuantity() < numOfShares) {
                         appController.changeMessage("ORDER FAILED: Dont have enough shares to sell");
                         stage.close();

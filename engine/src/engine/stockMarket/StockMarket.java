@@ -159,7 +159,7 @@ public class StockMarket implements StockMarketApi {
 
         int numberOfSharesInsertedToList = 0;
         int boughtNumOfShare = trade.getNumOfShares();
-        int dealsCounter = 1;
+        int dealsCounter = 0;
 
         trade = this.buyTrade(trade, symbol);
 
@@ -180,6 +180,7 @@ public class StockMarket implements StockMarketApi {
             this.addToBuyList(trade, symbol);
         }
 
+        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -192,7 +193,7 @@ public class StockMarket implements StockMarketApi {
 
         int numberOfSharesInsertedToList = 0;
         int sellNumOfShare = trade.getNumOfShares();
-        int dealsCounter = 1;
+        int dealsCounter = 0;
 
         trade = this.sellTrade(trade, symbol);
 
@@ -213,6 +214,7 @@ public class StockMarket implements StockMarketApi {
             this.addToSellList(trade, symbol);
         }
 
+        this.users.updateAllUsersTotalUsers();
         preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
@@ -242,6 +244,8 @@ public class StockMarket implements StockMarketApi {
                 deals.add(sellNumOfShare - trade.getNumOfShares());
             }
         }
+
+        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -270,7 +274,8 @@ public class StockMarket implements StockMarketApi {
                 deals.add(sellNumOfShare - trade.getNumOfShares());
             }
         }
-        
+
+        this.users.updateAllUsersTotalUsers();
         preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }

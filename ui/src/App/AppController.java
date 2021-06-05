@@ -11,6 +11,8 @@ import engine.dto.DTOUsers;
 import engine.stockMarket.StockMarket;
 import engine.stockMarket.StockMarketApi;
 import errors.ConstraintError;
+import errors.FileFormatNotSupportedError;
+import errors.NotUpperCaseError;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -23,6 +25,7 @@ import javafx.stage.Stage;
 import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.net.URL;
+import java.util.InputMismatchException;
 import java.util.Optional;
 
 public class AppController {
@@ -31,9 +34,9 @@ public class AppController {
     @FXML
     public HeaderController headerComponentController;
     @FXML
-    private ScrollPane bottomComponent;
+    public ScrollPane bottomComponent;
     @FXML
-    private BottomController bottomComponentController;
+    public BottomController bottomComponentController;
     @FXML
     public TabPane membersTabPane;
 
@@ -58,7 +61,7 @@ public class AppController {
             stockMarket = new StockMarket(xmlPath);
             addMembers();
             changeMessage("XML Loaded");
-        } catch (ConstraintError e) {
+        } catch (ConstraintError | InputMismatchException | NotUpperCaseError | FileFormatNotSupportedError e) {
             changeMessage("Error: failed to load xml - " + e.getMessage());
         }
         catch (Error | NullPointerException | JAXBException | IOException | InterruptedException e) {
