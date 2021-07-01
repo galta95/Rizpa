@@ -4,6 +4,7 @@ import dataManager.generated.RizpaStockExchangeDescriptor;
 import engine.dto.*;
 import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.stocks.Stocks;
+import engine.stockMarket.users.User;
 import engine.stockMarket.users.Users;
 import errors.NotFoundError;
 import dataManager.SchemaBasedJAXB;
@@ -150,13 +151,15 @@ public class StockMarket implements StockMarketApi {
     }
 
     @Override
-    public DTOOrder executeLmtOrderBuy(String symbol, String date, int numOfShares, int price) {
+    public DTOOrder executeLmtOrderBuy(String symbol, String date, int numOfShares,
+                                       int price, String userName) {
         List<Integer> deals = new LinkedList<>();
-        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.LMT);
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.LMT, preformUser);
 
         int numberOfSharesInsertedToList = 0;
         int boughtNumOfShare = trade.getNumOfShares();
-        int dealsCounter = 1;
+        int dealsCounter = 0;
 
         trade = this.buyTrade(trade, symbol);
 
@@ -177,17 +180,20 @@ public class StockMarket implements StockMarketApi {
             this.addToBuyList(trade, symbol);
         }
 
+        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
-    public DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price) {
+    public DTOOrder executeLmtOrderSell(String symbol, String date, int numOfShares, int price,
+                                        String userName) {
         List<Integer> deals = new LinkedList<>();
-        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.LMT);
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.LMT, preformUser);
 
         int numberOfSharesInsertedToList = 0;
         int sellNumOfShare = trade.getNumOfShares();
-        int dealsCounter = 1;
+        int dealsCounter = 0;
 
         trade = this.sellTrade(trade, symbol);
 
@@ -208,13 +214,16 @@ public class StockMarket implements StockMarketApi {
             this.addToSellList(trade, symbol);
         }
 
+        this.users.updateAllUsersTotalUsers();
+        preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
-    public DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price) {
+    public DTOOrder executeMktOrderBuy(String symbol, String date, int numOfShares, int price, String userName) {
         List<Integer> deals = new LinkedList<>();
-        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.MKT);
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.MKT, preformUser);
 
         int sellNumOfShare = 0;
         int dealsCounter = 0;
@@ -225,6 +234,7 @@ public class StockMarket implements StockMarketApi {
                 trade.setPrice(this.getStockPrice(symbol));
                 numberOfSharesInsertedToList = trade.getNumOfShares();
                 this.addToBuyList(trade, symbol);
+                break;
             } else {
                 sellNumOfShare = trade.getNumOfShares();
 
@@ -234,22 +244,27 @@ public class StockMarket implements StockMarketApi {
                 deals.add(sellNumOfShare - trade.getNumOfShares());
             }
         }
+
+        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
-    public DTOOrder executeMktOrderSell(String symbol, String date, int numOfShares, int price) {
+    public DTOOrder executeMktOrderSell(String symbol, String date, int numOfShares, int price,
+                                        String userName) {
         int sellNumOfShare;
         int dealsCounter = 0;
         List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
         int numberOfSharesInsertedToList = 0;
-        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.MKT);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.MKT, preformUser);
 
         while (trade.getNumOfShares() > 0) {
             if (this.isStockBuyListEmpty(symbol)) {
                 trade.setPrice(this.getStockPrice(symbol));
                 numberOfSharesInsertedToList = trade.getNumOfShares();
                 this.addToSellList(trade, symbol);
+                break;
             } else {
                 sellNumOfShare = trade.getNumOfShares();
 
@@ -259,6 +274,29 @@ public class StockMarket implements StockMarketApi {
                 deals.add(sellNumOfShare - trade.getNumOfShares());
             }
         }
+
+        this.users.updateAllUsersTotalUsers();
+        preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
+    }
+
+    @Override
+    public DTOUsers getAllUsers() {
+        return new DTOUsers(this.users.getUsers());
+    }
+
+    @Override
+    public DTOUser getUserByName(String name) {
+        User user = this.users.getUserByName(name);
+        if (user == null) {
+            return null;
+        }
+        return new DTOUser(user);
+    }
+
+    @Override
+    public DTOUserPotentialStockQuantity getUserStockPotentialQuantity(String userName, String symbol) {
+        User user = this.users.getUserByName(userName);
+        return new DTOUserPotentialStockQuantity(user.getHoldings().getItems().get(symbol).getPotentialQuantity());
     }
 }

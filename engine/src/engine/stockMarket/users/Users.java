@@ -1,9 +1,13 @@
 package engine.stockMarket.users;
 
+import dataManager.generated.RseHoldings;
+import dataManager.generated.RseStocks;
 import dataManager.generated.RseUser;
 import dataManager.generated.RseUsers;
+import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.stocks.Stocks;
 import errors.ConstraintError;
+import errors.NotFoundError;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +24,13 @@ public class Users {
             User currUser = new User(user, stocks);
             String name = currUser.getName();
             this.isUserNameExits(name);
+            this.isStockExists(currUser.getHoldings(), stocks);
             this.users.put(name, currUser);
         }
+    }
+
+    public final Map<String, User> getUsers() {
+        return this.users;
     }
 
     private void isUserNameExits(String name) throws ConstraintError {
@@ -29,5 +38,23 @@ public class Users {
         if (user != null) {
             throw new ConstraintError(name);
         }
+    }
+
+    public User getUserByName(String name) {
+        return users.get(name);
+    }
+
+    private void isStockExists(Holdings currUserHoldings, Stocks stocks) {
+        currUserHoldings.getItems().forEach((String symbol, Item item) -> {
+            if (stocks.getStocks().get(symbol) == null) {
+                throw new NotFoundError(symbol);
+            }
+        });
+    }
+
+    public void updateAllUsersTotalUsers() {
+        this.users.forEach((String name, User user) -> {
+            user.getHoldings().updateTotalStocksValue();
+        });
     }
 }
