@@ -284,22 +284,161 @@ public class StockMarket implements StockMarketApi {
 
     @Override
     public DTOOrder executeFokOrderSell(String symbol, String date, int numOfShares, int price, String userName) {
-        return null;
+        int possibleShares = numOfShares;
+        Stock stock = stocks.getStockBySymbol(symbol.toUpperCase());
+        List<Trade> buyList = stock.getBuys();
+
+        for (Trade trade: buyList) {
+            if (trade.getPrice() < price ) {
+                return null;
+            }
+            possibleShares -= trade.getNumOfShares();
+            if (possibleShares <= 0) {
+                break;
+            }
+        }
+
+        if (possibleShares > 0) {
+            return null;
+        }
+
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.FOK, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int sellNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.sellTrade(trade, symbol);
+
+        if (sellNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (sellNumOfShare != trade.getNumOfShares()) {
+                sellNumOfShare = trade.getNumOfShares();
+                trade = this.sellTrade(trade, symbol);
+                if (trade.getNumOfShares() != sellNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+
+        if (trade.getNumOfShares() > 0) {
+            numberOfSharesInsertedToList = trade.getNumOfShares();
+            this.addToSellList(trade, symbol);
+        }
+
+        this.users.updateAllUsersTotalUsers();
+        preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
     public DTOOrder executeFokOrderBuy(String symbol, String date, int numOfShares, int price, String userName) {
-        return null;
+        int possibleShares = numOfShares;
+        Stock stock = stocks.getStockBySymbol(symbol.toUpperCase());
+        List<Trade> sellList = stock.getSells();
+
+        for (Trade trade: sellList) {
+            if (trade.getPrice() > price ) {
+                return null;
+            }
+            possibleShares -= trade.getNumOfShares();
+            if (possibleShares <= 0) {
+                break;
+            }
+        }
+
+        if (possibleShares > 0) {
+            return null;
+        }
+
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.FOK, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int boughtNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.buyTrade(trade, symbol);
+
+        if (boughtNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (boughtNumOfShare != trade.getNumOfShares()) {
+                boughtNumOfShare = trade.getNumOfShares();
+                trade = this.buyTrade(trade, symbol);
+                if (trade.getNumOfShares() != boughtNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+
+        if (trade.getNumOfShares() > 0) {
+            numberOfSharesInsertedToList = trade.getNumOfShares();
+            this.addToBuyList(trade, symbol);
+        }
+
+        this.users.updateAllUsersTotalUsers();
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
     public DTOOrder executeIocOrderSell(String symbol, String date, int numOfShares, int price, String userName) {
-        return null;
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.IOC, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int sellNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.sellTrade(trade, symbol);
+
+        if (sellNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (sellNumOfShare != trade.getNumOfShares()) {
+                sellNumOfShare = trade.getNumOfShares();
+                trade = this.sellTrade(trade, symbol);
+                if (trade.getNumOfShares() != sellNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+
+        this.users.updateAllUsersTotalUsers();
+        preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
     public DTOOrder executeIocOrderBuy(String symbol, String date, int numOfShares, int price, String userName) {
-        return null;
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.IOC, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int boughtNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.buyTrade(trade, symbol);
+
+        if (boughtNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (boughtNumOfShare != trade.getNumOfShares()) {
+                boughtNumOfShare = trade.getNumOfShares();
+                trade = this.buyTrade(trade, symbol);
+                if (trade.getNumOfShares() != boughtNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+        this.users.updateAllUsersTotalUsers();
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
     @Override
