@@ -1,14 +1,17 @@
 package engine.stockMarket;
 
+import dataManager.SchemaBasedJAXB;
 import dataManager.generated.RizpaStockExchangeDescriptor;
 import engine.dto.*;
 import engine.stockMarket.stocks.Stock;
+import engine.stockMarket.users.User.Permissions;
 import engine.stockMarket.stocks.Stocks;
 import engine.stockMarket.users.User;
 import engine.stockMarket.users.Users;
+import errors.ConstraintError;
 import errors.NotFoundError;
-import dataManager.SchemaBasedJAXB;
 import engine.transaction.Trade;
+import errors.NotUpperCaseError;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -20,10 +23,9 @@ public class StockMarket implements StockMarketApi {
     private final Stocks stocks;
     private final Users users;
 
-    public StockMarket(String path) throws JAXBException, FileNotFoundException {
-        RizpaStockExchangeDescriptor rsed = SchemaBasedJAXB.loadXml(path);
-        this.stocks = new Stocks(rsed.getRseStocks());
-        this.users = new Users(rsed.getRseUsers(), this.stocks);
+    public StockMarket() {
+        stocks = new Stocks();
+        users = new Users();
     }
 
     private void assertStockExists(String name) throws NotFoundError {
@@ -281,6 +283,165 @@ public class StockMarket implements StockMarketApi {
     }
 
     @Override
+    public DTOOrder executeFokOrderSell(String symbol, String date, int numOfShares, int price, String userName) {
+        int possibleShares = numOfShares;
+        Stock stock = stocks.getStockBySymbol(symbol.toUpperCase());
+        List<Trade> buyList = stock.getBuys();
+
+        for (Trade trade: buyList) {
+            if (trade.getPrice() < price ) {
+                return null;
+            }
+            possibleShares -= trade.getNumOfShares();
+            if (possibleShares <= 0) {
+                break;
+            }
+        }
+
+        if (possibleShares > 0) {
+            return null;
+        }
+
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.FOK, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int sellNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.sellTrade(trade, symbol);
+
+        if (sellNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (sellNumOfShare != trade.getNumOfShares()) {
+                sellNumOfShare = trade.getNumOfShares();
+                trade = this.sellTrade(trade, symbol);
+                if (trade.getNumOfShares() != sellNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+
+        if (trade.getNumOfShares() > 0) {
+            numberOfSharesInsertedToList = trade.getNumOfShares();
+            this.addToSellList(trade, symbol);
+        }
+
+        this.users.updateAllUsersTotalUsers();
+        preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
+    }
+
+    @Override
+    public DTOOrder executeFokOrderBuy(String symbol, String date, int numOfShares, int price, String userName) {
+        int possibleShares = numOfShares;
+        Stock stock = stocks.getStockBySymbol(symbol.toUpperCase());
+        List<Trade> sellList = stock.getSells();
+
+        for (Trade trade: sellList) {
+            if (trade.getPrice() > price ) {
+                return null;
+            }
+            possibleShares -= trade.getNumOfShares();
+            if (possibleShares <= 0) {
+                break;
+            }
+        }
+
+        if (possibleShares > 0) {
+            return null;
+        }
+
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.FOK, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int boughtNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.buyTrade(trade, symbol);
+
+        if (boughtNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (boughtNumOfShare != trade.getNumOfShares()) {
+                boughtNumOfShare = trade.getNumOfShares();
+                trade = this.buyTrade(trade, symbol);
+                if (trade.getNumOfShares() != boughtNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+
+        if (trade.getNumOfShares() > 0) {
+            numberOfSharesInsertedToList = trade.getNumOfShares();
+            this.addToBuyList(trade, symbol);
+        }
+
+        this.users.updateAllUsersTotalUsers();
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
+    }
+
+    @Override
+    public DTOOrder executeIocOrderSell(String symbol, String date, int numOfShares, int price, String userName) {
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.IOC, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int sellNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.sellTrade(trade, symbol);
+
+        if (sellNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (sellNumOfShare != trade.getNumOfShares()) {
+                sellNumOfShare = trade.getNumOfShares();
+                trade = this.sellTrade(trade, symbol);
+                if (trade.getNumOfShares() != sellNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+
+        this.users.updateAllUsersTotalUsers();
+        preformUser.getHoldings().getItemBySymbol(symbol).updatePotentialQuantity(numberOfSharesInsertedToList);
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
+    }
+
+    @Override
+    public DTOOrder executeIocOrderBuy(String symbol, String date, int numOfShares, int price, String userName) {
+        List<Integer> deals = new LinkedList<>();
+        User preformUser = users.getUserByName(userName);
+        Trade trade = new Trade(date, numOfShares, price, Trade.OrderType.IOC, preformUser);
+
+        int numberOfSharesInsertedToList = 0;
+        int boughtNumOfShare = trade.getNumOfShares();
+        int dealsCounter = 0;
+
+        trade = this.buyTrade(trade, symbol);
+
+        if (boughtNumOfShare != trade.getNumOfShares()) {
+            dealsCounter++;
+
+            while (boughtNumOfShare != trade.getNumOfShares()) {
+                boughtNumOfShare = trade.getNumOfShares();
+                trade = this.buyTrade(trade, symbol);
+                if (trade.getNumOfShares() != boughtNumOfShare) {
+                    dealsCounter++;
+                }
+            }
+        }
+        this.users.updateAllUsersTotalUsers();
+        return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
+    }
+
+    @Override
     public DTOUsers getAllUsers() {
         return new DTOUsers(this.users.getUsers());
     }
@@ -298,5 +459,51 @@ public class StockMarket implements StockMarketApi {
     public DTOUserPotentialStockQuantity getUserStockPotentialQuantity(String userName, String symbol) {
         User user = this.users.getUserByName(userName);
         return new DTOUserPotentialStockQuantity(user.getHoldings().getItems().get(symbol).getPotentialQuantity());
+    }
+
+    @Override
+    public DTOUser insertUser(String name, String password, Permissions permission) {
+        User newUser = new User(name, password, permission);
+        try {
+            this.users.addUser(newUser);
+        } catch (ConstraintError e) {
+            return null;
+        }
+        return new DTOUser(newUser);
+    }
+
+    @Override
+    public DTOUser loadXml(String userName, String path) {
+        try {
+            RizpaStockExchangeDescriptor rsed = SchemaBasedJAXB.loadXml(path);
+            this.stocks.addStocksFromXml(rsed.getRseStocks());
+            User user = this.users.getUserByName(userName);
+            user.addHoldingsFromXml(rsed.getRseHoldings(), rsed.getRseStocks());
+            return new DTOUser(user);
+        } catch (JAXBException | FileNotFoundException | NotUpperCaseError | NotFoundError error) {
+            return null; //TODO: add errors return
+        }
+    }
+
+    @Override
+    public DTOStock insertStock(String companyName, String symbol, int numOfShares, int companyValue) {
+        int price = companyValue / numOfShares;
+        Stock newStock = new Stock(symbol, companyName, price);
+        try {
+            this.stocks.addStock(newStock);
+        } catch (ConstraintError e) {
+            return null;
+        }
+        return new DTOStock(newStock);
+    }
+
+    @Override
+    public DTOUser addMoney(String userName, int money) {
+        if (!this.users.isUserExists(userName)) {
+            return null;
+        }
+        User user = this.users.getUserByName(userName);
+        user.addMoney(money);
+        return new DTOUser(user);
     }
 }

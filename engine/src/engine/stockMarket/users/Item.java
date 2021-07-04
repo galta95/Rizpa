@@ -1,6 +1,5 @@
 package engine.stockMarket.users;
 
-import dataManager.generated.RseItem;
 import errors.InvalidData;
 import errors.RangeError;
 
