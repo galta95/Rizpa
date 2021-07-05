@@ -17,6 +17,10 @@ public class DTOUsers implements Iterable<DTOUser> {
         });
     }
 
+    public List<DTOUser> getUsers() {
+        return users;
+    }
+
     @Override
     public Iterator<DTOUser> iterator() {
         return users.iterator();
