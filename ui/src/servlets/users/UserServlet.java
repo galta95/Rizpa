@@ -1,27 +1,33 @@
-package servlets;
+package servlets.users;
+
 import com.google.gson.Gson;
-import engine.dto.DTOUsers;
+import engine.dto.DTOUser;
 import engine.stockMarket.StockMarketApi;
 import utils.ServletUtils;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class UsersServlets extends HttpServlet {
+import static constants.Constants.USERNAME;
 
+public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("application/json");
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
 
-        DTOUsers users = stockMarketApi.getAllUsers();
+        String username = req.getParameter(USERNAME);
+        System.out.println(username);
+        DTOUser user = stockMarketApi.getUserByName(username);
 
+        if (user == null) {
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+        }
         Gson gson = new Gson();
         String jsonResponse;
-        jsonResponse = gson.toJson(users);
+        jsonResponse = gson.toJson(user);
         res.getWriter().print(jsonResponse);
     }
 }

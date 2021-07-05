@@ -448,7 +448,7 @@ public class StockMarket implements StockMarketApi {
 
     @Override
     public DTOUser getUserByName(String name) {
-        User user = this.users.getUserByName(name);
+        User user = this.users.getUserByName(name.toUpperCase());
         if (user == null) {
             return null;
         }
