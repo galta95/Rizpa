@@ -18,18 +18,21 @@ public class LoginServlet extends HttpServlet {
     private final String SIGN_UP_URL = "../signup/signup.html";
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws ServletException, IOException {
-        processRequest(request, response);
-    }
+        res.setContentType("application/json");
 
-    protected void processRequest(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String usernameFromSession = SessionUtils.getUsername(req);
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
 
         if (usernameFromSession == null) {
             String usernameFromParameter = req.getParameter(USERNAME);
             String passwordFromParameter = req.getParameter(PASSWORD);
+
+            if (usernameFromParameter == null || passwordFromParameter == null
+                    || usernameFromParameter == "" || passwordFromParameter == "" ) {
+                res.sendError(HttpServletResponse.SC_BAD_REQUEST);
+            }
 
             Gson gson = new Gson();
             String jsonResponse;
@@ -39,10 +42,10 @@ public class LoginServlet extends HttpServlet {
             if (dtoUser == null) {
                 stockMarketApi.insertUser(usernameFromParameter, passwordFromParameter, Permissions.BROKER);
             }
+
             User userResponse = new User(usernameFromParameter, passwordFromParameter);
             jsonResponse = gson.toJson(userResponse);
 
-            res.setContentType("application/json");
             res.getWriter().print(jsonResponse);
         }
     }

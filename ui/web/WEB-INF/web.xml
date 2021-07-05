@@ -9,6 +9,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
-        <url-pattern>/pages/signup/login</url-pattern>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
 </web-app>
