@@ -10,7 +10,7 @@ const createListItem = (username) => {
 const getAllUsers = async () => {
     const myList = document.querySelector('#users-list');
 
-    await fetch(`http://localhost:8080/ui_Web_exploded/users`)
+    await fetch(`http://localhost:8080/ui_war_exploded/users`)
         .then(res => res.json())
         .then(data => {
             data.users.forEach(user => {
