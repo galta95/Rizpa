@@ -19,7 +19,6 @@ public class UserServlet extends HttpServlet {
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
 
         String username = req.getParameter(USERNAME);
-        System.out.println(username);
         DTOUser user = stockMarketApi.getUserByName(username);
 
         if (user == null) {

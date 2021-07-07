@@ -1,20 +1,38 @@
 <!DOCTYPE html>
 <html>
-    <script src="signup.js"></script>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-        <title>Online Chat</title>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Welcome to Rizpa App</h1>
-            <h2>Please enter a unique user name:</h2>
-            <form id="loginForm">
-                <input placeholder="username" type="text" name="username" class="text-input"/>
-                <input placeholder="password" type="text" name="password" class="text-input"/>
-                <button type="button" onclick="login()">Login</button>
-            </form>
+<script type="module" src="signup.js"></script>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Online Chat</title>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to Rizpa App</h1>
+    <h2>Please enter a unique user name:</h2>
+    <form class="needs-validations no-validate">
+        <div class="row">
+            <div class="col-3">
+                <label for="username" class="form-label">username</label>
+                <div class="input-group has-validation">
+                    <input placeholder="username" class="form-control" type="text" id="username" required/>
+                </div>
+                <label for="password" class="form-label">password</label>
+                <div class="input-group has-validation">
+                    <input placeholder="password" class="form-control" type="password" id="password" required/>
+                </div>
+                <label for="permissions" class="form-label">permissions</label>
+                <div class="input-group has-validation">
+                    <select class="form-select" id="permissions">
+                        <option value="broker">BROKER</option>
+                        <option value="admin">ADMIN</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2" id="loginBtn">Login</button>
+            </div>
         </div>
-    </body>
+    </form>
+</div>
+</body>
 </html>
