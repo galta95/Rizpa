@@ -15,6 +15,10 @@
         <servlet-name>UserServlet</servlet-name>
         <servlet-class>servlets.users.UserServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>StocksServlet</servlet-name>
+        <servlet-class>servlets.stocks.StocksServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
@@ -27,5 +31,9 @@
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/users/user</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StocksServlet</servlet-name>
+        <url-pattern>/stocks</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -13,6 +13,7 @@ import java.io.IOException;
 import static constants.Constants.USERNAME;
 
 public class UserServlet extends HttpServlet {
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("application/json");
