@@ -1,14 +1,33 @@
 const USERS_URL = '../../users';
+const USER_URL = '../../users/user';
 const STOCKS_URL = '../../stocks'
 
 let localUsers = {};
 let localStocks = {};
+let addMoneyBtn;
 
 const createUserListItem = (username, permission) => {
     const listItem = document.createElement('li');
     listItem.className = 'list-group-item'
     listItem.textContent = permission + ": " + username;
     return listItem;
+}
+
+const addMoney = async () => {
+    let moneyInput = document.getElementById('add-money-input');
+    if (!moneyInput.value || isNaN(moneyInput.value)) {
+        return;
+    }
+
+    const formData = {
+        userName: 'gal', // TODO: take from session
+        money: parseInt(moneyInput.value)
+    }
+
+    return fetch(USER_URL, {
+        method: 'PUT',
+        body: JSON.stringify(formData)
+    }).then((response => response.json()))
 }
 
 const getAllUsers = async () => {
@@ -25,6 +44,16 @@ const getAllUsers = async () => {
                     myList.appendChild(listItem);
                 }
             })
+        }).catch(e => console.log(e))
+}
+
+const getUserBalance = async () => {
+    const money = document.querySelector('#balance');
+
+    await fetch(USER_URL + `?username=gal`)// TODO: take from session
+        .then(res => res.json())
+        .then(data => {
+            money.textContent = data.money;
         }).catch(e => console.log(e))
 }
 
@@ -75,6 +104,9 @@ const getAllStocks = async () => {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+    addMoneyBtn = document.querySelector("#add-money-btn");
+    addMoneyBtn.addEventListener("click", addMoney);
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
+    setInterval(getUserBalance, 2000);
 });
