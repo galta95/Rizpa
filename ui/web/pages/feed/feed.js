@@ -39,7 +39,7 @@ const getAllUsers = async () => {
 // User
 
 const addMoney = async () => {
-    let moneyInput = document.getElementById('add-money-input');
+    let moneyInput = document.getElementById('addMoneyInput');
     if (!moneyInput.value || isNaN(moneyInput.value)) {
         return;
     }
@@ -144,7 +144,7 @@ const getAllStocks = async () => {
 // Events
 
 window.addEventListener("DOMContentLoaded", () => {
-    addMoneyBtn = document.getElementById("add-money-btn");
+    addMoneyBtn = document.getElementById("addMoneyBtn");
     addMoneyBtn.addEventListener("click", addMoney);
     addStockBtn = document.getElementById("addStockBtn");
     addStockBtn.addEventListener("click", addStock);
