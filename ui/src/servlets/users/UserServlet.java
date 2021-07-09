@@ -32,6 +32,7 @@ public class UserServlet extends HttpServlet {
             jsonResponse = gson.toJson(userNotFound);
             res.setStatus(HttpServletResponse.SC_NOT_FOUND);
             res.getWriter().print(jsonResponse);
+            return;
         }
         jsonResponse = gson.toJson(user);
         res.getWriter().print(jsonResponse);

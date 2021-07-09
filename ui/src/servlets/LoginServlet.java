@@ -41,6 +41,7 @@ public class LoginServlet extends HttpServlet {
 
             if (dtoUser == null) {
                 stockMarketApi.insertUser(username, password, permissionsEnum);
+                req.getSession(true).setAttribute(USERNAME, username);
             }
             res.getWriter().print(CREATED);
         }
