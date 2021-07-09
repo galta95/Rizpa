@@ -46,6 +46,10 @@ public class User {
         this.money -= money;
     }
 
+    public Permissions getPermission() {
+        return permission;
+    }
+
     public void updateHoldings(String symbol, int numOfShares) {
         Item stock = this.holdings.getItemBySymbol(symbol);
         if (stock == null) {

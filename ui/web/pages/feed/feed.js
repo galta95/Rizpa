@@ -4,10 +4,10 @@ const STOCKS_URL = '../../stocks'
 let localUsers = {};
 let localStocks = {};
 
-const createUserListItem = (username) => {
+const createUserListItem = (username, permission) => {
     let listItem = document.createElement('li');
     listItem.className = 'list-group-item'
-    listItem.textContent = username;
+    listItem.textContent = permission + ": " + username;
     return listItem;
 }
 
@@ -27,7 +27,8 @@ const getAllUsers = async () => {
             data.users.forEach(user => {
                 if (localUsers[user.name] === undefined) {
                     localUsers[user.name] = user.name;
-                    const listItem = createUserListItem(user.name);
+                    localUsers[user.permission] = user.permission;
+                    const listItem = createUserListItem(user.name, user.permission);
                     myList.appendChild(listItem);
                 }
             })
