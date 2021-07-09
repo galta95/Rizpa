@@ -15,11 +15,50 @@
             <ul class="list-group" id="users-list"></ul>
         </div>
         <div class="col lg">
-            <p>Account Manage</p>
-            <p>Balance: <strong id="balance"></strong></p>
-            <div class="input-group has-validation">
-                <input placeholder="Add Money" class="form-control" type="text" id="add-money-input" required/>
-                <button id="add-money-btn" class="btn btn-primary" >+</button>
+            <div>Account Manage</div>
+            <div class="row  border border-2 p-2">
+                <p>Balance: <strong id="balance"></strong></p>
+                <div class="input-group has-validation">
+                    <input placeholder="Add Money" class="form-control" type="text" id="add-money-input" required/>
+                    <button id="add-money-btn" class="btn btn-primary">+</button>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <form class="needs-validations no-validate border border-2 p-2">
+                <p>Add new stock: </p>
+                    <div class="row">
+                        <div class="col">
+                            <label for="companyName" class="form-label">company name</label>
+                            <div class="input-group has-validation">
+                                <input placeholder="company name" class="form-control" type="text" id="companyName"
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="symbol" class="form-label">symbol</label>
+                            <div class="input-group has-validation">
+                                <input placeholder="symbol" class="form-control" type="text" id="symbol" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="numOfShares" class="form-label">num of shares</label>
+                            <div class="input-group has-validation">
+                                <input placeholder="num of shares" class="form-control" type="text" id="numOfShares"
+                                       required/>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label for="companyValue" class="form-label">companyValue</label>
+                            <div class="input-group has-validation">
+                                <input placeholder="company value" class="form-control" type="text" id="companyValue"
+                                       required/>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mt-2" id="addStockBtn">Add Stock</button>
+                </form>
             </div>
         </div>
         <div class="col sm">
