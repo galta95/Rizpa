@@ -5,16 +5,9 @@ let localUsers = {};
 let localStocks = {};
 
 const createUserListItem = (username, permission) => {
-    let listItem = document.createElement('li');
+    const listItem = document.createElement('li');
     listItem.className = 'list-group-item'
     listItem.textContent = permission + ": " + username;
-    return listItem;
-}
-
-const createStockListItem = (stock) => {
-    let listItem = document.createElement('li');
-    listItem.className = 'list-group-item'
-    listItem.textContent = stock;
     return listItem;
 }
 
@@ -35,6 +28,36 @@ const getAllUsers = async () => {
         }).catch(e => console.log(e))
 }
 
+const createStockCol = (textContent) => {
+    const listItemCol = document.createElement('div');
+    listItemCol.className = 'col';
+    listItemCol.textContent = textContent;
+    return listItemCol;
+}
+
+const createStockRow = (stock) => {
+    const listItemRow = document.createElement('div');
+    listItemRow.className = 'row';
+
+    listItemRow.appendChild(createStockCol(stock.companyName));
+    listItemRow.appendChild(createStockCol(stock.symbol));
+    listItemRow.appendChild(createStockCol(stock.price));
+    listItemRow.appendChild(createStockCol(stock.cycle));
+    return listItemRow;
+}
+
+const createStockListItem = (stock) => {
+    let listItem = document.createElement('li');
+    let gridItem = document.createElement('div');
+
+    listItem.className = 'list-group-item';
+    gridItem.className = 'container';
+
+    gridItem.appendChild(createStockRow(stock));
+    listItem.appendChild(gridItem);
+    return listItem;
+}
+
 const getAllStocks = async () => {
     const myList = document.querySelector('#stocks-list');
 
@@ -42,9 +65,9 @@ const getAllStocks = async () => {
         .then(res => res.json())
         .then(data => {
             data.stocks.forEach(stock => {
-                if (localStocks[stock.name] === undefined) {
-                    localStocks[stock.name] = stock.name;
-                    const listItem = createStockListItem(stock.name);
+                if (localStocks[stock.companyName] === undefined) {
+                    localStocks[stock.companyName] = stock.companyName;
+                    const listItem = createStockListItem(stock);
                     myList.appendChild(listItem);
                 }
             })
