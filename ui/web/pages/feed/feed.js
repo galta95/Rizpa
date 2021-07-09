@@ -1,3 +1,6 @@
+const USERS_URL = '../../users';
+const STOCKS_URL = '../../stocks'
+
 let localUsers = {};
 let localStocks = {};
 
@@ -18,7 +21,7 @@ const createStockListItem = (stock) => {
 const getAllUsers = async () => {
     const myList = document.querySelector('#users-list');
 
-    await fetch(`http://localhost:8080/ui_war_exploded/users`)
+    await fetch(USERS_URL)
         .then(res => res.json())
         .then(data => {
             data.users.forEach(user => {
@@ -34,7 +37,7 @@ const getAllUsers = async () => {
 const getAllStocks = async () => {
     const myList = document.querySelector('#stocks-list');
 
-    await fetch(`http://localhost:8080/ui_war_exploded/stocks`)
+    await fetch(STOCKS_URL)
         .then(res => res.json())
         .then(data => {
             data.stocks.forEach(stock => {
@@ -49,8 +52,5 @@ const getAllStocks = async () => {
 
 window.addEventListener("DOMContentLoaded", () => {
     setInterval(getAllUsers, 2000);
-});
-
-window.addEventListener("DOMContentLoaded", () => {
     setInterval(getAllStocks, 2000);
 });

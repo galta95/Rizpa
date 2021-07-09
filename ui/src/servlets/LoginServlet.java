@@ -1,6 +1,5 @@
 package servlets;
 
-import com.google.gson.Gson;
 import engine.dto.DTOUser;
 import engine.stockMarket.StockMarketApi;
 import engine.stockMarket.users.User.Permissions;
@@ -14,8 +13,6 @@ import java.io.IOException;
 import static constants.Constants.*;
 
 public class LoginServlet extends HttpServlet {
-    private final String SIGN_UP_URL = "../signup/signup.html";
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
@@ -40,31 +37,12 @@ public class LoginServlet extends HttpServlet {
                 permissionsEnum = Permissions.ADMIN;
             }
 
-            Gson gson = new Gson();
-            String jsonResponse;
-
             DTOUser dtoUser = stockMarketApi.getUserByName(username);
 
             if (dtoUser == null) {
                 stockMarketApi.insertUser(username, password, permissionsEnum);
             }
-
-            User userResponse = new User(username, password, permissions);
-            jsonResponse = gson.toJson(userResponse);
-
-            res.getWriter().print(jsonResponse);
-        }
-    }
-
-    private static class User {
-        final private String username;
-        final private String password;
-        final private String permissions;
-
-        public User(String userName, String password, String permissions) {
-            this.username = userName;
-            this.password = password;
-            this.permissions = permissions;
+            res.getWriter().print(CREATED);
         }
     }
 }

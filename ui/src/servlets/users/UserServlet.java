@@ -17,17 +17,29 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("application/json");
+        Gson gson = new Gson();
+        String jsonResponse;
+
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
 
         String username = req.getParameter(USERNAME);
         DTOUser user = stockMarketApi.getUserByName(username);
 
         if (user == null) {
-            res.sendError(HttpServletResponse.SC_NOT_FOUND);
+            UserNotFound userNotFound = new UserNotFound(username);
+            jsonResponse = gson.toJson(userNotFound);
+            res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            res.getWriter().print(jsonResponse);
         }
-        Gson gson = new Gson();
-        String jsonResponse;
         jsonResponse = gson.toJson(user);
         res.getWriter().print(jsonResponse);
+    }
+
+    private static class UserNotFound {
+        final private String username;
+
+        public UserNotFound(String userName) {
+            this.username = userName;
+        }
     }
 }

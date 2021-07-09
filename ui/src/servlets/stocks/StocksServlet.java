@@ -23,16 +23,7 @@ public class StocksServlet extends HttpServlet {
 
         Gson gson = new Gson();
         String jsonResponse;
-
-        if (stocks.isEmpty()) {
-            Map<String, List<String>> msg = new HashMap<String, List<String>>();
-            List<String> lst = new LinkedList<>();
-            lst.add("There no stock on the market");
-            msg.put("stocks", lst);
-            jsonResponse = gson.toJson(msg);
-        } else{
-            jsonResponse = gson.toJson(stocks);
-        }
+        jsonResponse = gson.toJson(stocks);
         res.getWriter().print(jsonResponse);
     }
 }
