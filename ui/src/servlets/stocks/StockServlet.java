@@ -12,8 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static constants.Constants.BAD_REQUEST;
-import static constants.Constants.CREATED;
+import static constants.Constants.*;
 
 public class StockServlet extends HttpServlet {
 
@@ -26,17 +25,13 @@ public class StockServlet extends HttpServlet {
         BufferedReader reader = req.getReader();
         ParsedStock parsedStock = gson.fromJson(reader, ParsedStock.class);
 
-        System.out.println(parsedStock.companyName);
-        System.out.println(parsedStock.companyValue);
-        System.out.println(parsedStock.numOfShares);
-        System.out.println(parsedStock.symbol);
-
         DTOStock dtoStock = stockMarketApi.insertStock(parsedStock.companyName, parsedStock.symbol,
                 parsedStock.numOfShares, parsedStock.companyValue);
 
         if (dtoStock == null) {
-            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-            res.getWriter().print(BAD_REQUEST);
+            res.setStatus(HttpServletResponse.SC_CONFLICT);
+            res.getWriter().print(CONFLICT);
+            return;
         }
         res.setStatus(HttpServletResponse.SC_CREATED);
         res.getWriter().print(CREATED);
