@@ -23,6 +23,10 @@
         <servlet-name>StockServlet</servlet-name>
         <servlet-class>servlets.stocks.StockServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <servlet-class>servlets.file.FileUploadServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
@@ -43,5 +47,9 @@
     <servlet-mapping>
         <servlet-name>StockServlet</servlet-name>
         <url-pattern>/stocks/stock</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileUploadServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
     </servlet-mapping>
 </web-app>

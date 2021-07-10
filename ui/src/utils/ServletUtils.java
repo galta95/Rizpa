@@ -5,7 +5,6 @@ import engine.stockMarket.StockMarket;
 import engine.stockMarket.StockMarketApi;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 
 public class ServletUtils {
 
