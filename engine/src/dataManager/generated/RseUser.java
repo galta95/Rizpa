@@ -11,6 +11,7 @@ package dataManager.generated;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
@@ -24,8 +25,10 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType>
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;attribute name="symbol" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="quantity" use="required" type="{http://www.w3.org/2001/XMLSchema}int" />
+ *       &lt;sequence>
+ *         &lt;element ref="{}rse-holdings"/>
+ *       &lt;/sequence>
+ *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -34,53 +37,63 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
-@XmlRootElement(name = "rse-item")
-public class RseItem {
+@XmlType(name = "", propOrder = {
+    "rseHoldings"
+})
+@XmlRootElement(name = "rse-user")
+public class RseUser {
 
-    @XmlAttribute(name = "symbol", required = true)
-    protected String symbol;
-    @XmlAttribute(name = "quantity", required = true)
-    protected int quantity;
+    @XmlElement(name = "rse-holdings", required = true)
+    protected RseHoldings rseHoldings;
+    @XmlAttribute(name = "name", required = true)
+    protected String name;
 
     /**
-     * Gets the value of the symbol property.
+     * Gets the value of the rseHoldings property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link RseHoldings }
+     *     
+     */
+    public RseHoldings getRseHoldings() {
+        return rseHoldings;
+    }
+
+    /**
+     * Sets the value of the rseHoldings property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link RseHoldings }
+     *     
+     */
+    public void setRseHoldings(RseHoldings value) {
+        this.rseHoldings = value;
+    }
+
+    /**
+     * Gets the value of the name property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getSymbol() {
-        return symbol;
+    public String getName() {
+        return name;
     }
 
     /**
-     * Sets the value of the symbol property.
+     * Sets the value of the name property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setSymbol(String value) {
-        this.symbol = value;
-    }
-
-    /**
-     * Gets the value of the quantity property.
-     * 
-     */
-    public int getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * Sets the value of the quantity property.
-     * 
-     */
-    public void setQuantity(int value) {
-        this.quantity = value;
+    public void setName(String value) {
+        this.name = value;
     }
 
 }

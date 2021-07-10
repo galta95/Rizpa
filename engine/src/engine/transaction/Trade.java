@@ -4,7 +4,7 @@ import engine.stockMarket.users.User;
 
 public class Trade {
     public enum OrderType {
-        LMT, MKT, FOK, IOC
+        LMT, MKT
     }
     private String date;
     private int numOfShares;
