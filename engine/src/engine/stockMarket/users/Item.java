@@ -1,5 +1,6 @@
 package engine.stockMarket.users;
 
+import dataManager.generated.RseItem;
 import errors.InvalidData;
 import errors.RangeError;
 
@@ -15,12 +16,12 @@ public class Item {
         this.potentialQuantity = quantity;
     }
 
-/*    public Item(RseItem rseItem) {
+    public Item(RseItem rseItem) {
         this.symbol = rseItem.getSymbol().toUpperCase();
         this.validateQuantity(rseItem.getQuantity());
         this.quantity = rseItem.getQuantity();
         this.potentialQuantity = quantity;
-    }*/
+    }
 
     private void validateQuantity(int quantity) throws InvalidData {
         if (quantity <= 0) {

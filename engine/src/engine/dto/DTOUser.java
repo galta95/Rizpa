@@ -1,7 +1,6 @@
 package engine.dto;
 
 import engine.stockMarket.users.User;
-import engine.stockMarket.users.User.Permissions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +10,6 @@ public class DTOUser {
     private final int totalHoldings;
     private final int totalStocksValue;
     private final Map<String, Integer> holdings;
-    private final Permissions permission;
-    private int money;
-    private String password;
 
     public DTOUser(User user) {
         this.name = user.getName();
@@ -23,16 +19,9 @@ public class DTOUser {
         user.getHoldings().getItems().forEach((symbol, item)-> {
             holdings.put(symbol, item.getQuantity());
         });
-        this.permission = user.getPermission();
-        this.money = user.getMoney();
-        this.password = user.getPassword();
     }
 
     public String getUserName() { return name; }
-
-    public User.Permissions getPermission() {
-        return permission;
-    }
 
     public int getTotalHoldings() {
         return totalHoldings;
@@ -44,9 +33,5 @@ public class DTOUser {
 
     public int getTotalStocksValue() {
         return totalStocksValue;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }
