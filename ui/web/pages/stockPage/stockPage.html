@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Stock</title>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="row">
+                <div class="col text-center">Name:</div>
+                <div class="col text-center">Symbol:</div>
+                <div class="col text-center">Holdings:</div>
+            </div>
+            <div class="row">
+                <div class="col text-center">Price:</div>
+                <div class="col text-center">Cycle:</div>
+            </div>
+        </div>
+        <div class="col">
+            <button class="btn btn-primary mt-2" id="addStockBtn">Back To Feed</button>
+        </div>
+    </div>
+    <div class="row">
+        <form id="tradeForm" class="needs-validations no-validate border border-2 p-2">
+            <label for="tradeBtn" class="form-label">Trade Stock</label>
+            <div class="row">
+                <div class="col">
+                    <div>Trade Direction</div>
+                    <input type="radio" id="buy" name="tradeDirection" value="buy">
+                    <label for="buy">Buy</label><br>
+                    <input type="radio" id="sell" name="tradeDirection" value="sell">
+                    <label for="sell">Sell</label><br>
+                </div>
+                <div class="col">
+                    <div class="col">
+                        <select>
+                            <option value="0">Select Order Type:</option>
+                            <option value="1">LMT</option>
+                            <option value="2">MKT</option>
+                            <option value="3">FOC</option>
+                            <option value="4">IOC</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <label for="quantity" class="form-label">Quantity</label>
+                    <div class="input-group has-validation">
+                        <input placeholder="quantity" class="form-control" type="number" id="quantity"
+                               required/>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="limit" class="form-label">Limit</label>
+                    <div class="input-group has-validation">
+                        <input placeholder="limit" class="form-control" type="number" id="limit"
+                               required/>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2" id="tradeBtn">Trade Stock</button>
+        </form>
+    </div>
+    <div class="row">
+<!--        <p>Historical Data</p>-->
+        <table class="table table-success table-striped">Historical Data
+            <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
