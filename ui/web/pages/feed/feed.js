@@ -6,7 +6,7 @@ const STOCK_URL = '../../stocks/stock'
 let localUsers = {};
 let localStocks = {};
 let addMoneyBtn;
-let addStockBtn;
+let addStockForm;
 
 // Users
 
@@ -68,17 +68,12 @@ const getUserBalance = async () => {
 
 // Stock
 
-const addStock = async () => {
+const addStock = async (e) => {
+    e.preventDefault();
     let companyNameInput = document.getElementById('companyName');
     let symbolInput = document.getElementById('symbol');
     let numOfSharesInput = document.getElementById('numOfShares');
     let companyValueInput = document.getElementById('companyValue');
-
-    if (!companyNameInput.value || !symbolInput.value ||
-        !numOfSharesInput.value || isNaN(numOfSharesInput.value) ||
-        !companyValueInput.value || isNaN(companyValueInput.value)) {
-        return;
-    }
 
     const formData = {
         companyName: companyNameInput.value,
@@ -90,7 +85,9 @@ const addStock = async () => {
     return fetch(STOCK_URL, {
         method: 'POST',
         body: JSON.stringify(formData)
-    }).then((response => response.json()))
+    })
+        .then(() => addStockForm.reset())
+        .catch(() => console.log());
 }
 
 // Stocks
@@ -146,8 +143,9 @@ const getAllStocks = async () => {
 window.addEventListener("DOMContentLoaded", () => {
     addMoneyBtn = document.getElementById("addMoneyBtn");
     addMoneyBtn.addEventListener("click", addMoney);
-    addStockBtn = document.getElementById("addStockBtn");
-    addStockBtn.addEventListener("click", addStock);
+
+    addStockForm = document.getElementById("addStockForm");
+    addStockForm.addEventListener("submit", addStock);
 
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
