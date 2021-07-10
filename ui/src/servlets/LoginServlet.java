@@ -18,10 +18,11 @@ public class LoginServlet extends HttpServlet {
         String usernameFromSession = SessionUtils.getUsername(req);
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
 
+        String username = req.getParameter(USERNAME);
+        String password = req.getParameter(PASSWORD);
+        String permissions = req.getParameter(PERMISSIONS);
+
         if (usernameFromSession == null) {
-            String username = req.getParameter(USERNAME);
-            String password = req.getParameter(PASSWORD);
-            String permissions = req.getParameter(PERMISSIONS);
             Permissions permissionsEnum = Permissions.BROKER;
 
             if (username == null || password == null
@@ -39,9 +40,9 @@ public class LoginServlet extends HttpServlet {
                 stockMarketApi.insertUser(username, password, permissionsEnum);
                 req.getSession(true).setAttribute(USERNAME, username);
                 res.getWriter().print(CREATED);
-                return;
             }
-
+        } else {
+            DTOUser dtoUser = stockMarketApi.getUserByName(username);
             if (!dtoUser.getPassword().equals(password)) {
                 res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 res.getWriter().print("{message: invalid password}");
