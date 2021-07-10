@@ -1,10 +1,10 @@
 package engine.stockMarket.stocks;
 
-import dataManager.generated.RseStock;
-import dataManager.generated.RseStocks;
 import errors.ConstraintError;
 import errors.NotFoundError;
 import errors.NotUpperCaseError;
+import dataManager.generated.RseStock;
+import dataManager.generated.RseStocks;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,14 +14,12 @@ public class Stocks {
     private Map<String, Stock> stocks;
     private Map<String, String> companyToSymbole;
 
-    public Stocks() {
-        stocks = new HashMap<>();
-        companyToSymbole = new HashMap<>();
-    }
-
-    public void addStocksFromXml(RseStocks rseStocks) throws NotUpperCaseError {
+    public Stocks(RseStocks rseStocks) throws ConstraintError {
         List<RseStock> rseStock = rseStocks.getRseStock();
         char ch;
+
+        this.stocks = new HashMap<>();
+        this.companyToSymbole = new HashMap<>();
 
         for (RseStock item : rseStock) {
             Stock stock = new Stock(item);
@@ -30,13 +28,17 @@ public class Stocks {
 
             for (int i = 0; i < stockSymbol.length(); i++) {
                 ch = stockSymbol.charAt(i);
-                if (!Character.isUpperCase(ch)) {
+                if (!Character.isUpperCase(ch))
+                {
                     throw new NotUpperCaseError(stockSymbol);
                 }
             }
-
-            if (this.stocks.get(stockSymbol) != null || this.companyToSymbole.get(stockCompanyName) != null) {
-                continue;
+            
+            if (this.stocks.get(stockSymbol) != null) {
+                throw new ConstraintError(stockSymbol);
+            }
+            if (this.companyToSymbole.get(stockCompanyName) != null) {
+                throw new ConstraintError(stockCompanyName);
             }
 
             this.stocks.put(stockSymbol, stock);
@@ -71,17 +73,5 @@ public class Stocks {
         }
 
         return stock;
-    }
-
-    public boolean isStockExists(String symbol) {
-        return getStockBySymbol(symbol.toUpperCase()) != null;
-    }
-
-    public void addStock(Stock newStock) throws ConstraintError {
-        if (isStockExists(newStock.getSymbol())) {
-            throw new ConstraintError(newStock.getSymbol());
-        }
-        this.stocks.put(newStock.getSymbol(), newStock);
-        this.companyToSymbole.put(newStock.getCompanyName(), newStock.getSymbol());
     }
 }
