@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="col">
-            <button class="btn btn-primary mt-2" id="addStockBtn">Back To Feed</button>
+            <button class="btn btn-primary mt-2" id="back">Back To Feed</button>
         </div>
     </div>
     <div class="row">
@@ -29,20 +29,26 @@
             <label for="tradeBtn" class="form-label">Trade Stock</label>
             <div class="row">
                 <div class="col">
-                    <div>Trade Direction</div>
-                    <input type="radio" id="buy" name="tradeDirection" value="buy">
-                    <label for="buy">Buy</label><br>
-                    <input type="radio" id="sell" name="tradeDirection" value="sell">
-                    <label for="sell">Sell</label><br>
+                    <div>Trade Direction
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="buy" name="tradeDirection" value="buy"
+                                   checked>
+                            <label class="form-check-label" for="buy">Buy</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="sell" name="tradeDirection" value="sell">
+                            <label class="form-check-label" for="sell">Sell</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="col">
                     <div class="col">
-                        <select>
-                            <option value="0">Select Order Type:</option>
-                            <option value="1">LMT</option>
-                            <option value="2">MKT</option>
-                            <option value="3">FOC</option>
-                            <option value="4">IOC</option>
+                        <select class="form-select" id="orderType" required>
+                            <option selected>Select Order Type</option>
+                            <option value="LMT">LMT</option>
+                            <option value="MKT">MKT</option>
+                            <option value="FOK">FOK</option>
+                            <option value="IOC">IOC</option>
                         </select>
                     </div>
                 </div>
@@ -67,19 +73,18 @@
         </form>
     </div>
     <div class="row">
-<!--        <p>Historical Data</p>-->
-        <table class="table table-success table-striped">Historical Data
+        <table class="table table-striped">Historical Data
             <thead>
-                <tr>
-                    <th scope="col">Date</th>
-                    <th scope="col">Quantity</th>
-                    <th scope="col">Price</th>
-                </tr>
+            <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Price</th>
+            </tr>
             </thead>
             <tbody>
-                <td>-</td>
-                <td>-</td>
-                <td>-</td>
+            <td>-</td>
+            <td>-</td>
+            <td>-</td>
             </tbody>
         </table>
     </div>
