@@ -38,6 +38,10 @@ public class User {
         return money;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void addMoney(int money) {
         this.money += money;
     }
@@ -87,4 +91,5 @@ public class User {
             }
         });
     }
+
 }

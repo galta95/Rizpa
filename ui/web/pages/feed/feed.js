@@ -6,6 +6,8 @@ let localUsers = {};
 let localStocks = {};
 let addMoneyBtn;
 
+const userNameFromSession = window.sessionStorage.getItem("username");
+
 const createUserListItem = (username, permission) => {
     const listItem = document.createElement('li');
     listItem.className = 'list-group-item'
@@ -20,7 +22,7 @@ const addMoney = async () => {
     }
 
     const formData = {
-        userName: 'gal', // TODO: take from session
+        userName: userNameFromSession,
         money: parseInt(moneyInput.value)
     }
 
@@ -50,7 +52,7 @@ const getAllUsers = async () => {
 const getUserBalance = async () => {
     const money = document.querySelector('#balance');
 
-    await fetch(USER_URL + `?username=gal`)// TODO: take from session
+    await fetch(USER_URL + `?username=${userNameFromSession}`)
         .then(res => res.json())
         .then(data => {
             money.textContent = data.money;
