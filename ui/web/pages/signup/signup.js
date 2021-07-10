@@ -13,7 +13,7 @@ const login = (e) => {
     fetch(`${LOGIN_URL}?${USERNAME}=${userName.value}&${PASSWORD}=${password.value}&${PERMISSIONS}=${permissions.value}`)
         .then((res) => {
             if (res.ok) {
-                window.sessionStorage.setItem("username", userName.value);
+                window.localStorage.setItem("username", userName.value);
                 window.location.replace(FEEDURL)
             } else {
                 window.alert("Username or Password invalid")

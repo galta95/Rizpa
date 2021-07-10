@@ -1,4 +1,5 @@
-const userNameSession = window.sessionStorage.getItem("username");
+const userNameSession = window.localStorage.getItem("username");
+
 if (userNameSession) {
     window.location.replace("pages/feed/feed.html");
 } else {

@@ -1,10 +1,14 @@
 const USERS_URL = '../../users';
 const USER_URL = '../../users/user';
 const STOCKS_URL = '../../stocks'
+const STOCK_URL = '../../stocks/stock'
 
 let localUsers = {};
 let localStocks = {};
 let addMoneyBtn;
+let addStockForm;
+
+// Users
 
 const userNameFromSession = window.sessionStorage.getItem("username");
 
@@ -13,23 +17,6 @@ const createUserListItem = (username, permission) => {
     listItem.className = 'list-group-item'
     listItem.textContent = permission + ": " + username;
     return listItem;
-}
-
-const addMoney = async () => {
-    let moneyInput = document.getElementById('add-money-input');
-    if (!moneyInput.value || isNaN(moneyInput.value)) {
-        return;
-    }
-
-    const formData = {
-        userName: userNameFromSession,
-        money: parseInt(moneyInput.value)
-    }
-
-    return fetch(USER_URL, {
-        method: 'PUT',
-        body: JSON.stringify(formData)
-    }).then((response => response.json()))
 }
 
 const getAllUsers = async () => {
@@ -49,6 +36,25 @@ const getAllUsers = async () => {
         }).catch(e => console.log(e))
 }
 
+// User
+
+const addMoney = async () => {
+    let moneyInput = document.getElementById('addMoneyInput');
+    if (!moneyInput.value || isNaN(moneyInput.value)) {
+        return;
+    }
+
+    const formData = {
+        userName: userNameFromSession,
+        money: parseInt(moneyInput.value)
+    }
+
+    return fetch(USER_URL, {
+        method: 'PUT',
+        body: JSON.stringify(formData)
+    }).then((response => response.json()))
+}
+
 const getUserBalance = async () => {
     const money = document.querySelector('#balance');
 
@@ -58,6 +64,33 @@ const getUserBalance = async () => {
             money.textContent = data.money;
         }).catch(e => console.log(e))
 }
+
+
+// Stock
+
+const addStock = async (e) => {
+    e.preventDefault();
+    let companyNameInput = document.getElementById('companyName');
+    let symbolInput = document.getElementById('symbol');
+    let numOfSharesInput = document.getElementById('numOfShares');
+    let companyValueInput = document.getElementById('companyValue');
+
+    const formData = {
+        companyName: companyNameInput.value,
+        symbol: symbolInput.value,
+        numOfShares: parseInt(numOfSharesInput.value),
+        companyValue: parseInt(companyValueInput.value)
+    }
+
+    return fetch(STOCK_URL, {
+        method: 'POST',
+        body: JSON.stringify(formData)
+    })
+        .then(() => addStockForm.reset())
+        .catch(() => console.log());
+}
+
+// Stocks
 
 const createStockCol = (textContent) => {
     const listItemCol = document.createElement('div');
@@ -105,9 +138,15 @@ const getAllStocks = async () => {
         }).catch(e => console.log(e))
 }
 
+// Events
+
 window.addEventListener("DOMContentLoaded", () => {
-    addMoneyBtn = document.querySelector("#add-money-btn");
+    addMoneyBtn = document.getElementById("addMoneyBtn");
     addMoneyBtn.addEventListener("click", addMoney);
+
+    addStockForm = document.getElementById("addStockForm");
+    addStockForm.addEventListener("submit", addStock);
+
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
     setInterval(getUserBalance, 2000);
