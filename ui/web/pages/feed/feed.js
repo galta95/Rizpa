@@ -5,7 +5,7 @@ const STOCK_URL = '../../stocks/stock'
 
 let localUsers = {};
 let localStocks = {};
-let addMoneyBtn;
+let addMoneyForm;
 let addStockForm;
 let balance;
 let userName
@@ -40,9 +40,10 @@ const getAllUsers = () => {
 
 // User
 
-const addMoney = () => {
+const addMoney = (e) => {
+    e.preventDefault();
     let moneyInput = document.getElementById('addMoneyInput');
-    if (!moneyInput.value || isNaN(moneyInput.value)) {
+    if (isNaN(moneyInput.value)) {
         return;
     }
 
@@ -54,7 +55,9 @@ const addMoney = () => {
     return fetch(USER_URL, {
         method: 'PUT',
         body: JSON.stringify(formData)
-    }).then((response => response.json()))
+    })
+        .then(() => addMoneyForm.reset())
+        .catch(() => console.log());
 }
 
 const getUserBalance = () => {
@@ -64,6 +67,7 @@ const getUserBalance = () => {
         .then(res => res.json())
         .then(data => {
             const money = document.createElement("strong");
+            money.id = 'money';
             money.className = 'col';
             money.textContent = data.money;
             balance.appendChild(money);
@@ -71,13 +75,11 @@ const getUserBalance = () => {
 }
 
 const updateUserBalance = () => {
+    const money = document.getElementById('money');
     fetch(USER_URL + `?username=${userNameFromSession}`)
         .then(res => res.json())
         .then(data => {
-            const money = document.createElement("strong");
-            money.className = 'col';
             money.textContent = data.money;
-            balance.replace(money);
         }).catch(e => console.log(e))
 }
 
@@ -165,10 +167,10 @@ const setUserHello = () => {
 }
 
 function init() {
-    addMoneyBtn = document.getElementById("addMoneyBtn");
+    addMoneyForm = document.getElementById("addMoneyForm");
     addStockForm = document.getElementById("addStockForm");
 
-    addMoneyBtn.addEventListener("click", addMoney);
+    addMoneyForm.addEventListener("submit", addMoney);
     addStockForm.addEventListener("submit", addStock);
 
     setUserHello();
