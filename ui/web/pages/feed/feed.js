@@ -139,11 +139,12 @@ const createStockListItem = (stock) => {
     let listItem = document.createElement('li');
     let gridItem = document.createElement('div');
 
-    listItem.className = 'list-group-item';
+    listItem.className = 'list-group-item list-group-item-action';
     gridItem.className = 'container';
 
     gridItem.appendChild(createStockRow(stock));
     listItem.appendChild(gridItem);
+
     return listItem;
 }
 
