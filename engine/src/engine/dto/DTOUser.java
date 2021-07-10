@@ -13,6 +13,7 @@ public class DTOUser {
     private final Map<String, Integer> holdings;
     private final Permissions permission;
     private int money;
+    private String password;
 
     public DTOUser(User user) {
         this.name = user.getName();
@@ -24,6 +25,7 @@ public class DTOUser {
         });
         this.permission = user.getPermission();
         this.money = user.getMoney();
+        this.password = user.getPassword();
     }
 
     public String getUserName() { return name; }
@@ -42,5 +44,9 @@ public class DTOUser {
 
     public int getTotalStocksValue() {
         return totalStocksValue;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

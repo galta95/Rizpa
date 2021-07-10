@@ -13,11 +13,8 @@ import java.io.IOException;
 import static constants.Constants.*;
 
 public class LoginServlet extends HttpServlet {
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse res)
+    protected void signup(HttpServletRequest req, HttpServletResponse res)
             throws IOException {
-        res.setContentType("application/json");
-
         String usernameFromSession = SessionUtils.getUsername(req);
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
 
@@ -25,7 +22,6 @@ public class LoginServlet extends HttpServlet {
             String username = req.getParameter(USERNAME);
             String password = req.getParameter(PASSWORD);
             String permissions = req.getParameter(PERMISSIONS);
-
             Permissions permissionsEnum = Permissions.BROKER;
 
             if (username == null || password == null
@@ -42,8 +38,20 @@ public class LoginServlet extends HttpServlet {
             if (dtoUser == null) {
                 stockMarketApi.insertUser(username, password, permissionsEnum);
                 req.getSession(true).setAttribute(USERNAME, username);
+                res.getWriter().print(CREATED);
+                return;
             }
-            res.getWriter().print(CREATED);
+
+            if (!dtoUser.getPassword().equals(password)) {
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                res.getWriter().print("{message: invalid password}");
+            }
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+        res.setContentType("application/json");
+        signup(req, res);
     }
 }
