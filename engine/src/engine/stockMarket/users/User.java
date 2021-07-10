@@ -38,12 +38,20 @@ public class User {
         return money;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void addMoney(int money) {
         this.money += money;
     }
 
     public void subMoney(int money) {
         this.money -= money;
+    }
+
+    public Permissions getPermission() {
+        return permission;
     }
 
     public void updateHoldings(String symbol, int numOfShares) {
@@ -83,4 +91,5 @@ public class User {
             }
         });
     }
+
 }

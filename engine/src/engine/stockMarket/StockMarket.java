@@ -448,7 +448,7 @@ public class StockMarket implements StockMarketApi {
 
     @Override
     public DTOUser getUserByName(String name) {
-        User user = this.users.getUserByName(name);
+        User user = this.users.getUserByName(name.toUpperCase());
         if (user == null) {
             return null;
         }
@@ -488,8 +488,9 @@ public class StockMarket implements StockMarketApi {
     @Override
     public DTOStock insertStock(String companyName, String symbol, int numOfShares, int companyValue) {
         int price = companyValue / numOfShares;
-        Stock newStock = new Stock(symbol, companyName, price);
+        Stock newStock;
         try {
+            newStock = new Stock(symbol, companyName, price);
             this.stocks.addStock(newStock);
         } catch (ConstraintError e) {
             return null;

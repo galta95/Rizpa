@@ -26,7 +26,7 @@ public class Users {
     }
 
     public User getUserByName(String name) {
-        return users.get(name);
+        return users.get(name.toUpperCase());
     }
 
     public boolean isUserExists(String name) {
