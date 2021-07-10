@@ -7,6 +7,8 @@ let localUsers = {};
 let localStocks = {};
 let addMoneyBtn;
 let addStockForm;
+let balance;
+let userName
 
 // Users
 
@@ -19,10 +21,10 @@ const createUserListItem = (username, permission) => {
     return listItem;
 }
 
-const getAllUsers = async () => {
+const getAllUsers = () => {
     const myList = document.querySelector('#users-list');
 
-    await fetch(USERS_URL)
+    fetch(USERS_URL)
         .then(res => res.json())
         .then(data => {
             data.users.forEach(user => {
@@ -38,7 +40,7 @@ const getAllUsers = async () => {
 
 // User
 
-const addMoney = async () => {
+const addMoney = () => {
     let moneyInput = document.getElementById('addMoneyInput');
     if (!moneyInput.value || isNaN(moneyInput.value)) {
         return;
@@ -55,20 +57,34 @@ const addMoney = async () => {
     }).then((response => response.json()))
 }
 
-const getUserBalance = async () => {
-    const money = document.querySelector('#balance');
+const getUserBalance = () => {
+    balance = document.getElementById('balance');
 
-    await fetch(USER_URL + `?username=${userNameFromSession}`)
+    fetch(USER_URL + `?username=${userNameFromSession}`)
         .then(res => res.json())
         .then(data => {
+            const money = document.createElement("strong");
+            money.className = 'col';
             money.textContent = data.money;
+            balance.appendChild(money);
+        }).catch(e => console.log(e))
+}
+
+const updateUserBalance = () => {
+    fetch(USER_URL + `?username=${userNameFromSession}`)
+        .then(res => res.json())
+        .then(data => {
+            const money = document.createElement("strong");
+            money.className = 'col';
+            money.textContent = data.money;
+            balance.replace(money);
         }).catch(e => console.log(e))
 }
 
 
 // Stock
 
-const addStock = async (e) => {
+const addStock = (e) => {
     e.preventDefault();
     let companyNameInput = document.getElementById('companyName');
     let symbolInput = document.getElementById('symbol');
@@ -122,10 +138,10 @@ const createStockListItem = (stock) => {
     return listItem;
 }
 
-const getAllStocks = async () => {
+const getAllStocks = () => {
     const myList = document.querySelector('#stocks-list');
 
-    await fetch(STOCKS_URL)
+    fetch(STOCKS_URL)
         .then(res => res.json())
         .then(data => {
             data.stocks.forEach(stock => {
@@ -140,14 +156,31 @@ const getAllStocks = async () => {
 
 // Events
 
-window.addEventListener("DOMContentLoaded", () => {
-    addMoneyBtn = document.getElementById("addMoneyBtn");
-    addMoneyBtn.addEventListener("click", addMoney);
+const setUserHello = () => {
+    userName = document.getElementById('userHello');
+    const name = document.createElement("strong");
+    name.className = 'col';
+    name.textContent = userNameFromSession;
+    userName.appendChild(name);
+}
 
+function init() {
+    addMoneyBtn = document.getElementById("addMoneyBtn");
     addStockForm = document.getElementById("addStockForm");
+
+    addMoneyBtn.addEventListener("click", addMoney);
     addStockForm.addEventListener("submit", addStock);
+
+    setUserHello();
+    getAllUsers();
+    getAllStocks();
+    getUserBalance();
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    init();
 
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
-    setInterval(getUserBalance, 2000);
+    setInterval(updateUserBalance, 2000);
 });
