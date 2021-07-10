@@ -3,8 +3,7 @@ package engine.stockMarket.users;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import dataManager.generated.RseHoldings;
-import dataManager.generated.RseItem;
+
 import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.stocks.Stocks;
 import errors.NotFoundError;
@@ -15,19 +14,9 @@ public class Holdings {
     private int totalStocksValue;
     private final Stocks stocks;
 
-    public Holdings(RseHoldings rseHoldings, Stocks stocks) {
-        List<RseItem> rseHolding = rseHoldings.getRseItem();
-        this.stocks = stocks;
-        this.items = new HashMap<>();
-
-        for (RseItem item : rseHolding) {
-            Item currItem = new Item(item);
-            String symbol = currItem.getSymbol();
-            this.isSymbolExists(symbol, stocks);
-            this.items.put(symbol, currItem);
-        }
-        this.totalHoldings = items.size();
-        this.updateTotalStocksValue();
+    public Holdings() {
+        items = new HashMap<>();
+        stocks = new Stocks();
     }
 
     private void isSymbolExists(String symbol, Stocks stocks) throws NotFoundError {
