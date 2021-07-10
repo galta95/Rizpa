@@ -21,14 +21,6 @@ public class DTOStocks implements Iterable<DTOStock> {
         return stocks;
     }
 
-    public int getSize() {
-        return this.stocks.size();
-    }
-
-    public boolean isEmpty() {
-        return this.stocks.size() == 0;
-    }
-
     @Override
     public Iterator<DTOStock> iterator() {
         return stocks.iterator();
