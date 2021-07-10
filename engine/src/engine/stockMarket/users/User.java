@@ -1,15 +1,29 @@
 package engine.stockMarket.users;
 
-import dataManager.generated.RseUser;
-import engine.stockMarket.stocks.Stocks;
+import dataManager.generated.RseHoldings;
+import dataManager.generated.RseItem;
+import dataManager.generated.RseStock;
+import dataManager.generated.RseStocks;
+import errors.NotFoundError;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class User {
+    public enum Permissions {
+        ADMIN, BROKER
+    }
     private final String name;
     private final Holdings holdings;
+    private final Permissions permission;
+    private final String password;
+    private int money;
 
-    public User(RseUser rseUser, Stocks stocks) {
-        this.name = rseUser.getName().toUpperCase();
-        this.holdings = new Holdings(rseUser.getRseHoldings(), stocks);
+    public User(String name, String password, Permissions permission) {
+        this.name = name.toUpperCase();
+        this.permission = permission;
+        this.password = password;
+        this.holdings = new Holdings();
+        this.money = 0;
     }
 
     public String getName() {
@@ -18,6 +32,26 @@ public class User {
 
     public Holdings getHoldings() {
         return holdings;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void addMoney(int money) {
+        this.money += money;
+    }
+
+    public void subMoney(int money) {
+        this.money -= money;
+    }
+
+    public Permissions getPermission() {
+        return permission;
     }
 
     public void updateHoldings(String symbol, int numOfShares) {
@@ -33,4 +67,29 @@ public class User {
         holdings.setTotalHoldings();
         holdings.updateTotalStocksValue();
     }
+
+    public void addHoldingsFromXml(RseHoldings rseHoldings, RseStocks rseStocks) throws NotFoundError {
+        List<RseItem> rseItemsList = rseHoldings.getRseItem();
+        List<RseStock> rseStocksList = rseStocks.getRseStock();
+
+        AtomicBoolean flag = new AtomicBoolean(false);
+        rseItemsList.forEach(rseItem -> {
+            flag.set(false);
+            rseStocksList.forEach(rseStock -> {
+                if (rseItem.getSymbol().equals(rseStock.getRseSymbol())) {
+                    flag.set(true);
+                }
+            });
+            if (!flag.get()) {
+                throw new NotFoundError(rseItem.getSymbol());
+            }
+        });
+
+        rseItemsList.forEach(rseItem -> {
+            if (this.holdings.getItemBySymbol(rseItem.getSymbol().toUpperCase()) != null) {
+                this.updateHoldings(rseItem.getSymbol(), rseItem.getQuantity());
+            }
+        });
+    }
+
 }

@@ -1,8 +1,6 @@
 package engine.stockMarket.stocks;
 
 import dataManager.generated.RseStock;
-import engine.stockMarket.users.Holdings;
-import engine.stockMarket.users.User;
 import engine.transaction.Deal;
 import engine.transaction.Trade;
 
@@ -118,9 +116,12 @@ public class Stock {
     }
 
     public Trade sell(Trade trade) {
-        for (Trade currSell : this.buys) {
-            if (currSell.getPrice() >= trade.getPrice() && trade.getNumOfShares() > 0) {
-                makeDeal(trade, currSell, this.buys);
+        int dealValue;
+        for (Trade currBuyer : this.buys) {
+            if (currBuyer.getPrice() >= trade.getPrice() && trade.getNumOfShares() > 0) {
+                dealValue = makeDeal(trade, currBuyer, this.buys);
+                trade.getUser().addMoney(dealValue);
+                currBuyer.getUser().subMoney(dealValue);
                 return trade;
             } else
                 break;
@@ -129,9 +130,12 @@ public class Stock {
     }
 
     public Trade buy(Trade trade) {
-        for (Trade currSell : this.sells) {
-            if (currSell.getPrice() <= trade.getPrice() && trade.getNumOfShares() > 0) {
-                makeDeal(trade, currSell, this.sells);
+        int dealValue;
+        for (Trade currSeller : this.sells) {
+            if (currSeller.getPrice() <= trade.getPrice() && trade.getNumOfShares() > 0) {
+                dealValue = makeDeal(trade, currSeller, this.sells);
+                trade.getUser().subMoney(dealValue);
+                currSeller.getUser().addMoney(dealValue);
                 return trade;
             } else
                 break;
@@ -139,7 +143,7 @@ public class Stock {
         return trade;
     }
 
-    private void makeDeal(Trade consumer, Trade producer, List<Trade> stockTradeList) {
+    private int makeDeal(Trade consumer, Trade producer, List<Trade> stockTradeList) {
         int numOfShares;
         int price = producer.getPrice();
 
@@ -166,5 +170,7 @@ public class Stock {
         this.dealsCount++;
         this.price = price;
         this.cycle += dealValue;
+
+        return dealValue;
     }
 }
