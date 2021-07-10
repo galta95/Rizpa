@@ -2,6 +2,7 @@ const USERS_URL = '../../users';
 const USER_URL = '../../users/user';
 const STOCKS_URL = '../../stocks'
 const STOCK_URL = '../../stocks/stock'
+const UPLOAD_URL = '../../upload';
 
 let localUsers = {};
 let localStocks = {};
@@ -9,6 +10,7 @@ let addMoneyForm;
 let addStockForm;
 let balance;
 let userName
+let uploadFileForm;
 
 // Users
 
@@ -139,11 +141,12 @@ const createStockListItem = (stock) => {
     let listItem = document.createElement('li');
     let gridItem = document.createElement('div');
 
-    listItem.className = 'list-group-item';
+    listItem.className = 'list-group-item list-group-item-action';
     gridItem.className = 'container';
 
     gridItem.appendChild(createStockRow(stock));
     listItem.appendChild(gridItem);
+
     return listItem;
 }
 
@@ -163,14 +166,29 @@ const getAllStocks = () => {
         }).catch(e => console.log(e))
 }
 
+// File
+const uploadFile = (e) => {
+    e.preventDefault();
+    const selectedFile = document.getElementById('inputFile').files[0];
+
+    let formData = new FormData();
+    formData.append("file", selectedFile);
+
+    fetch(UPLOAD_URL, {method: 'POST', body: formData})
+        .then(() => window.alert("File Uploaded Successfully!"))
+        .catch(() => window.alert("Error: File did not uploaded"));
+}
+
 // Events
 
 function init() {
     addMoneyForm = document.getElementById("addMoneyForm");
     addStockForm = document.getElementById("addStockForm");
+    uploadFileForm = document.getElementById('formFile');
 
     addMoneyForm.addEventListener("submit", addMoney);
     addStockForm.addEventListener("submit", addStock);
+    uploadFileForm.addEventListener("submit", uploadFile);
 
     setUserHello();
     getAllUsers();
