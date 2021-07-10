@@ -40,6 +40,14 @@ const getAllUsers = () => {
 
 // User
 
+const setUserHello = () => {
+    userName = document.getElementById('userHello');
+    const name = document.createElement("strong");
+    name.className = 'col';
+    name.textContent = userNameFromSession;
+    userName.appendChild(name);
+}
+
 const addMoney = (e) => {
     e.preventDefault();
     let moneyInput = document.getElementById('addMoneyInput');
@@ -82,7 +90,6 @@ const updateUserBalance = () => {
             money.textContent = data.money;
         }).catch(e => console.log(e))
 }
-
 
 // Stock
 
@@ -157,14 +164,6 @@ const getAllStocks = () => {
 }
 
 // Events
-
-const setUserHello = () => {
-    userName = document.getElementById('userHello');
-    const name = document.createElement("strong");
-    name.className = 'col';
-    name.textContent = userNameFromSession;
-    userName.appendChild(name);
-}
 
 function init() {
     addMoneyForm = document.getElementById("addMoneyForm");
