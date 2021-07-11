@@ -2,6 +2,7 @@ package servlets.trades;
 
 import com.google.gson.Gson;
 import engine.dto.DTOOrder;
+import engine.dto.DTOStock;
 import engine.stockMarket.StockMarketApi;
 import utils.ServletUtils;
 
@@ -11,9 +12,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import static constants.Constants.CONFLICT;
-import static constants.Constants.CREATED;
+import static constants.Constants.*;
 
 public class TradeServlet extends HttpServlet {
 
@@ -39,12 +41,14 @@ public class TradeServlet extends HttpServlet {
                 }
                 break;
             case "MKT":
+                DTOStock stock = stockMarketApi.getStockBySymbol(parsedTrade.symbol);
+                int price = stock.getPrice();
                 if (parsedTrade.tradeDirection.equals("buy")) {
                     dtoOrder = stockMarketApi.executeMktOrderBuy(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                            parsedTrade.quantity, price, parsedTrade.userName);
                 } else {
                     dtoOrder = stockMarketApi.executeMktOrderSell(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                            parsedTrade.quantity, price, parsedTrade.userName);
                 }
                 break;
             case "FOK":
@@ -65,15 +69,15 @@ public class TradeServlet extends HttpServlet {
                             parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
                 }
                 break;
-        }
 
+        }
         if (dtoOrder == null) {
-            res.setStatus(HttpServletResponse.SC_CONFLICT);
-            res.getWriter().print(CONFLICT);
+            res.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+            res.getWriter().print(BAD_REQUEST);
             return;
         }
         res.setStatus(HttpServletResponse.SC_CREATED);
-        res.getWriter().print(CREATED);
+        res.getWriter().print(OK);
     }
 
 
@@ -92,9 +96,9 @@ public class TradeServlet extends HttpServlet {
         final int quantity;
         final int price;
 
-        public ParsedTrade(String symbol, String date, String userName, String tradeDirection, String orderType, int quantity, int price) {
+        public ParsedTrade(String symbol, String userName, String tradeDirection, String orderType, int quantity, int price) {
             this.symbol = symbol;
-            this.date = date;
+            this.date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
             this.userName = userName;
             this.tradeDirection = tradeDirection;
             this.orderType = orderType;
