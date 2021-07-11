@@ -9,7 +9,7 @@ let limitLabel
 const userNameFromSession = window.sessionStorage.getItem("username");
 
 function backPage() {
-    window.location.replace("pages/feed/feed.html");
+    window.location.replace("../feed/feed.html");
 }
 
 function tradeStock(e) {
