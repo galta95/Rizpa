@@ -8,85 +8,89 @@
 </head>
 <body>
 <div class="container">
-    <div class="row">
+    <div class="row mt-2">
         <div class="col">
             <div class="row">
-                <div class="col text-center">Name:</div>
-                <div class="col text-center">Symbol:</div>
-                <div class="col text-center">Holdings:</div>
+                <div class="col">Name:</div>
+                <div class="col">Symbol:</div>
+                <div class="col">Holdings:</div>
             </div>
-            <div class="row">
-                <div class="col text-center">Price:</div>
-                <div class="col text-center">Cycle:</div>
+            <div class="row mt-2">
+                <div class="col">Price:</div>
+                <div class="col">Cycle:</div>
+                <div class="col"></div>
             </div>
         </div>
-        <div class="col">
-            <button class="btn btn-primary mt-2" id="back">Back To Feed</button>
+        <div class="col-1 mt-2">
+            <button class="btn btn-primary" id="back">Back</button>
         </div>
     </div>
-    <div class="row">
-        <form id="tradeForm" class="needs-validations no-validate border border-2 p-2">
-            <label for="tradeBtn" class="form-label">Trade Stock</label>
-            <div class="row">
-                <div class="col">
-                    <div>Trade Direction
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" id="buy" name="tradeDirection" value="buy"
-                                   checked>
-                            <label class="form-check-label" for="buy">Buy</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" id="sell" name="tradeDirection" value="sell">
-                            <label class="form-check-label" for="sell">Sell</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
+    <div class="row mt-4">
+        <div class="col border border-2 p-2 me-4">
+            <form id="tradeForm" class="needs-validations">
+                <div class="fs-4">Trade Stock</div>
+                <div class="row mt-2">
                     <div class="col">
-                        <select class="form-select" id="orderType" required>
-                            <option selected>Select Order Type</option>
-                            <option value="LMT">LMT</option>
-                            <option value="MKT">MKT</option>
-                            <option value="FOK">FOK</option>
-                            <option value="IOC">IOC</option>
-                        </select>
+                        <label for="direction" class="form-label">Trade Direction:</label>
+                        <div id="direction">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="buy" name="tradeDirection" value="buy" checked>
+                                    <label class="form-check-label" for="buy">Buy</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" id="sell" name="tradeDirection" value="sell">
+                                    <label class="form-check-label" for="sell">Sell</label>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="col">
+                            <select class="form-select" id="orderType" required>
+                                <option selected>Select Order Type</option>
+                                <option value="LMT">LMT</option>
+                                <option value="MKT">MKT</option>
+                                <option value="FOK">FOK</option>
+                                <option value="IOC">IOC</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <label for="quantity" class="form-label">Quantity</label>
-                    <div class="input-group has-validation">
-                        <input placeholder="quantity" class="form-control" type="number" id="quantity"
-                               required/>
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <div class="input-group has-validation">
+                            <input placeholder="quantity" class="form-control" type="number" id="quantity"
+                                   required/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="limit" class="form-label">Limit</label>
+                        <div class="input-group has-validation">
+                            <input placeholder="limit" class="form-control" type="number" id="limit"
+                                   required/>
+                        </div>
                     </div>
                 </div>
-                <div class="col">
-                    <label for="limit" class="form-label">Limit</label>
-                    <div class="input-group has-validation">
-                        <input placeholder="limit" class="form-control" type="number" id="limit"
-                               required/>
-                    </div>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary mt-2" id="tradeBtn">Trade Stock</button>
-        </form>
-    </div>
-    <div class="row">
-        <table class="table table-striped">Historical Data
-            <thead>
-            <tr>
-                <th scope="col">Date</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-            </tr>
-            </thead>
-            <tbody>
-            <td>-</td>
-            <td>-</td>
-            <td>-</td>
-            </tbody>
-        </table>
+                <button type="submit" class="btn btn-primary mt-2" id="tradeBtn">Trade Stock</button>
+            </form>
+        </div>
+        <div class="col border border-2 p-2">
+            <div class="fs-4">Historical Data</div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                </tr>
+                </thead>
+                <tbody>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 </body>
