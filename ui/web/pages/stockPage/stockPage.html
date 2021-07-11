@@ -6,6 +6,7 @@
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title>Stock</title>
 </head>
+<script src="stockPage.js"></script>
 <body>
 <div class="container">
     <div class="row mt-2">
@@ -45,9 +46,9 @@
                     </div>
                     <div class="col">
                         <div class="col">
+                            <label for="orderType" class="form-label">Select Order Type</label>
                             <select class="form-select" id="orderType" required>
-                                <option selected>Select Order Type</option>
-                                <option value="LMT">LMT</option>
+                                <option selected value="LMT">LMT</option>
                                 <option value="MKT">MKT</option>
                                 <option value="FOK">FOK</option>
                                 <option value="IOC">IOC</option>
@@ -64,9 +65,9 @@
                         </div>
                     </div>
                     <div class="col">
-                        <label for="limit" class="form-label">Limit</label>
+                        <label for="limit" class="form-label" id="limitLabel">Limit</label>
                         <div class="input-group has-validation">
-                            <input placeholder="limit" class="form-control" type="number" id="limit"
+                            <input placeholder="limit" class="form-control " type="number" id="limit"
                                    required/>
                         </div>
                     </div>
