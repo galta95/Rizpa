@@ -1,16 +1,16 @@
 package servlets.file;
 
+import engine.dto.DTOUser;
 import engine.stockMarket.StockMarketApi;
 import utils.ServletUtils;
 
 import java.io.*;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Scanner;
 import javax.servlet.*;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.*;
-import javax.xml.bind.JAXBException;
+
+import constants.Constants;
+import utils.SessionUtils;
 
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1, // 1 MB
@@ -22,30 +22,40 @@ public class FileUploadServlet extends HttpServlet {
 
     private static final String SAVE_DIR = "uploadFiles";
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        // Get the current user
-        Part filePart = request.getPart("file");
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+        String usernameFromSession = SessionUtils.getUsername(req);
+        Part filePart = req.getPart("file");
 
-        if (filePart != null) {
-            String appPath = request.getServletContext().getRealPath("");
-            String savePath = appPath + SAVE_DIR;
-            File fileSaveDir = new File(savePath);
-
-            if (!fileSaveDir.exists()) {
-                fileSaveDir.mkdir();
-            }
-
-            Part part = request.getPart("file");
-
-            String tmpFileName = filePart.getSubmittedFileName();
-            tmpFileName = new File(tmpFileName).getName();
-            part.write(savePath + File.separator + tmpFileName);
-
-            File file = new File(savePath + File.separator + tmpFileName);
-            StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
-
-            stockMarketApi.loadXml("GAL", file.getPath());
-            response.getWriter().print("The file uploaded sucessfully.");
+        if (filePart == null) {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            res.getWriter().print("invalid file");
+            return;
         }
+
+        String appPath = req.getServletContext().getRealPath("");
+        String savePath = appPath + SAVE_DIR;
+        File fileSaveDir = new File(savePath);
+
+        if (!fileSaveDir.exists()) {
+            fileSaveDir.mkdir();
+        }
+
+        String tmpFileName = filePart.getSubmittedFileName();
+        tmpFileName = new File(tmpFileName).getName();
+        filePart.write(savePath + File.separator + tmpFileName);
+
+        File file = new File(savePath + File.separator + tmpFileName);
+
+        StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
+        DTOUser dtoUser = stockMarketApi.loadXml(usernameFromSession, file.getPath());
+
+        if (dtoUser == null) {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            res.getWriter().print("invalid file");
+            return;
+        }
+
+        res.setStatus(HttpServletResponse.SC_OK);
+        res.getWriter().print("The file uploaded successfully!");
     }
 }
