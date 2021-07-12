@@ -11,9 +11,10 @@ let userName
 let stockSymbol
 const stockPrice = document.createElement("strong");
 const stockCycle = document.createElement("strong");
+const stockHoldings = document.createElement("strong");
 let stockPriceHeader;
 let stockCycleHeader;
-
+let stockHoldingsHeader;
 
 const userNameFromSession = window.sessionStorage.getItem("username");
 const stockSymbolFromSession = window.sessionStorage.getItem("stockName");
@@ -22,27 +23,32 @@ function backPage() {
     window.location.replace("../feed/feed.html");
 }
 
-function tradeStock(e) {
+const tradeStock = (e) => {
     e.preventDefault();
-    let tradeDirectionInput = document.getElementsByName('tradeDirection');
+    let tradeDirectionInput = "buy";
     let orderTypeInput = document.getElementById('orderType');
     let quantityInput = document.getElementById('quantity');
     let limitInput = document.getElementById('limit');
+    const sellCheck = document.getElementById("sell");
 
-    if (quantityInput.value < 1 || limitInput.value < 1) {
-        addStockForm.reset();
+    if (parseInt(quantityInput.value) < 1 || (!limitInput.disabled && parseInt(limitInput.value) < 1)) {
+        tradeForm.reset();
         window.alert("Error: invalid input. must be positive number!");
         return;
     }
 
     if (orderTypeInput.value === "MKT") {
-        limitInput = 0;
+        limitInput.value = 0;
+    }
+
+    if (sellCheck.checked) {
+        tradeDirectionInput = "sell";
     }
 
     const formData = {
         symbol: stockSymbolFromSession,
         userName: userNameFromSession,
-        tradeDirection: tradeDirectionInput.value,
+        tradeDirection: tradeDirectionInput,
         orderType: orderTypeInput.value,
         quantity: parseInt(quantityInput.value),
         limit: parseInt(limitInput.value)
@@ -52,9 +58,15 @@ function tradeStock(e) {
         method: 'POST',
         body: JSON.stringify(formData)
     })
-        .then(() => addStockForm.reset())
+        .then((res) => {
+            if (!res.ok) {
+                window.alert("Bad request!");
+            }
+            window.alert("Success!");
+            tradeForm.reset()
+        })
         .catch(() => {
-            window.alert("Error: BAD REQUEST!");
+            window.alert("Error in system");
             console.log();
         });
 }
@@ -62,11 +74,11 @@ function tradeStock(e) {
 function limitVisibility() {
     let option = orderTypeSelect.value;
     if (option === "MKT") {
-        limitInput.className = "invisible"
-        limitLabel.className = "invisible"
+        limitInput.disabled = true;
+        limitLabel.disabled = true;
     } else {
-        limitInput.className = "form-control"
-        limitLabel.className = "form-label"
+        limitInput.disabled = false;
+        limitLabel.disabled = false;
     }
 }
 
@@ -84,17 +96,17 @@ const setStockSymbol = () => {
     stockSymbol.append(name);
 }
 
-// function getUserHoldings() {
-//     const holdings = document.getElementById('holdings');
-//     fetch(USER_URL + `?username=${userNameFromSession}`)
-//         .then(res => res.json())
-//         .then(data => {
-//             holdings.textContent = data.;
-//         }).catch(e => console.log(e))
-// }
+const getUserHoldings = () => {
+    fetch(USER_URL + `?username=${userNameFromSession}`)
+        .then(res => res.json())
+        .then(data => {
+            stockHoldings.textContent = data.holdings[stockSymbolFromSession];
+            stockHoldingsHeader.append(stockHoldings);
+        }).catch(e => console.log(e))
+}
 
 // Events
-getStockInfo = () => {
+const getStockInfo = () => {
     fetch(STOCK_URL + `?symbol=${stockSymbolFromSession}`)
         .then(res => res.json())
         .then(data => {
@@ -113,6 +125,7 @@ function init() {
     limitLabel = document.getElementById("limitLabel");
     stockPriceHeader = document.getElementById("price");
     stockCycleHeader = document.getElementById("cycle");
+    stockHoldingsHeader = document.getElementById("holdings");
 
     backBtn.addEventListener("click", backPage);
     tradeForm.addEventListener("submit", tradeStock);
@@ -121,6 +134,7 @@ function init() {
     setUser();
     setStockSymbol();
     getStockInfo();
+    getUserHoldings();
 
     // getUserHoldings();
 }
@@ -128,6 +142,6 @@ function init() {
 window.addEventListener("DOMContentLoaded", () => {
     init();
 
-    //setInterval(getUserHoldings, 2000);
+    setInterval(getUserHoldings, 2000);
     setInterval(getStockInfo, 2000);
 });
