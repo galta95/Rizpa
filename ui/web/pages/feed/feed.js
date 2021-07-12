@@ -120,7 +120,7 @@ const addStock = (e) => {
 
 // Stocks
 
-const moveToStockScreen = (stockName) => {
+moveToStockScreen = (stockName) => {
     window.sessionStorage.setItem("stockName", stockName);
     window.location.replace("../stockPage/stockPage.html");
 }
@@ -149,7 +149,7 @@ const createStockListItem = (stock) => {
 
     listItem.className = 'list-group-item list-group-item-action';
     listItem.addEventListener("click", () => {
-        const stockName = listItem.children[0].children[0].children[0].textContent;
+        const stockName = listItem.children[0].children[0].children[1].textContent;
         moveToStockScreen(stockName);
     });
     gridItem.className = 'container';

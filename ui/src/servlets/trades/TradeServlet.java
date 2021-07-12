@@ -72,7 +72,7 @@ public class TradeServlet extends HttpServlet {
 
         }
         if (dtoOrder == null) {
-            res.setStatus(HttpServletResponse.SC_BAD_GATEWAY);
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             res.getWriter().print(BAD_REQUEST);
             return;
         }
