@@ -100,7 +100,7 @@ public class StockMarket implements StockMarketApi {
     public DTOStock getStockBySymbol(String symbol) {
         try {
             return new DTOStock(this.stocks.getStockBySymbol(symbol));
-        } catch (NotFoundError error) {
+        } catch (Exception error) {
             return null;
         }
     }

@@ -9,12 +9,14 @@ let limitInput
 let limitLabel
 let userName
 let stockSymbol
-let stockPrice
-let stockCycle
+const stockPrice = document.createElement("strong");
+const stockCycle = document.createElement("strong");
+let stockPriceHeader;
+let stockCycleHeader;
 
 
 const userNameFromSession = window.sessionStorage.getItem("username");
-const stockNameFromSession = window.sessionStorage.getItem("stockName");
+const stockSymbolFromSession = window.sessionStorage.getItem("stockName");
 
 function backPage() {
     window.location.replace("../feed/feed.html");
@@ -38,7 +40,7 @@ function tradeStock(e) {
     }
 
     const formData = {
-        symbol: stockNameFromSession,
+        symbol: stockSymbolFromSession,
         userName: userNameFromSession,
         tradeDirection: tradeDirectionInput.value,
         orderType: orderTypeInput.value,
@@ -71,16 +73,14 @@ function limitVisibility() {
 const setUser = () => {
     userName = document.getElementById('name');
     const name = document.createElement("strong");
-    name.className = 'col';
-    name.textContent = userNameFromSession;
+    name.textContent = userNameFromSession.toUpperCase();
     userName.append(name);
 }
 
 const setStockSymbol = () => {
     stockSymbol = document.getElementById('symbol');
     const name = document.createElement("strong");
-    name.className = 'col';
-    name.textContent = stockNameFromSession;
+    name.textContent = stockSymbolFromSession;
     stockSymbol.append(name);
 }
 
@@ -94,22 +94,14 @@ const setStockSymbol = () => {
 // }
 
 // Events
-
-function getStockPrice() {
-    const price = document.getElementById('price');
-    fetch(STOCK_URL + `?symbol=${stockNameFromSession}`)
+getStockInfo = () => {
+    fetch(STOCK_URL + `?symbol=${stockSymbolFromSession}`)
         .then(res => res.json())
         .then(data => {
-            price.textContent = data.price;
-        }).catch(e => console.log(e))
-}
-
-function getStockCycle() {
-    const cycle = document.getElementById('cycle');
-    fetch(STOCK_URL + `?symbol=${stockNameFromSession}`)
-        .then(res => res.json())
-        .then(data => {
-            cycle.textContent = data.cycle;
+            stockPrice.textContent = data.price;
+            stockCycle.textContent = data.cycle;
+            stockCycleHeader.append(stockCycle);
+            stockPriceHeader.append(stockPrice);
         }).catch(e => console.log(e))
 }
 
@@ -119,7 +111,8 @@ function init() {
     orderTypeSelect = document.getElementById("orderType");
     limitInput = document.getElementById("limit");
     limitLabel = document.getElementById("limitLabel");
-    stockCycle = document.getElementById("cycle");
+    stockPriceHeader = document.getElementById("price");
+    stockCycleHeader = document.getElementById("cycle");
 
     backBtn.addEventListener("click", backPage);
     tradeForm.addEventListener("submit", tradeStock);
@@ -127,16 +120,14 @@ function init() {
 
     setUser();
     setStockSymbol();
+    getStockInfo();
 
     // getUserHoldings();
-    getStockPrice();
-    getStockCycle();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
     init();
 
-    setInterval(getUserHoldings, 2000);
-    setInterval(getStockPrice, 2000);
-    setInterval(getStockCycle, 2000);
+    //setInterval(getUserHoldings, 2000);
+    setInterval(getStockInfo, 2000);
 });
