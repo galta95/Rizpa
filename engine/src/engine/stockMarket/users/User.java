@@ -4,6 +4,7 @@ import dataManager.generated.RseHoldings;
 import dataManager.generated.RseItem;
 import dataManager.generated.RseStock;
 import dataManager.generated.RseStocks;
+import engine.stockMarket.stocks.Stocks;
 import errors.NotFoundError;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -68,7 +69,7 @@ public class User {
         holdings.updateTotalStocksValue();
     }
 
-    public void addHoldingsFromXml(RseHoldings rseHoldings, RseStocks rseStocks) throws NotFoundError {
+    public void addHoldingsFromXml(RseHoldings rseHoldings, RseStocks rseStocks, Stocks stocks) throws NotFoundError {
         List<RseItem> rseItemsList = rseHoldings.getRseItem();
         List<RseStock> rseStocksList = rseStocks.getRseStock();
 
@@ -85,9 +86,15 @@ public class User {
             }
         });
 
+        this.holdings.setStocks(stocks);
+
         rseItemsList.forEach(rseItem -> {
             if (this.holdings.getItemBySymbol(rseItem.getSymbol().toUpperCase()) != null) {
                 this.updateHoldings(rseItem.getSymbol(), rseItem.getQuantity());
+            } else {
+                this.holdings.addItem(rseItem.getSymbol(), rseItem.getQuantity());
+                holdings.setTotalHoldings();
+                holdings.updateTotalStocksValue();
             }
         });
     }

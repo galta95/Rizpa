@@ -478,7 +478,7 @@ public class StockMarket implements StockMarketApi {
             RizpaStockExchangeDescriptor rsed = SchemaBasedJAXB.loadXml(path);
             this.stocks.addStocksFromXml(rsed.getRseStocks());
             User user = this.users.getUserByName(userName);
-            user.addHoldingsFromXml(rsed.getRseHoldings(), rsed.getRseStocks());
+            user.addHoldingsFromXml(rsed.getRseHoldings(), rsed.getRseStocks(), this.stocks);
             return new DTOUser(user);
         } catch (JAXBException | FileNotFoundException | NotUpperCaseError | NotFoundError error) {
             return null; //TODO: add errors return
