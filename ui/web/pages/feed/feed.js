@@ -16,6 +16,7 @@ let uploadFileBtn;
 // Users
 
 const userNameFromSession = window.sessionStorage.getItem("username");
+const permissionsFromSession = window.sessionStorage.getItem("permissions");
 
 const createUserListItem = (username, permission) => {
     const listItem = document.createElement('li');
@@ -224,7 +225,13 @@ init = () => {
 
 window.addEventListener("DOMContentLoaded", () => {
     init();
+
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
-    setInterval(updateUserBalance, 2000);
+
+    if (permissionsFromSession === "admin") {
+        document.getElementById("brokerWindow").remove();
+    } else {
+        setInterval(updateUserBalance, 2000);
+    }
 });

@@ -20,6 +20,7 @@ let dealsTable;
 
 const userNameFromSession = window.sessionStorage.getItem("username");
 const stockSymbolFromSession = window.sessionStorage.getItem("stockName");
+const permissionsFromSession = window.sessionStorage.getItem("permissions");
 
 function backPage() {
     window.location.replace("../feed/feed.html");
@@ -134,11 +135,10 @@ const getStockDeals = () => {
 
 const addDealsToTable = (deals) => {
     document.getElementById("tb").remove();
+    const newTb = document.createElement("tbody");
+    newTb.id = "tb";
+    dealsTable.append(newTb);
     deals.forEach((deal, i) => {
-        const newTb = document.createElement("tbody");
-        newTb.id = "tb";
-        dealsTable.append(newTb);
-
         const dealRow = newTb.insertRow(i);
         const cell0 = dealRow.insertCell(0);
         const cell1 = dealRow.insertCell(1);
@@ -170,8 +170,13 @@ function init() {
     setUser();
     setStockSymbol();
     getStockInfo();
-    getUserHoldings();
     getStockDeals();
+    getUserHoldings();
+
+    if (permissionsFromSession === "admin") {
+        tradeForm.remove();
+        stockHoldingsHeader.remove();
+    }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
