@@ -144,7 +144,7 @@ const addDealsToTable = (deals) => {
         const cell1 = dealRow.insertCell(1);
         const cell2 = dealRow.insertCell(2);
 
-        cell0.textContent = "date";
+        cell0.textContent = deal.date;
         cell1.textContent = deal.numOfShares;
         cell2.textContent = deal.price;
     })

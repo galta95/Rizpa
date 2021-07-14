@@ -27,7 +27,8 @@ public class TradeServlet extends HttpServlet {
 
         BufferedReader reader = req.getReader();
         ParsedTrade parsedTrade = gson.fromJson(reader, ParsedTrade.class);
-
+        String date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
+        parsedTrade.setDate(date);
         DTOOrder dtoOrder = null;
 
         switch (parsedTrade.orderType) {
@@ -89,7 +90,7 @@ public class TradeServlet extends HttpServlet {
 
     private static class ParsedTrade {
         final String symbol;
-        final String date;
+        String date;
         final String userName;
         final String tradeDirection;
         final String orderType;
@@ -98,12 +99,15 @@ public class TradeServlet extends HttpServlet {
 
         public ParsedTrade(String symbol, String userName, String tradeDirection, String orderType, int quantity, int price) {
             this.symbol = symbol;
-            this.date = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").format(LocalDateTime.now());
             this.userName = userName;
             this.tradeDirection = tradeDirection;
             this.orderType = orderType;
             this.quantity = quantity;
             this.price = price;
+        }
+
+        public void setDate(String date) {
+            this.date = date;
         }
     }
 }
