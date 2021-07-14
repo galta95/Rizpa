@@ -134,11 +134,10 @@ const getStockDeals = () => {
 
 const addDealsToTable = (deals) => {
     document.getElementById("tb").remove();
+    const newTb = document.createElement("tbody");
+    newTb.id = "tb";
+    dealsTable.append(newTb);
     deals.forEach((deal, i) => {
-        const newTb = document.createElement("tbody");
-        newTb.id = "tb";
-        dealsTable.append(newTb);
-
         const dealRow = newTb.insertRow(i);
         const cell0 = dealRow.insertCell(0);
         const cell1 = dealRow.insertCell(1);

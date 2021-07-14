@@ -1,7 +1,6 @@
 package servlets.users;
 
 import com.google.gson.Gson;
-import engine.dto.DTOStock;
 import engine.dto.DTOUser;
 import engine.stockMarket.StockMarketApi;
 import utils.ServletUtils;
