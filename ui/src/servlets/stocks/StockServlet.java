@@ -2,9 +2,7 @@ package servlets.stocks;
 
 import com.google.gson.Gson;
 import engine.dto.DTOStock;
-import engine.dto.DTOStocks;
 import engine.stockMarket.StockMarketApi;
-import servlets.users.UserServlet;
 import utils.ServletUtils;
 
 import javax.servlet.ServletException;
@@ -51,7 +49,7 @@ public class StockServlet extends HttpServlet {
         DTOStock stock = stockMarketApi.getStockBySymbol(symbol);
 
         if (stock == null) {
-            StockServlet.SockNotFound stockNotFound = new StockServlet.SockNotFound(symbol);
+            StockNotFound stockNotFound = new StockNotFound(symbol);
             jsonResponse = gson.toJson(stockNotFound);
             res.setStatus(HttpServletResponse.SC_NOT_FOUND);
             res.getWriter().print(jsonResponse);
@@ -68,9 +66,9 @@ public class StockServlet extends HttpServlet {
         createNewStock(req, res);
     }
 
-    private static class SockNotFound {
+    private static class StockNotFound {
         final private String symbol;
-        public SockNotFound(String symbol) {
+        public StockNotFound(String symbol) {
             this.symbol = symbol;
         }
     }

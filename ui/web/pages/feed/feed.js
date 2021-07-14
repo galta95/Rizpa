@@ -127,7 +127,7 @@ moveToStockScreen = (stockName) => {
 
 const createStockCol = (textContent) => {
     const listItemCol = document.createElement('div');
-    listItemCol.className = 'col';
+    listItemCol.className = 'col text-center';
     listItemCol.textContent = textContent;
     return listItemCol;
 }
@@ -144,19 +144,15 @@ const createStockRow = (stock) => {
 }
 
 const createStockListItem = (stock) => {
-    let listItem = document.createElement('li');
-    let gridItem = document.createElement('div');
+    let listItem = document.createElement('a');
 
     listItem.className = 'list-group-item list-group-item-action';
     listItem.addEventListener("click", () => {
-        const stockName = listItem.children[0].children[0].children[1].textContent;
+        const stockName = listItem.children[0].children[1].textContent;
         moveToStockScreen(stockName);
     });
-    gridItem.className = 'container';
 
-    gridItem.appendChild(createStockRow(stock));
-    listItem.appendChild(gridItem);
-
+    listItem.appendChild(createStockRow(stock));
     return listItem;
 }
 
