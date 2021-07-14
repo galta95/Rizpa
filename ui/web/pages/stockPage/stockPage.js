@@ -72,6 +72,8 @@ const tradeStock = (e) => {
             window.alert("Error in system");
             console.log();
         });
+    limitInput.disabled = false;
+    limitLabel.disabled = false;
 }
 
 function limitVisibility() {
