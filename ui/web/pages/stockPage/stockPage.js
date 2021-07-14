@@ -20,6 +20,7 @@ let dealsTable;
 
 const userNameFromSession = window.sessionStorage.getItem("username");
 const stockSymbolFromSession = window.sessionStorage.getItem("stockName");
+const permissionsFromSession = window.sessionStorage.getItem("permissions");
 
 function backPage() {
     window.location.replace("../feed/feed.html");
@@ -169,8 +170,13 @@ function init() {
     setUser();
     setStockSymbol();
     getStockInfo();
-    getUserHoldings();
     getStockDeals();
+    getUserHoldings();
+
+    if (permissionsFromSession === "admin") {
+        tradeForm.remove();
+        stockHoldingsHeader.remove();
+    }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
