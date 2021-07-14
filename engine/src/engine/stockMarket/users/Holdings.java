@@ -12,7 +12,7 @@ public class Holdings {
     private final Map<String, Item> items;
     private int totalHoldings;
     private int totalStocksValue;
-    private final Stocks stocks;
+    private Stocks stocks;
 
     public Holdings() {
         items = new HashMap<>();
@@ -41,6 +41,10 @@ public class Holdings {
 
     public void setTotalHoldings() {
         this.totalHoldings = items.size();
+    }
+
+    public void setStocks(Stocks stocks) {
+        this.stocks = stocks;
     }
 
     public Item getItemBySymbol(String symbol) {

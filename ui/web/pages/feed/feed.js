@@ -11,7 +11,8 @@ let addStockForm;
 let balance;
 let userName
 let uploadFileForm;
-
+let inputFile;
+let uploadFileBtn;
 // Users
 
 const userNameFromSession = window.sessionStorage.getItem("username");
@@ -119,9 +120,14 @@ const addStock = (e) => {
 
 // Stocks
 
+moveToStockScreen = (stockName) => {
+    window.sessionStorage.setItem("stockName", stockName);
+    window.location.replace("../stockPage/stockPage.html");
+}
+
 const createStockCol = (textContent) => {
     const listItemCol = document.createElement('div');
-    listItemCol.className = 'col';
+    listItemCol.className = 'col text-center';
     listItemCol.textContent = textContent;
     return listItemCol;
 }
@@ -138,15 +144,15 @@ const createStockRow = (stock) => {
 }
 
 const createStockListItem = (stock) => {
-    let listItem = document.createElement('li');
-    let gridItem = document.createElement('div');
+    let listItem = document.createElement('a');
 
     listItem.className = 'list-group-item list-group-item-action';
-    gridItem.className = 'container';
+    listItem.addEventListener("click", () => {
+        const stockName = listItem.children[0].children[1].textContent;
+        moveToStockScreen(stockName);
+    });
 
-    gridItem.appendChild(createStockRow(stock));
-    listItem.appendChild(gridItem);
-
+    listItem.appendChild(createStockRow(stock));
     return listItem;
 }
 
@@ -167,7 +173,15 @@ const getAllStocks = () => {
 }
 
 // File
-const uploadFile = (e) => {
+hasFile = () => {
+    if (inputFile.value) {
+        uploadFileBtn.disabled = false;
+    } else {
+        uploadFileBtn.disabled = true;
+    }
+}
+
+uploadFile = (e) => {
     e.preventDefault();
     const selectedFile = document.getElementById('inputFile').files[0];
 
@@ -175,20 +189,32 @@ const uploadFile = (e) => {
     formData.append("file", selectedFile);
 
     fetch(UPLOAD_URL, {method: 'POST', body: formData})
-        .then(() => window.alert("File Uploaded Successfully!"))
+        .then((res) => {
+            if (res.ok) {
+                uploadFileForm.reset();
+                uploadFileBtn.disabled = true;
+                window.alert("File Uploaded Successfully!");
+            } else {
+                window.alert("Error: File did not uploaded");
+            }
+        })
         .catch(() => window.alert("Error: File did not uploaded"));
 }
 
 // Events
 
-function init() {
+init = () => {
     addMoneyForm = document.getElementById("addMoneyForm");
     addStockForm = document.getElementById("addStockForm");
     uploadFileForm = document.getElementById('formFile');
+    inputFile = document.getElementById('inputFile');
+    uploadFileBtn = document.getElementById('uploadFileBtn');
 
     addMoneyForm.addEventListener("submit", addMoney);
     addStockForm.addEventListener("submit", addStock);
     uploadFileForm.addEventListener("submit", uploadFile);
+    inputFile.addEventListener("change", hasFile);
+
 
     setUserHello();
     getAllUsers();
@@ -198,7 +224,6 @@ function init() {
 
 window.addEventListener("DOMContentLoaded", () => {
     init();
-
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
     setInterval(updateUserBalance, 2000);

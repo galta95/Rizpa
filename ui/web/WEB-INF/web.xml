@@ -24,8 +24,16 @@
         <servlet-class>servlets.stocks.StockServlet</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>TradeServlet</servlet-name>
+        <servlet-class>servlets.trades.TradeServlet</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>FileUploadServlet</servlet-name>
         <servlet-class>servlets.file.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>StockDealsServlet</servlet-name>
+        <servlet-class>servlets.stocks.StockDealsServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -47,6 +55,14 @@
     <servlet-mapping>
         <servlet-name>StockServlet</servlet-name>
         <url-pattern>/stocks/stock</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>StockDealsServlet</servlet-name>
+        <url-pattern>/stocks/stock/deals</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>TradeServlet</servlet-name>
+        <url-pattern>/trades/trade</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FileUploadServlet</servlet-name>

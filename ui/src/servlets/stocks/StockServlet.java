@@ -38,9 +38,39 @@ public class StockServlet extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        res.setContentType("application/json");
+        Gson gson = new Gson();
+        String jsonResponse;
+
+        StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
+
+        String symbol = req.getParameter(SYMBOL);
+        DTOStock stock = stockMarketApi.getStockBySymbol(symbol);
+
+        if (stock == null) {
+            StockNotFound stockNotFound = new StockNotFound(symbol);
+            jsonResponse = gson.toJson(stockNotFound);
+            res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            res.getWriter().print(jsonResponse);
+            return;
+        }
+
+        jsonResponse = gson.toJson(stock);
+        res.getWriter().print(jsonResponse);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         res.setContentType("application/json");
         createNewStock(req, res);
+    }
+
+    private static class StockNotFound {
+        final private String symbol;
+        public StockNotFound(String symbol) {
+            this.symbol = symbol;
+        }
     }
 
     private static class ParsedStock {
