@@ -182,7 +182,7 @@ public class StockMarket implements StockMarketApi {
             this.addToBuyList(trade, symbol);
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -217,7 +217,7 @@ public class StockMarket implements StockMarketApi {
             this.addToSellList(trade, symbol);
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -247,7 +247,7 @@ public class StockMarket implements StockMarketApi {
             }
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -278,7 +278,7 @@ public class StockMarket implements StockMarketApi {
             }
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -330,7 +330,7 @@ public class StockMarket implements StockMarketApi {
             this.addToSellList(trade, symbol);
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -381,7 +381,7 @@ public class StockMarket implements StockMarketApi {
             this.addToBuyList(trade, symbol);
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -410,7 +410,7 @@ public class StockMarket implements StockMarketApi {
             }
         }
 
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 
@@ -437,7 +437,7 @@ public class StockMarket implements StockMarketApi {
                 }
             }
         }
-        this.users.updateAllUsersTotalUsers();
+//        this.users.updateAllUsersTotalUsers();
         return new DTOOrder(true, deals, numberOfSharesInsertedToList, dealsCounter);
     }
 

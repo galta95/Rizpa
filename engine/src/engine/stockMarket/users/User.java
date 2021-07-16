@@ -66,7 +66,7 @@ public class User {
             }
         }
         holdings.setTotalHoldings();
-        holdings.updateTotalStocksValue();
+//        holdings.updateTotalStocksValue();
     }
 
     public void addHoldingsFromXml(RseHoldings rseHoldings, RseStocks rseStocks, Stocks stocks) throws NotFoundError {
@@ -94,7 +94,7 @@ public class User {
             } else {
                 this.holdings.addItem(rseItem.getSymbol(), rseItem.getQuantity());
                 holdings.setTotalHoldings();
-                holdings.updateTotalStocksValue();
+//                holdings.updateTotalStocksValue();
             }
         });
     }
