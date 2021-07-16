@@ -3,7 +3,11 @@ const USER_URL = '../../users/user';
 const STOCKS_URL = '../../stocks'
 const STOCK_URL = '../../stocks/stock'
 const UPLOAD_URL = '../../upload';
+const brokerStockPage = "../stockPage/stockPage.html";
+const adminStockPage = "../stockPage/adminStockPage.html";
 
+
+const ADMIN = 'admin';
 let localUsers = {};
 let localStocks = {};
 let addMoneyForm;
@@ -121,9 +125,13 @@ const addStock = (e) => {
 
 // Stocks
 
-moveToStockScreen = (stockName) => {
+const moveToStockScreen = (stockName) => {
     window.sessionStorage.setItem("stockName", stockName);
-    window.location.replace("../stockPage/stockPage.html");
+    if (permissionsFromSession === ADMIN) {
+        window.location.replace(adminStockPage);
+    } else {
+        window.location.replace(brokerStockPage);
+    }
 }
 
 const createStockCol = (textContent) => {
@@ -174,7 +182,7 @@ const getAllStocks = () => {
 }
 
 // File
-hasFile = () => {
+const hasFile = () => {
     if (inputFile.value) {
         uploadFileBtn.disabled = false;
     } else {
@@ -182,7 +190,7 @@ hasFile = () => {
     }
 }
 
-uploadFile = (e) => {
+const uploadFile = (e) => {
     e.preventDefault();
     const selectedFile = document.getElementById('inputFile').files[0];
 
@@ -204,7 +212,7 @@ uploadFile = (e) => {
 
 // Events
 
-init = () => {
+const init = () => {
     addMoneyForm = document.getElementById("addMoneyForm");
     addStockForm = document.getElementById("addStockForm");
     uploadFileForm = document.getElementById('formFile');
