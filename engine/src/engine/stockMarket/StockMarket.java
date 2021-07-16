@@ -486,12 +486,13 @@ public class StockMarket implements StockMarketApi {
     }
 
     @Override
-    public DTOStock insertStock(String companyName, String symbol, int numOfShares, int companyValue) {
+    public DTOStock insertStock(String companyName, String symbol, int numOfShares, int companyValue, String username) {
         int price = companyValue / numOfShares;
         Stock newStock;
         try {
             newStock = new Stock(symbol, companyName, price);
             this.stocks.addStock(newStock);
+            this.users.getUserByName(username.toUpperCase()).updateHoldings(symbol, numOfShares);
         } catch (ConstraintError e) {
             return null;
         }

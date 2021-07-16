@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import engine.dto.DTOStock;
 import engine.stockMarket.StockMarketApi;
 import utils.ServletUtils;
+import utils.SessionUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -21,12 +22,13 @@ public class StockServlet extends HttpServlet {
         Gson gson = new Gson();
 
         StockMarketApi stockMarketApi = ServletUtils.getStockMarketApi(getServletContext());
+        String usernameFromSession = SessionUtils.getUsername(req);
 
         BufferedReader reader = req.getReader();
         ParsedStock parsedStock = gson.fromJson(reader, ParsedStock.class);
 
         DTOStock dtoStock = stockMarketApi.insertStock(parsedStock.companyName, parsedStock.symbol,
-                parsedStock.numOfShares, parsedStock.companyValue);
+                parsedStock.numOfShares, parsedStock.companyValue, usernameFromSession);
 
         if (dtoStock == null) {
             res.setStatus(HttpServletResponse.SC_CONFLICT);

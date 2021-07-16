@@ -1,6 +1,5 @@
 package engine.stockMarket.users;
 
-import engine.dto.DTOUser;
 import engine.stockMarket.stocks.Stocks;
 import errors.ConstraintError;
 import errors.NotFoundError;

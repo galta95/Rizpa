@@ -25,7 +25,7 @@ public interface StockMarketApi {
         DTOUserPotentialStockQuantity getUserStockPotentialQuantity(String userName, String symbol);
         DTOUser insertUser(String name, String password, Permissions permission);
         DTOUser loadXml(String userName, String path);
-        DTOStock insertStock(String companyName, String symbol, int numOfShares, int companyValue);
+        DTOStock insertStock(String companyName, String symbol, int numOfShares, int companyValue, String username);
         DTOUser addMoney(String userName, int money);
 }
 
