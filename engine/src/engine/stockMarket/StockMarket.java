@@ -4,6 +4,7 @@ import dataManager.SchemaBasedJAXB;
 import dataManager.generated.*;
 import engine.dto.*;
 import engine.stockMarket.stocks.Stock;
+import engine.stockMarket.users.Movement;
 import engine.stockMarket.users.User.Permissions;
 import engine.stockMarket.stocks.Stocks;
 import engine.stockMarket.users.User;
@@ -526,7 +527,7 @@ public class StockMarket implements StockMarketApi {
             return null;
         }
         User user = this.users.getUserByName(userName);
-        user.addMoney(money);
+        user.addMoney(money, Movement.MovementType.DEPOSIT, null);
         return new DTOUser(user);
     }
 }
