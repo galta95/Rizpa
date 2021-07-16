@@ -41,9 +41,9 @@ public class Users {
         });
     }
 
-    public void updateAllUsersTotalUsers() {
-        this.users.forEach((String name, User user) -> {
-            user.getHoldings().updateTotalStocksValue();
-        });
-    }
+//    public void updateAllUsersTotalUsers() {
+//        this.users.forEach((String name, User user) -> {
+//            user.getHoldings().updateTotalStocksValue();
+//        });
+//    }
 }

@@ -11,7 +11,7 @@ import errors.NotFoundError;
 public class Holdings {
     private final Map<String, Item> items;
     private int totalHoldings;
-    private int totalStocksValue;
+//    private int totalStocksValue;
     private Stocks stocks;
 
     public Holdings() {
@@ -60,15 +60,15 @@ public class Holdings {
         items.remove(symbol);
     }
 
-    public void updateTotalStocksValue() {
-        totalStocksValue = 0;
-        items.forEach((String name, Item item) -> {
-            Stock stock = stocks.getStockBySymbol(item.getSymbol());
-            totalStocksValue += item.getQuantity() * stock.getPrice();
-        });
-    }
+//    public void updateTotalStocksValue() {
+//        totalStocksValue = 0;
+//        items.forEach((String name, Item item) -> {
+//            Stock stock = stocks.getStockBySymbol(item.getSymbol());
+//            totalStocksValue += item.getQuantity() * stock.getPrice();
+//        });
+//    }
 
-    public int getTotalStocksValue() {
-        return totalStocksValue;
-    }
+//    public int getTotalStocksValue() {
+//        return totalStocksValue;
+//    }
 }

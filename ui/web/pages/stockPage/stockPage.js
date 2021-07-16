@@ -54,7 +54,7 @@ const tradeStock = (e) => {
         tradeDirection: tradeDirectionInput,
         orderType: orderTypeInput.value,
         quantity: parseInt(quantityInput.value),
-        limit: parseInt(limitInput.value)
+        price: parseInt(limitInput.value)
     }
 
     fetch(TRADE_URL, {
@@ -72,6 +72,8 @@ const tradeStock = (e) => {
             window.alert("Error in system");
             console.log();
         });
+    limitInput.disabled = false;
+    limitLabel.disabled = false;
 }
 
 function limitVisibility() {
