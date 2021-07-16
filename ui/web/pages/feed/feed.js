@@ -13,7 +13,6 @@ let localStocks = {};
 let addMoneyForm;
 let addStockForm;
 let balance;
-let userName
 let uploadFileForm;
 let inputFile;
 let uploadFileBtn;
@@ -49,11 +48,8 @@ const getAllUsers = () => {
 // User
 
 const setUserHello = () => {
-    userName = document.getElementById('userHello');
-    const name = document.createElement("strong");
-    name.className = 'col';
-    name.textContent = userNameFromSession;
-    userName.appendChild(name);
+    const userHello = document.getElementById('userHello');
+    userHello.textContent = `Hello ${userNameFromSession},`;
 }
 
 const addMoney = (e) => {
@@ -87,6 +83,39 @@ const getUserBalance = () => {
             money.className = 'col';
             money.textContent = data.money;
             balance.appendChild(money);
+        }).catch(e => console.log(e))
+}
+
+const addMovementsToTable = (movements) => {
+    document.getElementById("tb").remove();
+    const newTb = document.createElement("tbody");
+    newTb.id = "tb";
+    dealsTable.append(newTb);
+    movements.forEach((movement, i) => {
+        const dealRow = newTb.insertRow(i);
+        const cell0 = dealRow.insertCell(0);
+        const cell1 = dealRow.insertCell(1);
+        const cell2 = dealRow.insertCell(2);
+        const cell3 = dealRow.insertCell(3);
+        const cell4 = dealRow.insertCell(4);
+        const cell5 = dealRow.insertCell(5);
+
+        cell0.textContent = movement.movementType;
+        cell1.textContent = movement.date;
+        cell2.textContent = movement.symbol;
+        cell3.textContent = movement.amount;
+        cell4.textContent = movement.prevBalance;
+        cell5.textContent = movement.afterBalance;
+    })
+}
+
+const getUserMovements = () => {
+    fetch(USER_URL + `?username=${userNameFromSession}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.movments.length > 0) {
+                addMovementsToTable(data.movments);
+            }
         }).catch(e => console.log(e))
 }
 
@@ -229,6 +258,7 @@ const init = () => {
     getAllUsers();
     getAllStocks();
     getUserBalance();
+    getUserMovements();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -241,5 +271,6 @@ window.addEventListener("DOMContentLoaded", () => {
         document.getElementById("brokerWindow").remove();
     } else {
         setInterval(updateUserBalance, 2000);
+        setInterval(getUserMovements, 2000);
     }
 });
