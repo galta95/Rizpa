@@ -3,6 +3,7 @@ package engine.stockMarket.users;
 import engine.stockMarket.stocks.Stocks;
 import errors.ConstraintError;
 import errors.NotFoundError;
+
 import java.util.HashMap;
 import java.util.Map;
 
