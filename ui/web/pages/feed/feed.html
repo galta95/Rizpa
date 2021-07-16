@@ -8,18 +8,34 @@
     <title>Feed</title>
 </head>
 <body>
-<div class="container">
+<div class="container mb-2">
     <div class="row">
         <div class="col-3">
-            <p>Connected Users</p>
+            <div class="fs-5">Connected Users</div>
             <ul class="list-group" id="users-list"></ul>
         </div>
         <div class="col">
             <div class="row" id="userHello">
-                <div class="col-2">Hello,</div>
+                <div class="col-2 fs-2">Hello,</div>
             </div>
             <div id="brokerWindow">
-                <div class="row" id="balance">
+                <div class="row mt-2 border border-2 p-2">
+                    <div class="fs-5">Account movements</div>
+                    <table class="table table-striped" id="dealsTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Prev Balance</th>
+                            <th scope="col">After Balance</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tb">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row mt-2" id="balance">
                     <div class="col-2">Balance:</div>
                 </div>
                 <div class="row mt-2">
@@ -80,7 +96,7 @@
             </div>
         </div>
         <div class="col-4">
-            <p>Market Summary</p>
+            <div class="fs-5">Market Summary</div>
             <div class="row">
                 <div class="col text-center">Name</div>
                 <div class="col text-center">Symbol</div>

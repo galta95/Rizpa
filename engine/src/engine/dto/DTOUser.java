@@ -4,6 +4,7 @@ import engine.stockMarket.users.User;
 import engine.stockMarket.users.User.Permissions;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class DTOUser {
@@ -14,6 +15,7 @@ public class DTOUser {
     private final Permissions permission;
     private int money;
     private String password;
+    private List<DTOMovment> movments;
 
     public DTOUser(User user) {
         this.name = user.getName();
