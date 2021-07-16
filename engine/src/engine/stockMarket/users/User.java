@@ -6,6 +6,7 @@ import dataManager.generated.RseStock;
 import dataManager.generated.RseStocks;
 import engine.stockMarket.stocks.Stocks;
 import errors.NotFoundError;
+
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -13,6 +14,7 @@ public class User {
     public enum Permissions {
         ADMIN, BROKER
     }
+
     private final String name;
     private final Holdings holdings;
     private final Permissions permission;
@@ -69,23 +71,8 @@ public class User {
 //        holdings.updateTotalStocksValue();
     }
 
-    public void addHoldingsFromXml(RseHoldings rseHoldings, RseStocks rseStocks, Stocks stocks) throws NotFoundError {
+    public void addHoldingsFromXml(RseHoldings rseHoldings, Stocks stocks) throws NotFoundError {
         List<RseItem> rseItemsList = rseHoldings.getRseItem();
-        List<RseStock> rseStocksList = rseStocks.getRseStock();
-
-        AtomicBoolean flag = new AtomicBoolean(false);
-        rseItemsList.forEach(rseItem -> {
-            flag.set(false);
-            rseStocksList.forEach(rseStock -> {
-                if (rseItem.getSymbol().equals(rseStock.getRseSymbol())) {
-                    flag.set(true);
-                }
-            });
-            if (!flag.get()) {
-                throw new NotFoundError(rseItem.getSymbol());
-            }
-        });
-
         this.holdings.setStocks(stocks);
 
         rseItemsList.forEach(rseItem -> {

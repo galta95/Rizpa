@@ -1,7 +1,7 @@
 package engine.stockMarket;
 
 import dataManager.SchemaBasedJAXB;
-import dataManager.generated.RizpaStockExchangeDescriptor;
+import dataManager.generated.*;
 import engine.dto.*;
 import engine.stockMarket.stocks.Stock;
 import engine.stockMarket.users.User.Permissions;
@@ -18,6 +18,7 @@ import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class StockMarket implements StockMarketApi {
     private final Stocks stocks;
@@ -78,6 +79,24 @@ public class StockMarket implements StockMarketApi {
 
     private int getStockSellPrice(String symbol) {
         return this.stocks.getStockByName(symbol).getSells().get(0).getPrice();
+    }
+
+    private void validateLoad(RseHoldings rseHoldings, RseStocks rseStocks) {
+        List<RseItem> rseItemsList = rseHoldings.getRseItem();
+        List<RseStock> rseStocksList = rseStocks.getRseStock();
+
+        AtomicBoolean flag = new AtomicBoolean(false);
+        rseItemsList.forEach(rseItem -> {
+            flag.set(false);
+            rseStocksList.forEach(rseStock -> {
+                if (rseItem.getSymbol().equals(rseStock.getRseSymbol())) {
+                    flag.set(true);
+                }
+            });
+            if (!flag.get()) {
+                throw new NotFoundError(rseItem.getSymbol());
+            }
+        });
     }
 
     //----------------------------API-----------------------------//
@@ -288,8 +307,8 @@ public class StockMarket implements StockMarketApi {
         Stock stock = stocks.getStockBySymbol(symbol.toUpperCase());
         List<Trade> buyList = stock.getBuys();
 
-        for (Trade trade: buyList) {
-            if (trade.getPrice() < price ) {
+        for (Trade trade : buyList) {
+            if (trade.getPrice() < price) {
                 return null;
             }
             possibleShares -= trade.getNumOfShares();
@@ -340,8 +359,8 @@ public class StockMarket implements StockMarketApi {
         Stock stock = stocks.getStockBySymbol(symbol.toUpperCase());
         List<Trade> sellList = stock.getSells();
 
-        for (Trade trade: sellList) {
-            if (trade.getPrice() > price ) {
+        for (Trade trade : sellList) {
+            if (trade.getPrice() > price) {
                 return null;
             }
             possibleShares -= trade.getNumOfShares();
@@ -476,9 +495,11 @@ public class StockMarket implements StockMarketApi {
     public DTOUser loadXml(String userName, String path) {
         try {
             RizpaStockExchangeDescriptor rsed = SchemaBasedJAXB.loadXml(path);
-            this.stocks.addStocksFromXml(rsed.getRseStocks());
+            validateLoad(rsed.getRseHoldings(), rsed.getRseStocks());
             User user = this.users.getUserByName(userName);
-            user.addHoldingsFromXml(rsed.getRseHoldings(), rsed.getRseStocks(), this.stocks);
+
+            this.stocks.addStocksFromXml(rsed.getRseStocks());
+            user.addHoldingsFromXml(rsed.getRseHoldings(), this.stocks);
             return new DTOUser(user);
         } catch (JAXBException | FileNotFoundException | NotUpperCaseError | NotFoundError error) {
             return null; //TODO: add errors return
