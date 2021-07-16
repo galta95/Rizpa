@@ -1,9 +1,12 @@
 package engine.stockMarket.stocks;
 
 import dataManager.generated.RseStock;
+import engine.stockMarket.users.Movement;
 import engine.transaction.Deal;
 import engine.transaction.Trade;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
 import java.util.LinkedList;
 import java.util.List;
@@ -120,8 +123,8 @@ public class Stock {
         for (Trade currBuyer : this.buys) {
             if (currBuyer.getPrice() >= trade.getPrice() && trade.getNumOfShares() > 0) {
                 dealValue = makeDeal(trade, currBuyer, this.buys);
-                trade.getUser().addMoney(dealValue);
-                currBuyer.getUser().subMoney(dealValue);
+                trade.getUser().addMoney(dealValue, Movement.MovementType.SELL, this.symbol);
+                currBuyer.getUser().subMoney(dealValue, Movement.MovementType.BUY, this.symbol);
                 return trade;
             } else
                 break;
@@ -134,8 +137,8 @@ public class Stock {
         for (Trade currSeller : this.sells) {
             if (currSeller.getPrice() <= trade.getPrice() && trade.getNumOfShares() > 0) {
                 dealValue = makeDeal(trade, currSeller, this.sells);
-                trade.getUser().subMoney(dealValue);
-                currSeller.getUser().addMoney(dealValue);
+                trade.getUser().subMoney(dealValue, Movement.MovementType.BUY, this.symbol);
+                currSeller.getUser().addMoney(dealValue, Movement.MovementType.SELL, this.symbol);
                 return trade;
             } else
                 break;

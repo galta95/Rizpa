@@ -1,16 +1,18 @@
 package engine.dto;
 
+import engine.stockMarket.users.Movement;
 import engine.stockMarket.users.User;
 import engine.stockMarket.users.User.Permissions;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class DTOUser {
     private final String name;
     private final int totalHoldings;
-//    private final int totalStocksValue;
+    //    private final int totalStocksValue;
     private final Map<String, Integer> holdings;
     private final Permissions permission;
     private int money;
@@ -22,15 +24,28 @@ public class DTOUser {
         this.totalHoldings = user.getHoldings().getTotalHoldings();
 //        this.totalStocksValue = user.getHoldings().getTotalStocksValue();
         this.holdings = new HashMap<>();
-        user.getHoldings().getItems().forEach((symbol, item)-> {
+        user.getHoldings().getItems().forEach((symbol, item) -> {
             holdings.put(symbol, item.getQuantity());
         });
         this.permission = user.getPermission();
         this.money = user.getMoney();
         this.password = user.getPassword();
+        initList(user.getMovements());
     }
 
-    public String getUserName() { return name; }
+    private void initList(List<Movement> movements) {
+        this.movments = new LinkedList<>();
+
+        movements.forEach((movement) -> {
+            DTOMovment dtoMovment = new DTOMovment(movement);
+            this.movments.add(dtoMovment);
+        });
+    }
+
+
+    public String getUserName() {
+        return name;
+    }
 
     public User.Permissions getPermission() {
         return permission;
