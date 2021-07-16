@@ -8,19 +8,34 @@
     <title>Feed</title>
 </head>
 <body>
-<div class="container">
+<div class="container-fluid mb-2 mt-2">
     <div class="row">
-        <div class="col-3">
-            <p>Connected Users</p>
+        <div class="col-2 border border-2 p-2 me-2 ms-2">
+            <div class="fs-5 mb-2 ms-2">Connected Users</div>
             <ul class="list-group" id="users-list"></ul>
         </div>
         <div class="col">
-            <div class="row" id="userHello">
-                <div class="col-2">Hello,</div>
+            <div class="row fs-2" id="userHello">
+                Hello
             </div>
             <div id="brokerWindow">
-                <div class="row" id="balance">
-                    <div class="col-2">Balance:</div>
+                <div class="row mt-2 fs-3" id="balance">Balance:</div>
+                <div class="row mt-2 border border-2 p-2">
+                    <div class="fs-5">Account movements</div>
+                    <table class="table table-striped" id="dealsTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Type</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Symbol</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Prev Balance</th>
+                            <th scope="col">After Balance</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tb">
+                        </tbody>
+                    </table>
                 </div>
                 <div class="row mt-2">
                     <form id="addMoneyForm" class="needs-validations no-validate border border-2 p-2">
@@ -29,6 +44,13 @@
                                    required/>
                             <button type="submit" id="addMoneyBtn" class="btn btn-primary">+</button>
                         </div>
+                    </form>
+                </div>
+                <div class="row mt-2">
+                    <form class="border border-2 p-2" id="formFile">
+                        <label for="formFile" class="form-label">Upload XML</label>
+                        <input class="form-control" type="file" id="inputFile">
+                        <button type="submit" class="btn btn-primary mt-2" id="uploadFileBtn" disabled>Upload</button>
                     </form>
                 </div>
                 <div class="row mt-2">
@@ -70,24 +92,19 @@
                         <button type="submit" class="btn btn-primary mt-2" id="addStockBtn">Add Stock</button>
                     </form>
                 </div>
-                <div class="row mt-2">
-                    <form class="border border-2 p-2" id="formFile">
-                        <label for="formFile" class="form-label">Upload XML</label>
-                        <input class="form-control" type="file" id="inputFile">
-                        <button type="submit" class="btn btn-primary mt-2" id="uploadFileBtn" disabled>Upload</button>
-                    </form>
-                </div>
             </div>
         </div>
-        <div class="col-4">
-            <p>Market Summary</p>
-            <div class="row">
-                <div class="col text-center">Name</div>
-                <div class="col text-center">Symbol</div>
-                <div class="col text-center">Price</div>
-                <div class="col text-center">Cycle</div>
+        <div class="col-4 border border-2 p-2 me-2 ms-2">
+            <div class="fs-5 ms-2">Market Summary</div>
+            <div class="mt-2">
+                <div class="row">
+                    <div class="col text-center">Name</div>
+                    <div class="col text-center">Symbol</div>
+                    <div class="col text-center">Price</div>
+                    <div class="col text-center">Cycle</div>
+                </div>
+                <ul class="list-group" id="stocks-list"></ul>
             </div>
-            <ul class="list-group" id="stocks-list"></ul>
         </div>
     </div>
 </div>
