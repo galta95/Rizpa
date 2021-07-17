@@ -174,8 +174,13 @@ const addStock = (e) => {
         method: 'POST',
         body: JSON.stringify(formData)
     })
-        .then(() => addStockForm.reset())
-        .catch(() => console.log());
+        .then((res) => {
+            if (!res.ok) {
+                window.alert("Error: Cannot create new stock");
+            }
+            addStockForm.reset();
+        })
+        .catch(() => window.alert("Error: Cannot create new stock"));
 }
 
 // Stocks
