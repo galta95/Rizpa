@@ -35,6 +35,10 @@
         <servlet-name>StockDealsServlet</servlet-name>
         <servlet-class>servlets.stocks.StockDealsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChatServlet</servlet-name>
+        <servlet-class>servlets.chat.ChatServlet</servlet-class>
+    </servlet>
 
     <servlet-mapping>
         <servlet-name>loginServlet</servlet-name>
@@ -67,5 +71,9 @@
     <servlet-mapping>
         <servlet-name>FileUploadServlet</servlet-name>
         <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChatServlet</servlet-name>
+        <url-pattern>/chat</url-pattern>
     </servlet-mapping>
 </web-app>
