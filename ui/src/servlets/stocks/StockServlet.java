@@ -27,6 +27,11 @@ public class StockServlet extends HttpServlet {
         BufferedReader reader = req.getReader();
         ParsedStock parsedStock = gson.fromJson(reader, ParsedStock.class);
 
+        if (stockMarketApi.getStockBySymbol(parsedStock.symbol) != null) {
+            res.setStatus(HttpServletResponse.SC_CONFLICT);
+            res.getWriter().print(CONFLICT);
+            return;
+        }
         DTOStock dtoStock = stockMarketApi.insertStock(parsedStock.companyName, parsedStock.symbol,
                 parsedStock.numOfShares, parsedStock.companyValue, usernameFromSession);
 
@@ -70,6 +75,7 @@ public class StockServlet extends HttpServlet {
 
     private static class StockNotFound {
         final private String symbol;
+
         public StockNotFound(String symbol) {
             this.symbol = symbol;
         }
