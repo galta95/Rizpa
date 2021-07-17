@@ -16,8 +16,10 @@ public class DTOUser {
     private final Map<String, Integer> holdings;
     private final Permissions permission;
     private int money;
-    private String password;
+    private final String password;
     private List<DTOMovment> movments;
+    private boolean isNewDealAlert;
+    private DTODeal newDeal;
 
     public DTOUser(User user) {
         this.name = user.getName();
@@ -31,6 +33,12 @@ public class DTOUser {
         this.money = user.getMoney();
         this.password = user.getPassword();
         initList(user.getMovements());
+        this.isNewDealAlert = user.isNewDealAlert();
+        if (user.getNewDeal() == null) {
+            this.newDeal = null;
+        } else {
+            this.newDeal = new DTODeal(user.getNewDeal());
+        }
     }
 
     private void initList(List<Movement> movements) {
@@ -42,6 +50,13 @@ public class DTOUser {
         });
     }
 
+    public boolean isNewDealAlert() {
+        return isNewDealAlert;
+    }
+
+    public DTODeal getNewDeal() {
+        return newDeal;
+    }
 
     public String getUserName() {
         return name;
