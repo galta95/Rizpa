@@ -104,7 +104,7 @@ const setStockSymbol = () => {
     stockSymbol.append(name);
 }
 
-const getUserHoldings = () => {
+const getUserHoldingsAndAlert = () => {
     fetch(USER_URL + `?username=${userNameFromSession}`)
         .then(res => res.json())
         .then(data => {
@@ -114,6 +114,26 @@ const getUserHoldings = () => {
             }
             stockHoldings.textContent = holdings;
             stockHoldingsHeader.append(stockHoldings);
+
+            if (data.isNewDealAlert) {
+                let deal = data.newDeal
+                let msg = "New " + deal.symbol + " deal!\n" +
+                    "The deal was between: " + deal.consumer + " and " + deal.producer + "\n" +
+                    "Deal value : " + deal.dealValue + "\n" +
+                    "Num of shares: " + deal.numOfShares + ", Price: " + deal.price + "\n";
+
+                window.alert(msg);
+
+                const formData = {
+                    userName: userNameFromSession,
+                    money: 0
+                }
+
+                return fetch(USER_URL, {
+                    method: 'PUT',
+                    body: JSON.stringify(formData)
+                }).catch(() => console.log());
+            }
         }).catch(e => console.log(e))
 }
 
@@ -204,14 +224,13 @@ function init() {
         orderTypeSelect.addEventListener("change", limitVisibility);
     }
 
-
     backBtn.addEventListener("click", backPage);
 
     setUser();
     setStockSymbol();
     getStockInfo();
     getStockDeals();
-    getUserHoldings();
+    getUserHoldingsAndAlert();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -219,5 +238,5 @@ window.addEventListener("DOMContentLoaded", () => {
 
     setInterval(getStockInfo, 2000);
     setInterval(getStockDeals, 2000);
-    setInterval(getUserHoldings, 2000);
+    setInterval(getUserHoldingsAndAlert, 2000);
 });

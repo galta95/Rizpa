@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import engine.dto.DTOUser;
 import engine.stockMarket.StockMarketApi;
 import utils.ServletUtils;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,8 +47,14 @@ public class UserServlet extends HttpServlet {
 
         BufferedReader reader = req.getReader();
         ParsedUser parsedUser = gson.fromJson(reader, ParsedUser.class);
+        DTOUser dtoUser;
 
-        DTOUser dtoUser = stockMarketApi.addMoney(parsedUser.userName, parsedUser.money);
+        if (parsedUser.money > 0) {
+            dtoUser = stockMarketApi.addMoney(parsedUser.userName, parsedUser.money);
+        } else {
+            dtoUser = stockMarketApi.resetDealAlert(parsedUser.userName);
+        }
+
 
         if (dtoUser == null) {
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -60,6 +67,7 @@ public class UserServlet extends HttpServlet {
 
     private static class UserNotFound {
         final private String username;
+
         public UserNotFound(String userName) {
             this.username = userName;
         }

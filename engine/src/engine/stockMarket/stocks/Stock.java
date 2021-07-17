@@ -164,10 +164,15 @@ public class Stock {
 
         int dealValue = price * numOfShares;
         Deal newDeal = new Deal(consumer.getDate(), numOfShares, price, dealValue,
-                consumer.getOrderType(), consumer.getUser(), producer.getUser());
+                consumer.getOrderType(), consumer.getUser(), producer.getUser(), this.symbol);
 
         consumer.getUser().updateHoldings(symbol, numOfShares);
         producer.getUser().updateHoldings(symbol, numOfShares);
+
+        consumer.getUser().setNewDealAlert(true);
+        consumer.getUser().setNewDeal(newDeal);
+        producer.getUser().setNewDealAlert(true);
+        producer.getUser().setNewDeal(newDeal);
 
         this.deals.add(0, newDeal);
         this.dealsCount++;

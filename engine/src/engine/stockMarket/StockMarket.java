@@ -530,4 +530,15 @@ public class StockMarket implements StockMarketApi {
         user.addMoney(money, Movement.MovementType.DEPOSIT, null);
         return new DTOUser(user);
     }
+
+    @Override
+    public DTOUser resetDealAlert(String userName) {
+        if (!this.users.isUserExists(userName)) {
+            return null;
+        }
+        User user = this.users.getUserByName(userName);
+        user.resetDealAlert();
+
+        return new DTOUser(user);
+    }
 }

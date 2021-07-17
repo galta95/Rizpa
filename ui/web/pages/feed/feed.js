@@ -7,7 +7,6 @@ const brokerStockPage = "../stockPage/stockPage.html";
 const adminStockPage = "../stockPage/adminStockPage.html";
 const CHAT_URL = '../../chat';
 
-
 const ADMIN = 'admin';
 let localUsers = {};
 let localStocks = {};
@@ -126,12 +125,32 @@ const getUserMovements = () => {
         }).catch(e => console.log(e))
 }
 
-const updateUserBalance = () => {
+const updateUserBalanceAndAlerts = () => {
     const money = document.getElementById('money');
     fetch(USER_URL + `?username=${userNameFromSession}`)
         .then(res => res.json())
         .then(data => {
             money.textContent = data.money;
+
+            if (data.isNewDealAlert) {
+                let deal = data.newDeal
+                let msg = "New " + deal.symbol + " deal!\n" +
+                    "The deal was between: " + deal.consumer + " and " + deal.producer + "\n" +
+                    "Deal value : " + deal.dealValue + "\n" +
+                    "Num of shares: " + deal.numOfShares + ", Price: " + deal.price + "\n";
+
+                window.alert(msg);
+
+                const formData = {
+                    userName: userNameFromSession,
+                    money: 0
+                }
+
+                return fetch(USER_URL, {
+                    method: 'PUT',
+                    body: JSON.stringify(formData)
+                }).catch(() => console.log());
+            }
         }).catch(e => console.log(e))
 }
 
@@ -315,7 +334,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (permissionsFromSession === "admin") {
         document.getElementById("brokerWindow").remove();
     } else {
-        setInterval(updateUserBalance, 2000);
+        setInterval(updateUserBalanceAndAlerts, 2000);
         setInterval(getUserMovements, 2000);
     }
 });

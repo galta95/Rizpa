@@ -5,6 +5,7 @@ import dataManager.generated.RseItem;
 import dataManager.generated.RseStock;
 import dataManager.generated.RseStocks;
 import engine.stockMarket.stocks.Stocks;
+import engine.transaction.Deal;
 import engine.transaction.Trade;
 import errors.NotFoundError;
 
@@ -25,6 +26,8 @@ public class User {
     private final String password;
     private int money;
     private final List<Movement> movements;
+    private boolean newDealAlert;
+    private Deal newDeal;
 
     public User(String name, String password, Permissions permission) {
         this.name = name.toUpperCase();
@@ -33,6 +36,8 @@ public class User {
         this.holdings = new Holdings();
         this.money = 0;
         this.movements = new LinkedList<>();
+        this.newDealAlert = false;
+        this.newDeal = null;
     }
 
     public List<Movement> getMovements() {
@@ -53,6 +58,22 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public boolean isNewDealAlert() {
+        return newDealAlert;
+    }
+
+    public Deal getNewDeal() {
+        return newDeal;
+    }
+
+    public void setNewDealAlert(boolean newDealAlert) {
+        this.newDealAlert = newDealAlert;
+    }
+
+    public void setNewDeal(Deal newDeal) {
+        this.newDeal = newDeal;
     }
 
     public void addMoney(int money, Movement.MovementType movementType, String symbol) {
@@ -106,5 +127,10 @@ public class User {
 //                holdings.updateTotalStocksValue();
             }
         });
+    }
+
+    public void resetDealAlert() {
+        this.newDealAlert = false;
+        this.newDeal = null;
     }
 }
