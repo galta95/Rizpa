@@ -67,9 +67,10 @@ const tradeStock = (e) => {
     })
         .then((res) => {
             if (!res.ok) {
-                window.alert("Bad request!");
+
+                window.alert("The order wasn't submitted!");
             } else {
-                window.alert("Success!");
+                window.alert("The order submitted!");
             }
             tradeForm.reset()
         })
