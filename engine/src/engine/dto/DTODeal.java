@@ -1,5 +1,6 @@
 package engine.dto;
 
+import engine.transaction.Deal;
 import engine.transaction.Trade;
 
 public class DTODeal {
@@ -7,12 +8,13 @@ public class DTODeal {
     private final String date;
     private final int numOfShares;
     private final int price;
-    private Trade.OrderType orderType;
+    private final Trade.OrderType orderType;
     private final String consumer;
     private final String producer;
+    private final String symbol;
 
     public DTODeal(int dealValue, String date, int numOfShares, int price, Trade.OrderType orderType,
-                   String consumer, String producer) {
+                   String consumer, String producer, String symbol) {
         this.dealValue = dealValue;
         this.date = date;
         this.numOfShares = numOfShares;
@@ -20,6 +22,18 @@ public class DTODeal {
         this.orderType = orderType;
         this.consumer = consumer;
         this.producer = producer;
+        this.symbol = symbol;
+    }
+
+    public DTODeal(Deal deal) {
+        this.dealValue = deal.getDealValue();
+        this.date = deal.getDate();
+        this.numOfShares = deal.getNumOfShares();
+        this.price = deal.getPrice();
+        this.orderType = deal.getOrderType();
+        this.consumer = deal.getConsumer().getName();
+        this.producer = deal.getProducer().getName();
+        this.symbol = deal.getSymbol();
     }
 
     public int getDealValue() {
@@ -48,5 +62,9 @@ public class DTODeal {
 
     public String getProducer() {
         return producer;
+    }
+
+    public String getSymbol() {
+        return symbol;
     }
 }

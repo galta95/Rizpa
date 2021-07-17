@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Stock</title>
+</head>
+<script src="stockPage.js"></script>
+<body>
+<div class="container">
+    <div class="row mt-2">
+        <div class="col">
+            <div class="row">
+                <div class="col-4" id="name">Name:</div>
+                <div class="col" id="symbol">Symbol:</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col" id="price">Price:</div>
+                <div class="col" id="cycle">Cycle:</div>
+                <div class="col"></div>
+            </div>
+        </div>
+        <div class="col-1 mt-2">
+            <button class="btn btn-primary" id="back">Back</button>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col border border-2 p-2 me-4">
+            <div class="row">
+                <div class="col">
+                    <div class="fs-5">Buys Queue</div>
+                    <table class="table table-striped" id="buysTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">user</th>
+                        </tr>
+                        </thead>
+                        <tbody id="buysTableBody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col">
+                    <div class="fs-5">Sells Queue</div>
+                    <table class="table table-striped" id="sellsTable">
+                        <thead>
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">user</th>
+                        </tr>
+                        </thead>
+                        <tbody id="sellsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 border border-2 p-2">
+            <div class="fs-5">Historical Data</div>
+            <table class="table table-striped" id="dealsTable">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                </tr>
+                </thead>
+                <tbody id="tb">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>

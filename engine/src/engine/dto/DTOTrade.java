@@ -17,6 +17,14 @@ public class DTOTrade {
         this.userName = userName;
     }
 
+    public DTOTrade(Trade trade) {
+        this.date = trade.getDate();
+        this.numOfShares = trade.getNumOfShares();
+        this.price = trade.getPrice();
+        this.orderType = trade.getOrderType();
+        this.userName = trade.getUser().getName();
+    }
+
     public String getDate() {
         return date;
     }

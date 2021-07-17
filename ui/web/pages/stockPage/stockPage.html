@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Stock</title>
+</head>
+<script src="stockPage.js"></script>
+<body>
+<div class="container">
+    <div class="row mt-2">
+        <div class="col">
+            <div class="row">
+                <div class="col" id="name">Name:</div>
+                <div class="col" id="symbol">Symbol:</div>
+                <div class="col" id="holdings">Holdings:</div>
+            </div>
+            <div class="row mt-2">
+                <div class="col" id="price">Price:</div>
+                <div class="col" id="cycle">Cycle:</div>
+                <div class="col"></div>
+            </div>
+        </div>
+        <div class="col-1 mt-2">
+            <button class="btn btn-primary" id="back">Back</button>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col border border-2 p-2 me-4">
+            <form id="tradeForm">
+                <div class="fs-4">Trade Stock</div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="direction" class="form-label">Trade Direction:</label>
+                        <div id="direction">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="buy" name="tradeDirection" value="buy"
+                                       checked>
+                                <label class="form-check-label" for="buy">Buy</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" id="sell" name="tradeDirection"
+                                       value="sell">
+                                <label class="form-check-label" for="sell">Sell</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="col">
+                            <label for="orderType" class="form-label">Select Order Type</label>
+                            <select class="form-select" id="orderType" required>
+                                <option selected value="LMT">LMT</option>
+                                <option value="MKT">MKT</option>
+                                <option value="FOK">FOK</option>
+                                <option value="IOC">IOC</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <div class="input-group has-validation">
+                            <input placeholder="quantity" class="form-control" type="number" id="quantity"
+                                   required/>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="limit" class="form-label" id="limitLabel">Limit</label>
+                        <div class="input-group has-validation">
+                            <input placeholder="limit" class="form-control " type="number" id="limit"
+                                   required/>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2" id="tradeBtn">Trade Stock</button>
+            </form>
+        </div>
+        <div class="col border border-2 p-2">
+            <div class="fs-4">Historical Data</div>
+            <table class="table table-striped" id="dealsTable">
+                <thead>
+                <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                </tr>
+                </thead>
+                <tbody id="tb">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
