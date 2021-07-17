@@ -9,14 +9,15 @@ let tradeForm
 let orderTypeSelect
 let limitInput
 let limitLabel
-let userName
 let stockSymbol
 const stockPrice = document.createElement("strong");
 const stockCycle = document.createElement("strong");
 const stockHoldings = document.createElement("strong");
+const stockName = document.createElement("strong");
 let stockPriceHeader;
 let stockCycleHeader;
 let stockHoldingsHeader;
+let stockNameHeader;
 let dealsTable;
 let buysTable;
 let sellsTable;
@@ -67,8 +68,9 @@ const tradeStock = (e) => {
         .then((res) => {
             if (!res.ok) {
                 window.alert("Bad request!");
+            } else {
+                window.alert("Success!");
             }
-            window.alert("Success!");
             tradeForm.reset()
         })
         .catch(() => {
@@ -88,13 +90,6 @@ const limitVisibility = () => {
         limitInput.disabled = false;
         limitLabel.disabled = false;
     }
-}
-
-const setUser = () => {
-    userName = document.getElementById('name');
-    const name = document.createElement("strong");
-    name.textContent = userNameFromSession.toUpperCase();
-    userName.append(name);
 }
 
 const setStockSymbol = () => {
@@ -142,20 +137,22 @@ const updateQueue = (table, tableBodyId, queue) => {
     const newTb = document.createElement("tbody");
     newTb.id = tableBodyId;
     table.append(newTb);
-    queue.forEach((item, i) => {
-        const dealRow = newTb.insertRow(i);
-        const cell0 = dealRow.insertCell(0);
-        const cell1 = dealRow.insertCell(1);
-        const cell2 = dealRow.insertCell(2);
-        const cell3 = dealRow.insertCell(3);
-        const cell4 = dealRow.insertCell(4);
+    if (queue.length > 0) {
+        queue.forEach((item, i) => {
+            const dealRow = newTb.insertRow(i);
+            const cell0 = dealRow.insertCell(0);
+            const cell1 = dealRow.insertCell(1);
+            const cell2 = dealRow.insertCell(2);
+            const cell3 = dealRow.insertCell(3);
+            const cell4 = dealRow.insertCell(4);
 
-        cell0.textContent = item.date;
-        cell1.textContent = item.numOfShares;
-        cell2.textContent = item.price;
-        cell3.textContent = item.orderType;
-        cell4.textContent = item.userName;
-    })
+            cell0.textContent = item.date;
+            cell1.textContent = item.numOfShares;
+            cell2.textContent = item.price;
+            cell3.textContent = item.orderType;
+            cell4.textContent = item.userName;
+        })
+    }
 }
 
 const getStockInfo = () => {
@@ -164,16 +161,15 @@ const getStockInfo = () => {
         .then(data => {
             stockPrice.textContent = data.price;
             stockCycle.textContent = data.cycle;
+            stockName.textContent = data.companyName;
+
             stockCycleHeader.append(stockCycle);
             stockPriceHeader.append(stockPrice);
+            stockNameHeader.append(stockName);
 
             if (permissionsFromSession === ADMIN) {
-                if (data.sells.length > 0) {
                     updateQueue(sellsTable, "sellsTableBody", data.sells);
-                }
-                if (data.buys.length > 0) {
                     updateQueue(buysTable, "buysTableBody", data.buys);
-                }
             }
         }).catch(e => console.log(e))
 }
@@ -212,6 +208,7 @@ function init() {
     limitLabel = document.getElementById("limitLabel");
     stockPriceHeader = document.getElementById("price");
     stockCycleHeader = document.getElementById("cycle");
+    stockNameHeader = document.getElementById("name");
     stockHoldingsHeader = document.getElementById("holdings");
     dealsTable = document.getElementById("dealsTable");
 
@@ -226,7 +223,6 @@ function init() {
 
     backBtn.addEventListener("click", backPage);
 
-    setUser();
     setStockSymbol();
     getStockInfo();
     getStockDeals();

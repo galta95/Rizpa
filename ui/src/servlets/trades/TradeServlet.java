@@ -31,46 +31,52 @@ public class TradeServlet extends HttpServlet {
         parsedTrade.setDate(date);
         DTOOrder dtoOrder = null;
 
-        switch (parsedTrade.orderType) {
-            case "LMT":
-                if (parsedTrade.tradeDirection.equals("buy")) {
-                    dtoOrder = stockMarketApi.executeLmtOrderBuy(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
-                } else {
-                    dtoOrder = stockMarketApi.executeLmtOrderSell(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
-                }
-                break;
-            case "MKT":
-                DTOStock stock = stockMarketApi.getStockBySymbol(parsedTrade.symbol);
-                int price = stock.getPrice();
-                if (parsedTrade.tradeDirection.equals("buy")) {
-                    dtoOrder = stockMarketApi.executeMktOrderBuy(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, price, parsedTrade.userName);
-                } else {
-                    dtoOrder = stockMarketApi.executeMktOrderSell(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, price, parsedTrade.userName);
-                }
-                break;
-            case "FOK":
-                if (parsedTrade.tradeDirection.equals("buy")) {
-                    dtoOrder = stockMarketApi.executeFokOrderBuy(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
-                } else {
-                    dtoOrder = stockMarketApi.executeFokOrderSell(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
-                }
-                break;
-            case "IOC":
-                if (parsedTrade.tradeDirection.equals("buy")) {
-                    dtoOrder = stockMarketApi.executeIocOrderBuy(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
-                } else {
-                    dtoOrder = stockMarketApi.executeIocOrderSell(parsedTrade.symbol, parsedTrade.date,
-                            parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
-                }
-                break;
+        try {
+            switch (parsedTrade.orderType) {
+                case "LMT":
+                    if (parsedTrade.tradeDirection.equals("buy")) {
+                        dtoOrder = stockMarketApi.executeLmtOrderBuy(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                    } else {
+                        dtoOrder = stockMarketApi.executeLmtOrderSell(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                    }
+                    break;
+                case "MKT":
+                    DTOStock stock = stockMarketApi.getStockBySymbol(parsedTrade.symbol);
+                    int price = stock.getPrice();
+                    if (parsedTrade.tradeDirection.equals("buy")) {
+                        dtoOrder = stockMarketApi.executeMktOrderBuy(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, price, parsedTrade.userName);
+                    } else {
+                        dtoOrder = stockMarketApi.executeMktOrderSell(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, price, parsedTrade.userName);
+                    }
+                    break;
+                case "FOK":
+                    if (parsedTrade.tradeDirection.equals("buy")) {
+                        dtoOrder = stockMarketApi.executeFokOrderBuy(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                    } else {
+                        dtoOrder = stockMarketApi.executeFokOrderSell(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                    }
+                    break;
+                case "IOC":
+                    if (parsedTrade.tradeDirection.equals("buy")) {
+                        dtoOrder = stockMarketApi.executeIocOrderBuy(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                    } else {
+                        dtoOrder = stockMarketApi.executeIocOrderSell(parsedTrade.symbol, parsedTrade.date,
+                                parsedTrade.quantity, parsedTrade.price, parsedTrade.userName);
+                    }
+                    break;
 
+            }
+        } catch (Exception e) {
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            res.getWriter().print(BAD_REQUEST);
+            return;
         }
         if (dtoOrder == null) {
             res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
