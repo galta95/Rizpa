@@ -1,5 +1,6 @@
 package utils;
 
+import engine.chat.ChatManager;
 import engine.dto.DTOUsers;
 import engine.stockMarket.StockMarket;
 import engine.stockMarket.StockMarketApi;
@@ -10,9 +11,11 @@ public class ServletUtils {
 
 	private static final String USERS_ATTRIBUTE_NAME = "users";
 	private static final String STOCK_MARKET_API_ATTRIBUTE_NAME  = "stockMarketApi";
+	private static final String CHAT_MANAGER_ATTRIBUTE_NAME = "chatManager";
 
 	private static final Object stockMarketApi = new Object();
 	private static final Object users = new Object();
+	private static final Object chatManagerLock = new Object();
 
 	public static StockMarketApi getStockMarketApi(ServletContext servletContext) {
 		synchronized (stockMarketApi) {
@@ -31,5 +34,14 @@ public class ServletUtils {
 			}
 		}
 		return (DTOUsers) servletContext.getAttribute(USERS_ATTRIBUTE_NAME);
+	}
+
+	public static ChatManager getChatManager(ServletContext servletContext) {
+		synchronized (chatManagerLock) {
+			if (servletContext.getAttribute(CHAT_MANAGER_ATTRIBUTE_NAME) == null) {
+				servletContext.setAttribute(CHAT_MANAGER_ATTRIBUTE_NAME, new ChatManager());
+			}
+		}
+		return (ChatManager) servletContext.getAttribute(CHAT_MANAGER_ATTRIBUTE_NAME);
 	}
 }

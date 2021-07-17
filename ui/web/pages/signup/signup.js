@@ -17,7 +17,7 @@ const login = (e) => {
                 window.sessionStorage.setItem("permissions", permissions.value);
                 window.location.replace(FEEDURL)
             } else {
-                window.alert("Username or Password invalid")
+                window.alert("Username or Password or Permissions is invalid")
             }
         }).catch(e => {
         console.log(e);

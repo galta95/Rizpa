@@ -5,6 +5,7 @@ const STOCK_URL = '../../stocks/stock'
 const UPLOAD_URL = '../../upload';
 const brokerStockPage = "../stockPage/stockPage.html";
 const adminStockPage = "../stockPage/adminStockPage.html";
+const CHAT_URL = '../../chat';
 
 
 const ADMIN = 'admin';
@@ -16,6 +17,12 @@ let balance;
 let uploadFileForm;
 let inputFile;
 let uploadFileBtn;
+let chatForm;
+let chatArea;
+let chatInputString = "";
+let chatInput;
+let currentChatSize = 0;
+let newChatSize = 0;
 // Users
 
 const userNameFromSession = window.sessionStorage.getItem("username");
@@ -239,6 +246,39 @@ const uploadFile = (e) => {
         .catch(() => window.alert("Error: File did not uploaded"));
 }
 
+const updateChatInput = () => {
+    chatInputString += chatInput.value;
+}
+
+const sendMessage = (e) => {
+    e.preventDefault();
+    fetch(CHAT_URL + `?username=${userNameFromSession}&userstring=${chatInputString}`, {method: 'POST'})
+        .then(() => {
+            chatInputString = "";
+            chatForm.reset();
+            getChatData();
+        });
+}
+
+const getChatData = () => {
+    fetch(CHAT_URL)
+        .then(res => res.json())
+        .then(data => {
+            newChatSize = data.chatDataList.length;
+            if (newChatSize > currentChatSize) {
+                data.chatDataList.forEach((chatBlock, i) => {
+                    if (i > currentChatSize - 1) {
+                        const chatString = chatBlock.username + ": " + chatBlock.chatString;
+                        const line = document.createElement("div");
+                        line.textContent = chatString;
+                        chatArea.append(line);
+                    }
+                })
+                currentChatSize = newChatSize;
+            }
+        })
+}
+
 // Events
 
 const init = () => {
@@ -247,12 +287,16 @@ const init = () => {
     uploadFileForm = document.getElementById('formFile');
     inputFile = document.getElementById('inputFile');
     uploadFileBtn = document.getElementById('uploadFileBtn');
+    chatForm = document.getElementById('chatform');
+    chatArea = document.getElementById('chatarea');
+    chatInput = document.getElementById('userString');
 
     addMoneyForm.addEventListener("submit", addMoney);
     addStockForm.addEventListener("submit", addStock);
     uploadFileForm.addEventListener("submit", uploadFile);
     inputFile.addEventListener("change", hasFile);
-
+    chatForm.addEventListener("submit", sendMessage);
+    chatInput.addEventListener("change", updateChatInput);
 
     setUserHello();
     getAllUsers();
@@ -266,6 +310,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     setInterval(getAllUsers, 2000);
     setInterval(getAllStocks, 2000);
+    setInterval(getChatData, 2000);
 
     if (permissionsFromSession === "admin") {
         document.getElementById("brokerWindow").remove();
@@ -274,3 +319,4 @@ window.addEventListener("DOMContentLoaded", () => {
         setInterval(getUserMovements, 2000);
     }
 });
+

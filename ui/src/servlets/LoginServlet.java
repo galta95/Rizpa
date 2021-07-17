@@ -22,16 +22,16 @@ public class LoginServlet extends HttpServlet {
         String password = req.getParameter(PASSWORD);
         String permissions = req.getParameter(PERMISSIONS);
 
+        Permissions permissionsEnum = Permissions.BROKER;
+        if (permissions.equals(ADMIN)) {
+            permissionsEnum = Permissions.ADMIN;
+        }
+
         if (usernameFromSession == null) {
-            Permissions permissionsEnum = Permissions.BROKER;
 
             if (username == null || password == null
                     || username.equals("") || password.equals("")) {
                 res.sendError(HttpServletResponse.SC_BAD_REQUEST);
-            }
-
-            if (permissions.equals(ADMIN)) {
-                permissionsEnum = Permissions.ADMIN;
             }
 
             DTOUser dtoUser = stockMarketApi.getUserByName(username);
@@ -43,9 +43,9 @@ public class LoginServlet extends HttpServlet {
             }
         } else {
             DTOUser dtoUser = stockMarketApi.getUserByName(username);
-            if (!dtoUser.getPassword().equals(password)) {
+            if (!dtoUser.getPassword().equals(password) || !dtoUser.getPermission().equals(permissionsEnum)) {
                 res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                res.getWriter().print("{message: invalid password}");
+                res.getWriter().print("invalid password or permission");
             }
         }
     }

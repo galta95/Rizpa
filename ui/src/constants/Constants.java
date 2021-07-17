@@ -11,4 +11,5 @@ public class Constants {
     public static final String CONFLICT = "conflict";
     public static final String CREATED = "created";
     public static final String OK = "ok";
+    public static final String CHAT_PARAMETER = "userstring";
 }
